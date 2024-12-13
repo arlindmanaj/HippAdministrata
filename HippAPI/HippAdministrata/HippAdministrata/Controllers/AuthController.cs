@@ -122,6 +122,139 @@ namespace hippserver.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("register/employee")]
+        public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeRequest request)
+        {
+            try
+            {
+                _logger.LogInformation("Registering employee {Name}", request.Name);
+
+                var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleName == "Employee");
+                if (role == null)
+                    return BadRequest(new { message = "Employee role not found." });
+
+                var user = new User
+                {
+                    Name = request.Name,
+                    PasswordHash = HashPassword(request.Password),
+                    RoleId = role.RoleId,
+                    RoleName = role.RoleName
+                };
+
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
+
+                var employee = new Employee
+                {
+                    Name = request.Name,
+                    Password = HashPassword(request.Password),
+                    Supervisor = null, // Or assign a default manager here
+                    UserId = user.UserId
+                };
+
+                await _dbContext.Employees.AddAsync(employee);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Employee {Name} registered successfully", request.Name);
+                return Ok(new { message = "Employee registered successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during employee registration.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("register/manager")]
+        public async Task<IActionResult> RegisterManager([FromBody] RegisterManagerRequest request)
+        {
+            try
+            {
+                _logger.LogInformation("Registering manager {Name}", request.Name);
+
+                var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleName == "Manager");
+                if (role == null)
+                    return BadRequest(new { message = "Manager role not found." });
+
+                var user = new User
+                {
+                    Name = request.Name,
+                    PasswordHash = HashPassword(request.Password),
+                    RoleId = role.RoleId,
+                    RoleName = role.RoleName
+                };
+
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
+
+                var manager = new Manager
+                {
+                    Name = request.Name,
+                    Password = HashPassword(request.Password),
+                    UserId = user.UserId
+                };
+
+                await _dbContext.Managers.AddAsync(manager);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Manager {Name} registered successfully", request.Name);
+                return Ok(new { message = "Manager registered successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during manager registration.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("register/salesperson")]
+        public async Task<IActionResult> RegisterSalesPerson([FromBody] RegisterSalesPersonRequest request)
+        {
+            try
+            {
+                _logger.LogInformation("Registering salesperson {Username}", request.Username);
+
+                var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleName == "SalesPerson");
+                if (role == null)
+                    return BadRequest(new { message = "SalesPerson role not found." });
+
+                var user = new User
+                {
+                    Name = request.Username,
+                    PasswordHash = HashPassword(request.Password),
+                    RoleId = role.RoleId,
+                    RoleName = role.RoleName
+                };
+
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
+
+                var salesPerson = new SalesPerson
+                {
+                    Username = request.Username,
+                    Password = HashPassword(request.Password),
+                    Location = request.Location,
+                    UserId = user.UserId
+                };
+
+                await _dbContext.SalesPersons.AddAsync(salesPerson);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Salesperson {Username} registered successfully", request.Username);
+                return Ok(new { message = "SalesPerson registered successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during salesperson registration.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+
         private static string HashPassword(string password)
         {
             using var sha256 = SHA256.Create();
