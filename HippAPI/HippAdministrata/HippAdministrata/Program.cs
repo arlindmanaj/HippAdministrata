@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Builder;
+using HippAdministrata.Services;
 
 
 namespace HippAdministrata
@@ -31,10 +32,16 @@ namespace HippAdministrata
 
             // Register Repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 
             // Register Services
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<DriverService>();
+            builder.Services.AddScoped<WarehouseService>();
 
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
