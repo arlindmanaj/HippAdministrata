@@ -35,6 +35,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<IDriverRepository, DriverRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  
 
             // Register Services
             builder.Services.AddScoped<IJwtService, JwtService>();
@@ -42,6 +44,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<ProductService>();
             builder.Services.AddScoped<DriverService>();
             builder.Services.AddScoped<WarehouseService>();
+            builder.Services.AddScoped<ManagerService>();
+            builder.Services.AddScoped<EmployeeService>();
 
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

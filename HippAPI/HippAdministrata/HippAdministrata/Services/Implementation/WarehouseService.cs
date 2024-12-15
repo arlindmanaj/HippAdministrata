@@ -25,6 +25,19 @@ namespace HippAdministrata.Services
 
         public async Task<bool> UpdateAsync(Warehouse warehouse) => await _warehouseRepository.UpdateAsync(warehouse);
 
-        public async Task<bool> DeleteAsync(int id) => await _warehouseRepository.DeleteAsync(id);
+        public async Task<bool> DeleteAsync(int id)
+        {
+            // Check if the warehouse has any orders
+            var orders = await _warehouseRepository.GetOrdersByWarehouseAsync(id);
+            if (orders != null && orders.Any())
+            {
+                return false; // Indicate that the deletion failed due to orders being present
+            }
+
+            // Proceed with deletion if no orders are associated
+            return await _warehouseRepository.DeleteAsync(id);
+        }
+
+
     }
 }

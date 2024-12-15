@@ -1,31 +1,40 @@
 ﻿using HippAdministrata.Models.Domains;
 using HippAdministrata.Services;
 using HippAdministrata.Services.Implementation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HippAdministrata.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")] 
     public class AdminController : ControllerBase
     {
         private readonly ProductService _productService;
         private readonly DriverService _driverService;
         private readonly WarehouseService _warehouseService;
-        //private readonly OrderHistoryService _orderHistoryService;
+        private readonly ManagerService _managerService;
+        private readonly EmployeeService _employeeService;  
 
         public AdminController(
             ProductService productService,
             DriverService driverService,
-            WarehouseService warehouseService)
-          //  OrderHistoryService orderHistoryService)
+            WarehouseService warehouseService,
+            ManagerService managerService,
+            EmployeeService employeeService)
+
         {
             _productService = productService;
             _driverService = driverService;
             _warehouseService = warehouseService;
-            //_orderHistoryService = orderHistoryService;
+            _managerService = managerService;
+            _employeeService = employeeService;
         }
 
+        // =======================
+        // Products
+        // =======================
         [HttpGet("products")]
         public async Task<IActionResult> GetAllProducts()
         {
@@ -56,6 +65,10 @@ namespace HippAdministrata.Controllers
                 return Ok("Product deleted successfully");
             return NotFound("Product not found");
         }
+
+        // =======================
+        // Drivers
+        // =======================
         [HttpGet("drivers")]
         public async Task<IActionResult> GetAllDrivers()
         {
@@ -86,6 +99,10 @@ namespace HippAdministrata.Controllers
                 return Ok("Driver deleted successfully");
             return NotFound("Driver not found");
         }
+
+        // =======================
+        // Warehouses
+        // =======================
         [HttpGet("warehouses")]
         public async Task<IActionResult> GetAllWarehouses()
         {
@@ -112,10 +129,95 @@ namespace HippAdministrata.Controllers
         [HttpDelete("warehouses/{id}")]
         public async Task<IActionResult> DeleteWarehouse(int id)
         {
-            if (await _warehouseService.DeleteAsync(id))
-                return Ok("Warehouse deleted successfully");
-            return NotFound("Warehouse not found");
+            bool isDeleted = await _warehouseService.DeleteAsync(id);
+
+            if (!isDeleted)
+            {
+                // If deletion failed, check if it was because of orders
+                var orders = await _warehouseService.GetOrdersByWarehouseAsync(id);
+                if (orders.Any())
+                {
+                    return BadRequest(new { message = $"Cannot delete this warehouse because it has {orders.Count()} order(s) associated with it." });
+                }
+
+                return NotFound(new { message = "Warehouse not found" });
+            }
+
+            return Ok(new { message = "Warehouse deleted successfully" });
         }
 
+
+        // =======================
+        // Managers
+        // =======================
+        [HttpGet("managers")]
+        public async Task<IActionResult> GetAllManagers()
+        {
+            var managers = await _managerService.GetAllAsync();
+            return Ok(managers);
+        }
+
+        [HttpGet("managers/{id}")]
+        public async Task<IActionResult> GetManagerById(int id)
+        {
+            var manager = await _managerService.GetByIdAsync(id);
+            if (manager == null) return NotFound("Manager not found");
+            return Ok(manager);
+        }
+
+
+        [HttpPut("managers/{id}")]
+        public async Task<IActionResult> UpdateManager(int id, Manager updatedManager)
+        {
+            if (await _managerService.UpdateAsync(id, updatedManager))
+                return Ok("Manager updated successfully");
+            return BadRequest("Failed to update manager");
+        }
+
+
+        [HttpDelete("managers/{id}")]
+        public async Task<IActionResult> DeleteManager(int id)
+        {
+            if (await _managerService.DeleteAsync(id))
+                return Ok("Manager deleted successfully");
+            return NotFound("Manager not found");
+        }
+
+
+        // =======================
+        // Employee
+        // =======================
+        [HttpGet("employee")]
+        public async Task<IActionResult> GetAllEmployee()
+        {
+            var employee = await _employeeService.GetAllAsync();
+            return Ok(employee);
+        }
+
+        [HttpGet("employee/{id}")]
+        public async Task<IActionResult> GetEmployeeById(int id)
+        {
+            var employee = await _employeeService.GetByIdAsync(id);
+            if (employee == null) return NotFound("Employee not found");
+            return Ok(employee);
+        }
+
+
+        [HttpPut("employee/{id}")]
+        public async Task<IActionResult> UpdatedEmployee(int id, Employee updatedEmployee)
+        {
+            if (await _employeeService.UpdateAsync(id, updatedEmployee))
+                return Ok("Employee updated successfully");
+            return BadRequest("Failed to update employee");
+        }
+
+
+        [HttpDelete("employee/{id}")]
+        public async Task<IActionResult> DeleteEmployee(int id)
+        {
+            if (await _employeeService.DeleteAsync(id))
+                return Ok("Employee deleted successfully");
+            return NotFound("Employee not found");
+        }
     }
 }
