@@ -4,6 +4,7 @@ using HippAdministrata.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HippAdministrata.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241219132044_AddingCarDriverNavigation")]
+    partial class AddingCarDriverNavigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,16 +170,8 @@ namespace HippAdministrata.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderHistoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OrderHistoryId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -197,8 +192,6 @@ namespace HippAdministrata.Migrations
                     b.HasIndex("DriverId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("OrderHistoryId1");
 
                     b.HasIndex("ProductId");
 
@@ -486,10 +479,6 @@ namespace HippAdministrata.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("HippAdministrata.Models.JunctionTables.OrderHistory", "OrderHistory")
-                        .WithMany()
-                        .HasForeignKey("OrderHistoryId1");
-
                     b.HasOne("HippAdministrata.Models.Domains.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -512,8 +501,6 @@ namespace HippAdministrata.Migrations
                     b.Navigation("Driver");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("OrderHistory");
 
                     b.Navigation("Product");
 

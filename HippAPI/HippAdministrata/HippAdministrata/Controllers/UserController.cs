@@ -26,17 +26,7 @@ namespace hippserver.Controllers
             return Ok(users);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody] User model)
-        {
-            var result = await _userService.AddUserAsync(model);
-
-            if (!result)
-                return BadRequest(new { message = "Error adding user" });
-
-            return Ok(new { message = "User added successfully" });
-        }
-
+       
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

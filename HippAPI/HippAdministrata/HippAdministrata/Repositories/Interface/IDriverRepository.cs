@@ -1,4 +1,5 @@
 ﻿using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.JunctionTables;
 
 namespace HippAdministrata.Repositories.Interface
 {

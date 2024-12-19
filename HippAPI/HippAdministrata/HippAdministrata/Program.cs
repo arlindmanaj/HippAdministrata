@@ -43,12 +43,8 @@ namespace HippAdministrata
             // Register Services
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ProductService>();
-            builder.Services.AddScoped<DriverService>();
-            builder.Services.AddScoped<WarehouseService>();
-            builder.Services.AddScoped<ManagerService>();
-            builder.Services.AddScoped<EmployeeService>();
-            builder.Services.AddScoped<SalesPersonService>();
+            builder.Services.AddScoped<IDriverService, DriverService> ();
+           
 
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

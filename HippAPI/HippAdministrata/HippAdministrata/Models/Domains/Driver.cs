@@ -1,4 +1,6 @@
-﻿namespace HippAdministrata.Models.Domains
+﻿using HippAdministrata.Models.JunctionTables;
+
+namespace HippAdministrata.Models.Domains
 {
     public class Driver
     {
@@ -9,7 +11,7 @@
         public string? CarModel { get; set; }
         public int UserId { get; set; } // FK to User
         public User? User { get; set; }
-
+        public ICollection<CarDrivers>? CarDrivers { get; set; }
         public int OrderId {get; set; }
 
         public Order? Order { get; set; }

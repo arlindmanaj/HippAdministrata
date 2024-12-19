@@ -1,10 +1,11 @@
 ﻿using HippAdministrata.Models.Domains;
 using HippAdministrata.Repositories.Interface;
+using HippAdministrata.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace HippAdministrata.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,13 +14,7 @@ namespace HippAdministrata.Services
             _productRepository = productRepository;
         }
 
-        public async Task<Product> GetByIdAsync(int id) => await _productRepository.GetByIdAsync(id);
-
-        public async Task<IEnumerable<Product>> GetAllAsync() => await _productRepository.GetAllAsync();
-
-        public async Task<IEnumerable<Product>> GetUnlabeledProductsAsync() => await _productRepository.GetUnlabeledProductsAsync();
-
-        public async Task<bool> CreateAsync(Product product) => await _productRepository.CreateAsync(product);
+       
 
         public async Task<bool> UpdateAsync(Product product)
         {

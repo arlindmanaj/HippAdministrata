@@ -1,61 +1,88 @@
-﻿//using HippAdministrata.Models.Domains;
-//using HippAdministrata.Services;
-//using Microsoft.AspNetCore.Mvc;
+﻿using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.Enums;
+using HippAdministrata.Services;
+using HippAdministrata.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-//namespace HippAdministrata.Controllers
-//{
-//    [ApiController]
-//    [Route("api/[controller]")]
-//    public class OrderController : ControllerBase
-//    {
-//        private readonly OrderService _orderService;
+namespace HippAdministrata.Controllers
+{
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class OrderController : ControllerBase
+    {
+        private readonly IOrderService _orderService;
 
-//        public OrderController(OrderService orderService)
-//        {
-//            _orderService = orderService;
-//        }
+        public OrderController(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
 
-//        [HttpGet("{id}")]
-//        public async Task<IActionResult> GetOrderById(int id)
-//        {
-//            var order = await _orderService.GetOrderByIdAsync(id);
-//            if (order == null) return NotFound();
-//            return Ok(order);
-//        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var order = await _orderService.GetByIdAsync(id);
+            if (order == null) return NotFound();
+            return Ok(order);
+        }
 
-//        [HttpGet]
-//        public async Task<IActionResult> GetAllOrders()
-//        {
-//            var orders = await _orderService.GetAllOrdersAsync();
-//            return Ok(orders);
-//        }
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var orders = await _orderService.GetAllAsync();
+            return Ok(orders);
+        }
 
-//        [HttpPost]
-//        public async Task<IActionResult> CreateOrder(Order order)
-//        {
-//            if (await _orderService.CreateOrderAsync(order)) return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
-//            return BadRequest();
-//        }
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetByClientId(int clientId)
+        {
+            var orders = await _orderService.GetByClientIdAsync(clientId);
+            return Ok(orders);
+        }
 
-//        [HttpPut]
-//        public async Task<IActionResult> UpdateOrder(Order order)
-//        {
-//            if (await _orderService.UpdateOrderAsync(order)) return NoContent();
-//            return BadRequest();
-//        }
+        [HttpGet("salesperson/{salesPersonId}")]
+        public async Task<IActionResult> GetBySalesPersonId(int salesPersonId)
+        {
+            var orders = await _orderService.GetBySalesPersonIdAsync(salesPersonId);
+            return Ok(orders);
+        }
 
-//        [HttpDelete("{id}")]
-//        public async Task<IActionResult> DeleteOrder(int id)
-//        {
-//            if (await _orderService.DeleteOrderAsync(id)) return NoContent();
-//            return NotFound();
-//        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Order order)
+        {
+            var result = await _orderService.CreateAsync(order);
+            if (!result) return BadRequest("Failed to create order.");
+            return Ok("Order created successfully.");
+        }
 
-//        [HttpPatch("{id}/status")]
-//        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
-//        {
-//            if (await _orderService.UpdateOrderStatusAsync(id, status)) return NoContent();
-//            return BadRequest();
-//        }
-//    }
-//}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] Order order)
+        {
+            if (id != order.Id) return BadRequest("Order ID mismatch.");
+
+            var existingOrder = await _orderService.GetByIdAsync(id);
+            if (existingOrder == null) return NotFound("Order not found.");
+
+            var result = await _orderService.UpdateAsync(order);
+            if (!result) return StatusCode(500, "Failed to update order.");
+            return Ok("Order updated successfully.");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _orderService.DeleteAsync(id);
+            if (!result) return NotFound("Order not found.");
+            return Ok("Order deleted successfully.");
+        }
+
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] OrderStatus status)
+        {
+            var result = await _orderService.UpdateOrderStatusAsync(id, status);
+            if (!result) return NotFound("Order not found or failed to update status.");
+            return Ok("Order status updated successfully.");
+        }
+    }
+}
