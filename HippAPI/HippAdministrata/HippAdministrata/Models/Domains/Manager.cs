@@ -8,5 +8,6 @@
         public int UserId { get; set; } // FK to User
         public User? User { get; set; }
 
+
     }
 }

@@ -30,5 +30,7 @@ namespace HippAdministrata.Models.Domains
         public Warehouse? Warehouse { get; set; }
         public Driver? Driver { get; set; }
 
+        public ICollection<OrderProduct>? OrderProducts { get; set; }
+
     }
 }

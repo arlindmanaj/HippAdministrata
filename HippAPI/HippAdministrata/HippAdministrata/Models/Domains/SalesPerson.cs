@@ -11,6 +11,8 @@ namespace HippAdministrata.Models.Domains
         public Location Location { get; set; }
         public ICollection<Order>? Orders { get; set; }
         public ICollection<SalesPersonClients>? SalesPersonsClients { get; set; }
+        public ICollection<Order>? ManagedOrders { get; set; }
+
         public int UserId { get; set; } // FK to User
         public User? User { get; set; }
     }

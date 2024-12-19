@@ -36,6 +36,31 @@ namespace HippAdministrata.Controllers
             return Ok(order);
         }
 
+        [HttpGet("orders")]
+        public async Task<IActionResult> GetManagedOrders(int salesPersonId)
+        {
+            var orders = await _orderService.GetBySalesPersonIdAsync(salesPersonId);
+            return Ok(orders);
+        }
+
+        [HttpPut("orders/{orderId}/assign-employee")]
+        public async Task<IActionResult> AssignEmployee(int orderId, [FromBody] int employeeId)
+        {
+            var result = await _orderService.AssignEmployeeToOrder(orderId, employeeId);
+            if (!result) return BadRequest("Failed to assign employee.");
+            return Ok("Employee assigned successfully.");
+        }
+
+        [HttpPut("orders/{orderId}/assign-driver")]
+        public async Task<IActionResult> AssignDriver(int orderId, [FromBody] int driverId)
+        {
+            var result = await _orderService.AssignDriverToOrder(orderId, driverId);
+            if (!result) return BadRequest("Failed to assign driver.");
+            return Ok("Driver assigned successfully.");
+        }
+
+
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -57,46 +82,46 @@ namespace HippAdministrata.Controllers
             return Ok(orders);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
-        {
-            // Validate related entities
-            var driver = await _driverService.GetByIdAsync(request.DriverId);
-            if (driver == null) return BadRequest($"Driver with ID {request.DriverId} not found.");
+        //[HttpPost]
+        //public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
+        //{
+        //    // Validate related entities
+        //    var driver = await _driverService.GetByIdAsync(request.DriverId);
+        //    if (driver == null) return BadRequest($"Driver with ID {request.DriverId} not found.");
 
-            var client = await _clientService.GetByIdAsync(request.ClientId);
-            if (client == null) return BadRequest($"Client with ID {request.ClientId} not found.");
+        //    var client = await _clientService.GetByIdAsync(request.ClientId);
+        //    if (client == null) return BadRequest($"Client with ID {request.ClientId} not found.");
 
-            var salesPerson = await _salesPersonService.GetByIdAsync(request.SalesPersonId);
-            if (salesPerson == null) return BadRequest($"SalesPerson with ID {request.SalesPersonId} not found.");
+        //    var salesPerson = await _salesPersonService.GetByIdAsync(request.SalesPersonId);
+        //    if (salesPerson == null) return BadRequest($"SalesPerson with ID {request.SalesPersonId} not found.");
 
-            var employee = await _employeeService.GetByIdAsync(request.EmployeeId);
-            if (employee == null) return BadRequest($"Employee with ID {request.EmployeeId} not found.");
+        //    var employee = await _employeeService.GetByIdAsync(request.EmployeeId);
+        //    if (employee == null) return BadRequest($"Employee with ID {request.EmployeeId} not found.");
 
-            var warehouse = request.WarehouseId.HasValue
-                ? await _warehouseService.GetByIdAsync(request.WarehouseId.Value)
-                : null;
+        //    var warehouse = request.WarehouseId.HasValue
+        //        ? await _warehouseService.GetByIdAsync(request.WarehouseId.Value)
+        //        : null;
 
-            // Map the DTO to the domain model
-            var order = new Order
-            {
-                Name = request.Name,
-                Quantity = request.Quantity,
-                DeliveryDestination = request.DeliveryDestination,
-                ClientId = request.ClientId,
-                SalesPersonId = request.SalesPersonId,
-                EmployeeId = request.EmployeeId,
-                DriverId = request.DriverId,
-                WarehouseId = request.WarehouseId,
-                OrderStatus = request.OrderStatus,
-                LastUpdated = DateTime.UtcNow // Automatically set timestamp
-            };
+        //    // Map the DTO to the domain model
+        //    var order = new Order
+        //    {
+        //        Name = request.Name,
+        //        Quantity = request.Quantity,
+        //        DeliveryDestination = request.DeliveryDestination,
+        //        ClientId = request.ClientId,
+        //        SalesPersonId = request.SalesPersonId,
+        //        EmployeeId = request.EmployeeId,
+        //        DriverId = request.DriverId,
+        //        WarehouseId = request.WarehouseId,
+        //        OrderStatus = request.OrderStatus,
+        //        LastUpdated = DateTime.UtcNow // Automatically set timestamp
+        //    };
 
-            var result = await _orderService.CreateAsync(order);
-            if (!result) return StatusCode(500, "Failed to create order.");
+        //    var result = await _orderService.CreateAsync(order);
+        //    if (!result) return StatusCode(500, "Failed to create order.");
 
-            return Ok("Order created successfully.");
-        }
+        //    return Ok("Order created successfully.");
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Order order)

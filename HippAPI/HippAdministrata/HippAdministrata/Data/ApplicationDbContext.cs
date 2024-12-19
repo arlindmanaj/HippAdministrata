@@ -32,7 +32,8 @@ namespace HippAdministrata.Data
             modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-
+            modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeProductLabelConfiguration());
 
         }
 

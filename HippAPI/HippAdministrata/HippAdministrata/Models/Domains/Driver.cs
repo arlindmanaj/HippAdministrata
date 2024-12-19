@@ -1,4 +1,5 @@
-﻿using HippAdministrata.Models.JunctionTables;
+﻿using HippAdministrata.Models.Enums;
+using HippAdministrata.Models.JunctionTables;
 
 namespace HippAdministrata.Models.Domains
 {
@@ -12,6 +13,7 @@ namespace HippAdministrata.Models.Domains
         public int UserId { get; set; } // FK to User
         public User? User { get; set; }
         public ICollection<CarDrivers>? CarDrivers { get; set; }
+        public ICollection<OrderStatus>? OrderStatus { get; set; }
         public int OrderId {get; set; }
 
         public Order? Order { get; set; }

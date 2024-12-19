@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HippAdministrata.Models.JunctionTables;
+using System.ComponentModel.DataAnnotations;
 
 namespace HippAdministrata.Models.Domains
 {
@@ -13,5 +14,9 @@ namespace HippAdministrata.Models.Domains
         public decimal LabeledQuantity { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+
+        public ICollection<OrderProduct>? OrderProducts { get; set; }
+
+        public ICollection<EmployeeProductLabel>? EmployeeProductLabels { get; set; }
     }
 }

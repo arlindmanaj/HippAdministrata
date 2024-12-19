@@ -13,5 +13,7 @@ namespace HippAdministrata.Services.Interface
         Task<bool> UpdateAsync(Order order);
         Task<bool> DeleteAsync(int id);
         Task<bool> UpdateOrderStatusAsync(int id, OrderStatus status);
+        Task<bool> AssignEmployeeToOrder(int orderId, int employeeId);
+        Task<bool> AssignDriverToOrder(int orderId, int driverId);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace HippAdministrata.Models.Domains
+﻿using HippAdministrata.Models.JunctionTables;
+
+namespace HippAdministrata.Models.Domains
 {
     public class Employee
     {
@@ -8,6 +10,9 @@
         public Manager? Supervisor { get; set; }
         public int UserId { get; set; } // FK to User
         public User? User { get; set; }
+
+        public ICollection<EmployeeProductLabel>? EmployeeProductLabels { get; set; }
+        public ICollection<Order>? AssignedOrders { get; set; }
 
     }
 }
