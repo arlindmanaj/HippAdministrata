@@ -38,13 +38,14 @@ namespace HippAdministrata
             builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  
             builder.Services.AddScoped<ISalesPersonRepository, SalesPersonRepository>();
-
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             // Register Services
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IDriverService, DriverService> ();
-           
+            builder.Services.AddScoped<IDriverService, DriverService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

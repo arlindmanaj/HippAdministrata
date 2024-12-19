@@ -1,6 +1,8 @@
 ﻿using HippAdministrata.Models.Domains;
 using HippAdministrata.Models.Enums;
+using HippAdministrata.Models.Requests;
 using HippAdministrata.Services;
+using HippAdministrata.Services.Implementation;
 using HippAdministrata.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +15,17 @@ namespace HippAdministrata.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-
-        public OrderController(IOrderService orderService)
+        private readonly IDriverService _driverService;
+        private readonly IClientService _clientService;
+        private readonly IWarehouseService _warehouseService;
+        private readonly IEmployeeService _employeeService;
+        public OrderController(IOrderService orderService, IDriverService driverService, IClientService clientService, IEmployeeService employeeService, IWarehouseService warehouseService)
         {
             _orderService = orderService;
+            _driverService = driverService;
+            _clientService = clientService;
+            _warehouseService = warehouseService;
+            _employeeService = employeeService;
         }
 
         [HttpGet("{id}")]
@@ -49,10 +58,43 @@ namespace HippAdministrata.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Order order)
+        public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
         {
+            // Validate related entities
+            var driver = await _driverService.GetByIdAsync(request.DriverId);
+            if (driver == null) return BadRequest($"Driver with ID {request.DriverId} not found.");
+
+            var client = await _clientService.GetByIdAsync(request.ClientId);
+            if (client == null) return BadRequest($"Client with ID {request.ClientId} not found.");
+
+            var salesPerson = await _salesPersonService.GetByIdAsync(request.SalesPersonId);
+            if (salesPerson == null) return BadRequest($"SalesPerson with ID {request.SalesPersonId} not found.");
+
+            var employee = await _employeeService.GetByIdAsync(request.EmployeeId);
+            if (employee == null) return BadRequest($"Employee with ID {request.EmployeeId} not found.");
+
+            var warehouse = request.WarehouseId.HasValue
+                ? await _warehouseService.GetByIdAsync(request.WarehouseId.Value)
+                : null;
+
+            // Map the DTO to the domain model
+            var order = new Order
+            {
+                Name = request.Name,
+                Quantity = request.Quantity,
+                DeliveryDestination = request.DeliveryDestination,
+                ClientId = request.ClientId,
+                SalesPersonId = request.SalesPersonId,
+                EmployeeId = request.EmployeeId,
+                DriverId = request.DriverId,
+                WarehouseId = request.WarehouseId,
+                OrderStatus = request.OrderStatus,
+                LastUpdated = DateTime.UtcNow // Automatically set timestamp
+            };
+
             var result = await _orderService.CreateAsync(order);
-            if (!result) return BadRequest("Failed to create order.");
+            if (!result) return StatusCode(500, "Failed to create order.");
+
             return Ok("Order created successfully.");
         }
 
