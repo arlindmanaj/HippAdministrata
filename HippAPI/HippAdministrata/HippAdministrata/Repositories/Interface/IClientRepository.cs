@@ -1,15 +1,14 @@
 ﻿using HippAdministrata.Models.Domains;
-using HippAdministrata.Models.DTOs;
 
-namespace HippAdministrata.Services.Interface
+namespace HippAdministrata.Repositories.Interface
 {
-    public interface IClientService
+    public interface IClientRepository
     {
         Task<Client> GetByIdAsync(int id);
         Task<IEnumerable<Client>> GetAllAsync();
+        Task<bool> CreateAsync(Client client);
         Task<bool> UpdateAsync(int id, Client updatedClient);
         Task<bool> DeleteAsync(int id);
-        Task<bool> CreateOrderRequestAsync(int clientId, ClientOrderRequestDto request);
-        
+
     }
 }

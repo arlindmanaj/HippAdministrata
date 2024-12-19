@@ -1,4 +1,5 @@
 ﻿using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.DTOs;
 using HippAdministrata.Models.Enums;
 
 namespace HippAdministrata.Services.Interface
@@ -15,5 +16,7 @@ namespace HippAdministrata.Services.Interface
         Task<bool> UpdateOrderStatusAsync(int id, OrderStatus status);
         Task<bool> AssignEmployeeToOrder(int orderId, int employeeId);
         Task<bool> AssignDriverToOrder(int orderId, int driverId);
+
+        Task<bool> ProcessOrderRequestAsync(int requestId, OrderProcessRequestDto request);
     }
 }

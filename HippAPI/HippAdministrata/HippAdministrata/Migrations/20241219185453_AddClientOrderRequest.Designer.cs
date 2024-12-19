@@ -4,6 +4,7 @@ using HippAdministrata.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HippAdministrata.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241219185453_AddClientOrderRequest")]
+    partial class AddClientOrderRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,11 +236,17 @@ namespace HippAdministrata.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("LabeledQuantity")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalQuantity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnlabeledQuantity")
                         .HasColumnType("decimal(18,2)");
@@ -441,18 +450,6 @@ namespace HippAdministrata.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeliveryDestination")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<int>("SalesPersonId")
                         .HasColumnType("int");
 
@@ -463,41 +460,6 @@ namespace HippAdministrata.Migrations
                     b.HasIndex("SalesPersonId");
 
                     b.ToTable("SalesPersonClients");
-                });
-
-            modelBuilder.Entity("HippAdministrata.Models.Requests.ClientOrderRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeliveryDestination")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SalesPersonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("SalesPersonId");
-
-                    b.ToTable("ClientOrderRequests");
                 });
 
             modelBuilder.Entity("HippAdministrata.Models.Domains.Client", b =>
@@ -726,25 +688,6 @@ namespace HippAdministrata.Migrations
                         .WithMany("SalesPersonsClients")
                         .HasForeignKey("SalesPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("SalesPerson");
-                });
-
-            modelBuilder.Entity("HippAdministrata.Models.Requests.ClientOrderRequest", b =>
-                {
-                    b.HasOne("HippAdministrata.Models.Domains.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HippAdministrata.Models.Domains.SalesPerson", "SalesPerson")
-                        .WithMany()
-                        .HasForeignKey("SalesPersonId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Client");

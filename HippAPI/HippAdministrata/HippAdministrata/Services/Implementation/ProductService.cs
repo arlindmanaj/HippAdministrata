@@ -14,27 +14,27 @@ namespace HippAdministrata.Services
             _productRepository = productRepository;
         }
 
-       
-
-        public async Task<bool> UpdateAsync(Product product)
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            try
-            {
-                return await _productRepository.UpdateAsync(product);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Optional: Add any additional business logic here (e.g., logging or retrying)
-                return false;
-            }
+            return await _productRepository.GetAllAsync();
+        }
+
+        public async Task<Product> GetByIdAsync(int id)
+        {
+            return await _productRepository.GetByIdAsync(id);
+        }
+
+        public async Task<bool> CreateAsync(Product product)
+        {
+            // Add validation logic if needed (e.g., prevent duplicate names)
+            return await _productRepository.CreateAsync(product);
         }
 
 
-        public async Task<bool> DeleteAsync(int id) => await _productRepository.DeleteAsync(id);
-
-        public async Task<bool> UpdateQuantitiesAsync(int id, decimal labeled, decimal unlabeled)
+        public async Task<bool> DeleteAsync(int id)
         {
-            return await _productRepository.UpdateQuantitiesAsync(id, labeled, unlabeled);
+            return await _productRepository.DeleteAsync(id);
         }
     }
+
 }

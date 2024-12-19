@@ -1,6 +1,7 @@
 ﻿using HippAdministrata.Configurations;
 using HippAdministrata.Models.Domains;
 using HippAdministrata.Models.JunctionTables;
+using HippAdministrata.Models.Requests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -23,6 +24,10 @@ namespace HippAdministrata.Data
         public DbSet<SalesPerson> SalesPersons { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<ClientOrderRequest> ClientOrderRequests { get; set; }
+        public DbSet<SalesPersonClients> SalesPersonClients { get; set; }
+
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CarDriversConfiguration());
@@ -34,7 +39,7 @@ namespace HippAdministrata.Data
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeProductLabelConfiguration());
-
+            modelBuilder.ApplyConfiguration(new ClientOrderRequestConfiguration());
         }
 
     }

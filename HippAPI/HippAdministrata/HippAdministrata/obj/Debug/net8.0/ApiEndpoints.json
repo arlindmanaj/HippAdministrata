@@ -96,6 +96,90 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "HippAdministrata.Controllers.ClientController",
+    "Method": "GetAll",
+    "RelativePath": "api/Client",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ClientController",
+    "Method": "SubmitOrderRequest",
+    "RelativePath": "api/Client/{clientId}/submit-order-request",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clientId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "HippAdministrata.Models.DTOs.ClientOrderRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ClientController",
+    "Method": "GetById",
+    "RelativePath": "api/Client/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ClientController",
+    "Method": "Update",
+    "RelativePath": "api/Client/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedClient",
+        "Type": "HippAdministrata.Models.Domains.Client",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ClientController",
+    "Method": "Delete",
+    "RelativePath": "api/Client/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "HippAdministrata.Controllers.DriverController",
     "Method": "GetAll",
     "RelativePath": "api/Driver",
@@ -191,22 +275,6 @@
   },
   {
     "ContainingType": "HippAdministrata.Controllers.OrderController",
-    "Method": "Create",
-    "RelativePath": "api/Order",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "order",
-        "Type": "HippAdministrata.Models.Domains.Order",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HippAdministrata.Controllers.OrderController",
     "Method": "GetById",
     "RelativePath": "api/Order/{id}",
     "HttpMethod": "GET",
@@ -297,6 +365,22 @@
   },
   {
     "ContainingType": "HippAdministrata.Controllers.OrderController",
+    "Method": "GetManagedOrders",
+    "RelativePath": "api/Order/orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "salesPersonId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.OrderController",
     "Method": "GetBySalesPersonId",
     "RelativePath": "api/Order/salesperson/{salesPersonId}",
     "HttpMethod": "GET",
@@ -306,6 +390,116 @@
       {
         "Name": "salesPersonId",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ProductController",
+    "Method": "GetAll",
+    "RelativePath": "api/Product",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ProductController",
+    "Method": "GetById",
+    "RelativePath": "api/Product/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ProductController",
+    "Method": "Delete",
+    "RelativePath": "api/Product/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ProductController",
+    "Method": "CreateProduct",
+    "RelativePath": "api/Product/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "HippAdministrata.Models.DTOs.ProductCreateRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.SalesPersonController",
+    "Method": "GetClientOrderRequests",
+    "RelativePath": "api/SalesPerson/order-requests",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.SalesPersonController",
+    "Method": "UpdateOrderStatus",
+    "RelativePath": "api/SalesPerson/orders/{orderId}/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "newStatus",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.SalesPersonController",
+    "Method": "ProcessOrderRequest",
+    "RelativePath": "api/SalesPerson/process-order/{requestId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "HippAdministrata.Models.DTOs.OrderProcessRequestDto",
         "IsRequired": true
       }
     ],

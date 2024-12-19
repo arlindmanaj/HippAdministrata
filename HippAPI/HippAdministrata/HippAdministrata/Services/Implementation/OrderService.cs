@@ -1,4 +1,6 @@
-﻿using HippAdministrata.Models.Domains;
+﻿using HippAdministrata.Data;
+using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.DTOs;
 using HippAdministrata.Models.Enums;
 using HippAdministrata.Repositories.Interface;
 using HippAdministrata.Services.Interface;
@@ -10,12 +12,14 @@ namespace HippAdministrata.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IDriverRepository _driverRepository;
+        private readonly ApplicationDbContext _context;
 
-        public OrderService(IOrderRepository orderRepository, IEmployeeRepository employeeRepository, IDriverRepository driverRepository)
+        public OrderService(IOrderRepository orderRepository, IEmployeeRepository employeeRepository, IDriverRepository driverRepository, ApplicationDbContext context)
         {
             _orderRepository = orderRepository;
             _employeeRepository = employeeRepository;
             _driverRepository = driverRepository;
+            _context = context;
         }
 
 
@@ -65,6 +69,35 @@ namespace HippAdministrata.Services
 
             return await _orderRepository.UpdateAsync(order);
         }
+
+
+        public async Task<bool> ProcessOrderRequestAsync(int requestId, OrderProcessRequestDto request)
+        {
+            var clientOrderRequest = await _context.ClientOrderRequests.FindAsync(requestId);
+            if (clientOrderRequest == null) throw new ArgumentException($"Order request with ID {requestId} not found.");
+
+            var order = new Order
+            {
+                Name = clientOrderRequest.Name,
+                Quantity = clientOrderRequest.Quantity,
+                DeliveryDestination = clientOrderRequest.DeliveryDestination,
+                ClientId = clientOrderRequest.ClientId,
+                SalesPersonId = clientOrderRequest.SalesPersonId,
+                EmployeeId = request.EmployeeId,
+                DriverId = request.DriverId,
+                WarehouseId = request.WarehouseId,
+                OrderStatus = OrderStatus.Created,
+                LastUpdated = DateTime.UtcNow
+            };
+
+            var result = await _orderRepository.CreateAsync(order);
+            if (!result) return false;
+
+            _context.ClientOrderRequests.Remove(clientOrderRequest);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+
         public async Task<bool> AssignEmployeeToOrder(int orderId, int employeeId)
         {
             // Validate if the order exists

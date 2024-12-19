@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HippAdministrata")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+371d3e24c7dd645c38a37ce4fa0e2bb21ccaabf6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5dbb214b466895139638fb000d37cf06cac8c60c")]
 [assembly: System.Reflection.AssemblyProductAttribute("HippAdministrata")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HippAdministrata")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -4,9 +4,9 @@ namespace HippAdministrata.Models.Requests
 {
     public class OrderCreateRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int Quantity { get; set; }
-        public string DeliveryDestination { get; set; }
+        public string? DeliveryDestination { get; set; }
         public int ClientId { get; set; }
         public int SalesPersonId { get; set; }
         public int EmployeeId { get; set; }
