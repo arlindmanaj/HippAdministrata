@@ -16,13 +16,16 @@ namespace HippAdministrata.Controllers
         private readonly WarehouseService _warehouseService;
         private readonly ManagerService _managerService;
         private readonly EmployeeService _employeeService;  
+        private readonly SalesPersonService _salesPersonService;
 
         public AdminController(
             ProductService productService,
             DriverService driverService,
             WarehouseService warehouseService,
             ManagerService managerService,
-            EmployeeService employeeService)
+            EmployeeService employeeService
+            ,
+            SalesPersonService salesPersonService)
 
         {
             _productService = productService;
@@ -30,6 +33,7 @@ namespace HippAdministrata.Controllers
             _warehouseService = warehouseService;
             _managerService = managerService;
             _employeeService = employeeService;
+            _salesPersonService = salesPersonService;
         }
 
         // =======================
@@ -218,6 +222,42 @@ namespace HippAdministrata.Controllers
             if (await _employeeService.DeleteAsync(id))
                 return Ok("Employee deleted successfully");
             return NotFound("Employee not found");
+        }
+
+        // =======================
+        // SalesPerson
+        // =======================
+        [HttpGet("SalesPerson")]
+        public async Task<IActionResult> GetAllSalePerson()
+        {
+            var salesPerson = await _salesPersonService.GetAllAsync();
+            return Ok(salesPerson);
+        }
+
+        [HttpGet("SalePerson/{id}")]
+        public async Task<IActionResult> GetSalePersonById(int id)
+        {
+            var salesPerson = await _salesPersonService.GetByIdAsync(id);
+            if (salesPerson == null) return NotFound("Employee not found");
+            return Ok(salesPerson);
+        }
+
+
+        [HttpPut("SalePerson/{id}")]
+        public async Task<IActionResult> UpdatedSalePerson(int id, SalesPerson updatedSalesPerson)
+        {
+            if (await _salesPersonService.UpdateAsync(id, updatedSalesPerson))
+                return Ok("SalePerson updated successfully");
+            return BadRequest("Failed to update SalePerson");
+        }
+
+
+        [HttpDelete("SalePerson/{id}")]
+        public async Task<IActionResult> DeleteSalePerson(int id)
+        {
+            if (await _salesPersonService.DeleteAsync(id))
+                return Ok("SalePerson deleted successfully");
+            return NotFound("SalePerson not found");
         }
     }
 }

@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj": {}
+    "C:\\Users\\Melos\\source\\repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj": {
+    "C:\\Users\\Melos\\source\\repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
+        "projectUniqueName": "C:\\Users\\Melos\\source\\repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
         "projectName": "HippAdministrata",
-        "projectPath": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
+        "projectPath": "C:\\Users\\Melos\\source\\repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
         "packagesPath": "C:\\Users\\Melos\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\obj\\",
         "projectStyle": "PackageReference",

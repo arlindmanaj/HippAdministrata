@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oNJrcucNEc4=",
+  "dgSpecHash": "YGUXHr+M93o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
+  "projectFilePath": "C:\\Users\\Melos\\source\\repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Melos\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Melos\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
