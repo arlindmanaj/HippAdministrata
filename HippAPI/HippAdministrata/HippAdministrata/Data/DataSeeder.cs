@@ -1,5 +1,6 @@
 ﻿using HippAdministrata.Models.Domains;
 using HippAdministrata.Models.Enums;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,6 +19,8 @@ namespace HippAdministrata.Data
                 if (context.Users.Any())
                     return; // Database already seeded
 
+                if (context.Warehouses.Any())
+                    return;
                 // Seed Roles
                 if (!context.Roles.Any())
                 {
@@ -260,7 +263,26 @@ namespace HippAdministrata.Data
 
                 // Save changes to the database
                 context.SaveChanges();
+
+                // Seed Warehouse
+
+                context.Warehouses.AddRange(
+                    new Warehouse
+                    {
+                        Name = "Stofjan Xoxi, Penthouse",
+                        Location = Location.Prishtina
+                    },
+                    new Warehouse
+                    {
+                        Name = "Hasan Prishtina kati 2",
+                        Location = Location.Peja
+
+                    }
+
+                );
+                context.SaveChanges();
             }
+
         }
 
         private static string HashPassword(string password)

@@ -20,11 +20,11 @@ namespace HippAdministrata.Controllers
         private readonly ISalesPersonClientService _salesPersonClientService;
         
 
-        public SalesPersonController(IOrderService orderService, ISalesPersonClientService salesPersonClientService , ISalesPersonService salesPersonService, IClientService clientService)
+        public SalesPersonController(ILogger<SalesPersonController> logger,IOrderService orderService, ISalesPersonClientService salesPersonClientService , ISalesPersonService salesPersonService, IClientService clientService)
         {
             _orderService = orderService;
             _clientService = clientService;
-           
+            _logger = logger; 
             _salesPersonClientService = salesPersonClientService;
             _salesPersonService = salesPersonService;
         }
@@ -60,20 +60,27 @@ namespace HippAdministrata.Controllers
         }
 
 
-        
+
         [HttpPost("process-order/{requestId}")]
         public async Task<IActionResult> ProcessOrderRequest(int requestId, [FromBody] OrderProcessRequestDto request)
         {
             try
             {
-                var result = await _salesPersonClientService.ProcessOrderRequestAsync(requestId, request);
-                if (!result) return BadRequest("Failed to process order request.");
+                _logger.LogInformation("Received ProcessOrderRequest for requestId: {RequestId}", requestId);
 
+                var result = await _salesPersonClientService.ProcessOrderRequestAsync(requestId, request);
+                if (!result)
+                {
+                    _logger.LogWarning("Failed to process order request for requestId: {RequestId}", requestId);
+                    return BadRequest("Failed to process order request.");
+                }
+
+                _logger.LogInformation("Order processed successfully for requestId: {RequestId}", requestId);
                 return Ok("Order processed successfully.");
             }
             catch (Exception ex)
             {
-               
+                _logger.LogError(ex, "An error occurred while processing the order request for requestId: {RequestId}", requestId);
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }

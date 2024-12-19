@@ -15,9 +15,7 @@ namespace HippAdministrata.Configurations
                   .IsRequired()
                   .HasConversion<string>();
 
-            entity.HasMany(w => w.Orders)
-                  .WithOne(o => o.Warehouse)
-                  .HasForeignKey(o => o.WarehouseId);
+           
         }
     }
 }

@@ -4,6 +4,7 @@ using HippAdministrata.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HippAdministrata.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241219205019_RemovedUnneccessaryAttributes")]
+    partial class RemovedUnneccessaryAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,10 +342,6 @@ namespace HippAdministrata.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
@@ -628,8 +627,9 @@ namespace HippAdministrata.Migrations
                         .HasForeignKey("SalesPersonId1");
 
                     b.HasOne("HippAdministrata.Models.Domains.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId");
+                        .WithMany("Orders")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Client");
 
@@ -840,6 +840,11 @@ namespace HippAdministrata.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("SalesPersonsClients");
+                });
+
+            modelBuilder.Entity("HippAdministrata.Models.Domains.Warehouse", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("HippAdministrata.Models.JunctionTables.SalesPersonClients", b =>

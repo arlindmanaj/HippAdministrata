@@ -21,6 +21,10 @@ namespace HippAdministrata.Configurations
                   .WithMany(c => c.SalesPersonsClients)
                   .HasForeignKey(spc => spc.ClientId)
                   .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(spc => spc.Products)
+             .WithOne(spcp => spcp.SalesPersonClient)
+             .HasForeignKey(spcp => spcp.SalesPersonClientId);
         }
     }
 }

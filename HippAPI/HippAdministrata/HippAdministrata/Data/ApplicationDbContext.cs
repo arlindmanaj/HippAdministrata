@@ -26,6 +26,8 @@ namespace HippAdministrata.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<ClientOrderRequest> ClientOrderRequests { get; set; }
         public DbSet<SalesPersonClients> SalesPersonClients { get; set; }
+        public DbSet<SalesPersonClientProduct> SalesPersonClientProducts { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,6 +42,7 @@ namespace HippAdministrata.Data
             modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeProductLabelConfiguration());
             modelBuilder.ApplyConfiguration(new ClientOrderRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new SalesPersonClientProductConfiguration());
         }
 
     }

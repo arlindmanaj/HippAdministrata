@@ -76,31 +76,35 @@ namespace HippAdministrata.Controllers
         {
             try
             {
-                // Validate client exists
                 var client = await _clientService.GetByIdAsync(clientId);
                 if (client == null) return NotFound($"Client with ID {clientId} not found.");
 
-                // Assign the first available SalesPerson
                 var salesPerson = await _context.SalesPersons.FirstOrDefaultAsync();
                 if (salesPerson == null) return BadRequest("No SalesPerson available.");
 
-                // Create order request
                 var salesPersonClient = new SalesPersonClients
                 {
                     ClientId = clientId,
                     SalesPersonId = salesPerson.Id,
                     Name = request.Name,
-                    
                     DeliveryDestination = request.DeliveryDestination
                 };
 
-                // Add the object to the SalesPersonClients table
                 await _context.SalesPersonClients.AddAsync(salesPersonClient);
+                await _context.SaveChangesAsync();
 
-                // Save changes to the database
-                var result = await _context.SaveChangesAsync();
-                if (result <= 0) return BadRequest("Failed to save order request.");
+                foreach (var product in request.Products)
+                {
+                    var productLink = new SalesPersonClientProduct
+                    {
+                        SalesPersonClientId = salesPersonClient.Id,
+                        ProductId = product.ProductId,
+                        Quantity = product.Quantity
+                    };
+                    await _context.SalesPersonClientProducts.AddAsync(productLink);
+                }
 
+                await _context.SaveChangesAsync();
                 return Ok("Order request submitted successfully.");
             }
             catch (Exception ex)

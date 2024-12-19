@@ -30,10 +30,7 @@ namespace HippAdministrata.Configurations
                   .HasForeignKey(o => o.DriverId)
                   .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(o => o.Warehouse)
-                  .WithMany(w => w.Orders)
-                  .HasForeignKey(o => o.WarehouseId)
-                  .OnDelete(DeleteBehavior.Restrict);
+           
 
             entity.HasOne(o => o.Product)
                .WithMany() // Assuming a Product can be part of multiple Orders

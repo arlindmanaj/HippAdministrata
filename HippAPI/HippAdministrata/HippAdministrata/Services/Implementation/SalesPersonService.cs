@@ -6,6 +6,6 @@ namespace HippAdministrata.Services
 {
     public class SalesPersonService : ISalesPersonService
     {
-       
+
     }
 }
