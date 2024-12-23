@@ -76,12 +76,27 @@ namespace HippAdministrata.Controllers
         {
             try
             {
+                // Validate if client exists
                 var client = await _clientService.GetByIdAsync(clientId);
                 if (client == null) return NotFound($"Client with ID {clientId} not found.");
 
+                // Get the first available SalesPerson
                 var salesPerson = await _context.SalesPersons.FirstOrDefaultAsync();
                 if (salesPerson == null) return BadRequest("No SalesPerson available.");
 
+                // Step 1: Create a ClientOrderRequest entry
+                var clientOrderRequest = new ClientOrderRequest
+                {
+                    ClientId = clientId,
+                    SalesPersonId = salesPerson.Id,
+                    Name = request.Name,
+                    DeliveryDestination = request.DeliveryDestination
+                };
+
+                await _context.ClientOrderRequests.AddAsync(clientOrderRequest);
+                await _context.SaveChangesAsync(); // Save to generate the ClientOrderRequest ID
+
+                // Step 2: Create a SalesPersonClients entry
                 var salesPersonClient = new SalesPersonClients
                 {
                     ClientId = clientId,
@@ -91,8 +106,9 @@ namespace HippAdministrata.Controllers
                 };
 
                 await _context.SalesPersonClients.AddAsync(salesPersonClient);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Save to generate the SalesPersonClients ID
 
+                // Step 3: Add products to SalesPersonClientProduct table
                 foreach (var product in request.Products)
                 {
                     var productLink = new SalesPersonClientProduct
@@ -104,7 +120,7 @@ namespace HippAdministrata.Controllers
                     await _context.SalesPersonClientProducts.AddAsync(productLink);
                 }
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Save all changes to database
                 return Ok("Order request submitted successfully.");
             }
             catch (Exception ex)
@@ -113,6 +129,7 @@ namespace HippAdministrata.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+
 
 
 
