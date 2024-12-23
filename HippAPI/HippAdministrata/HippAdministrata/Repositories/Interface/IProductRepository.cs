@@ -5,6 +5,7 @@ namespace HippAdministrata.Repositories.Interface
     public interface IProductRepository
     {
         Task<Product> GetByIdAsync(int id);
+        
         Task<IEnumerable<Product>> GetAllAsync();
         Task<IEnumerable<Product>> GetUnlabeledProductsAsync();
         Task<bool> CreateAsync(Product product);

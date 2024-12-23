@@ -5,30 +5,37 @@ namespace HippAdministrata.Models.Domains
 {
     public class Order
     {
+        // Primary Key
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public int Quantity { get; set; }
-        public string? DeliveryDestination { get; set; }
-        public DateTime LastUpdated { get; set; }
-        public int ClientId { get; set; }
-        public int SalesPersonId { get; set; }
-        public int EmployeeId {get; set;}
-        public int DriverId { get; set; }
-        public int? WarehouseId { get; set; }
 
+        // Foreign Key references
+        public int ProductId { get; set; } // Foreign Key to Product
+        public int ClientId { get; set; } // Foreign Key to Client
+        public int SalesPersonId { get; set; } // Foreign Key to SalesPerson
+
+        // Order Details
+        public string? DeliveryDestination { get; set; } // Delivery Address
+        public int Quantity { get; set; }
+
+        // Timestamps
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? LastUpdated { get; set; }
+
+        // Order Workflow Status
         public OrderStatus OrderStatus { get; set; }
 
-        public int OrderHistoryId { get; set; }
-        public OrderHistory? OrderHistory { get; set; }
+        // Post-assignment nullable properties
+        public int? EmployeeId { get; set; } // Assigned Employee
+        public int? DriverId { get; set; } // Assigned Driver
+        public int? WarehouseId { get; set; } // Assigned Warehouse
 
-        public int ProductId { get; set; }
+        // Navigation Properties (optional, useful for EF Core relationships)
         public Product? Product { get; set; }
-
         public Client? Client { get; set; }
         public SalesPerson? SalesPerson { get; set; }
         public Employee? Employee { get; set; }
-        public Warehouse? Warehouse { get; set; }
         public Driver? Driver { get; set; }
-
+        public Warehouse? Warehouse { get; set; }
     }
+
 }

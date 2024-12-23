@@ -30,6 +30,8 @@ namespace HippAdministrata.Services
         }
 
 
+
+
         public async Task<bool> DeleteAsync(int id) => await _productRepository.DeleteAsync(id);
 
         public async Task<bool> UpdateQuantitiesAsync(int id, decimal labeled, decimal unlabeled)

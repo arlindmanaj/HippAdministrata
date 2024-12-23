@@ -1,17 +1,23 @@
 ﻿using HippAdministrata.Models.Domains;
 using HippAdministrata.Models.Enums;
+using HippAdministrata.Repositories.Implementation;
 using HippAdministrata.Repositories.Interface;
 using HippAdministrata.Services.Interface;
+using HippAdministrata.Models.DTOs;
+using HippAdministrata.Models.JunctionTables;
+using HippAdministrata.Data;
 
 namespace HippAdministrata.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, ApplicationDbContext applicationDbContext)
         {
             _orderRepository = orderRepository;
+            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<Order> GetByIdAsync(int id)
@@ -34,9 +40,44 @@ namespace HippAdministrata.Services
             return await _orderRepository.GetBySalesPersonIdAsync(salesPersonId);
         }
 
-        public async Task<bool> CreateAsync(Order order)
+
+        public async Task<Order> CreateOrderAsync(int clientId, OrderDto orderDto)
         {
-            return await _orderRepository.CreateAsync(order);
+            // Automatically assign salesperson (example logic)
+            var salesperson =  _applicationDbContext.SalesPersons.FirstOrDefault();
+            if (salesperson == null)
+                throw new Exception("No default salesperson available for the client.");
+
+            // Create and save order
+            var order = new Order
+            {
+                ClientId = clientId,
+                ProductId = orderDto.ProductId,
+                SalesPersonId = salesperson.Id,
+                DeliveryDestination = orderDto.DeliveryDestination,
+                Quantity = orderDto.Quantity,
+                OrderStatus = OrderStatus.Created,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            return await _orderRepository.AddAsync(order);
+        }
+
+        public async Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null || order.OrderStatus != OrderStatus.Created)
+                throw new Exception("Order not found or cannot be assigned.");
+
+            // Update assignments
+            order.EmployeeId = assignmentDto.EmployeeId;
+            order.DriverId = assignmentDto.DriverId;
+            order.WarehouseId = assignmentDto.WarehouseId;
+            order.OrderStatus = OrderStatus.InProgress;
+            order.LastUpdated = DateTime.UtcNow;
+
+            await _orderRepository.UpdateAsync(order);
+            return order;
         }
 
         public async Task<bool> UpdateAsync(Order order)
@@ -49,15 +90,6 @@ namespace HippAdministrata.Services
             return await _orderRepository.DeleteAsync(id);
         }
 
-        public async Task<bool> UpdateOrderStatusAsync(int id, OrderStatus status)
-        {
-            var order = await _orderRepository.GetByIdAsync(id);
-            if (order == null) return false;
-
-            order.OrderStatus = status;
-            order.LastUpdated = DateTime.UtcNow;
-
-            return await _orderRepository.UpdateAsync(order);
-        }
+     
     }
 }

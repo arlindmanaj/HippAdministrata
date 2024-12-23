@@ -20,6 +20,7 @@ namespace HippAdministrata.Repositories.Implementation
             return await _context.Set<Product>().FindAsync(id);
         }
 
+       
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Set<Product>().ToListAsync();
@@ -48,8 +49,7 @@ namespace HippAdministrata.Repositories.Implementation
             if (existingProduct == null) return false;
 
             existingProduct.Name = product.Name;
-            existingProduct.ImageUrl = product.ImageUrl;
-            existingProduct.TotalQuantity = product.TotalQuantity;
+           
             existingProduct.UnlabeledQuantity = product.UnlabeledQuantity;
             existingProduct.LabeledQuantity = product.LabeledQuantity;
             existingProduct.UpdatedAt = DateTime.UtcNow;

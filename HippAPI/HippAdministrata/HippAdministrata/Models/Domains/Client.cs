@@ -10,7 +10,7 @@ namespace HippAdministrata.Models.Domains
         public string? Phone { get; set; }
         public string? Address { get; set; }
         public ICollection<Order>? Orders { get; set; }
-        public ICollection<SalesPersonClients>? SalesPersonsClients { get; set; }
+       
         public int UserId { get; set; } // FK to User
         public User? User { get; set; }
     }

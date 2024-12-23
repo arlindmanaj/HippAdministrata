@@ -23,12 +23,13 @@ namespace HippAdministrata.Data
         public DbSet<SalesPerson> SalesPersons { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<OrderHistory> OrderHistories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CarDriversConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderHistoryConfiguration());
-            modelBuilder.ApplyConfiguration(new SalesPersonClientsConfiguration());
+            
             modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());

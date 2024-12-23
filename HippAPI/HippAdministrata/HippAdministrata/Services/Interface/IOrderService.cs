@@ -1,4 +1,5 @@
 ﻿using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.DTOs;
 using HippAdministrata.Models.Enums;
 
 namespace HippAdministrata.Services.Interface
@@ -9,9 +10,10 @@ namespace HippAdministrata.Services.Interface
         Task<IEnumerable<Order>> GetAllAsync();
         Task<IEnumerable<Order>> GetByClientIdAsync(int clientId);
         Task<IEnumerable<Order>> GetBySalesPersonIdAsync(int salesPersonId);
-        Task<bool> CreateAsync(Order order);
+        Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto);
+        Task<Order> CreateOrderAsync(int clientId, OrderDto orderDto);
         Task<bool> UpdateAsync(Order order);
         Task<bool> DeleteAsync(int id);
-        Task<bool> UpdateOrderStatusAsync(int id, OrderStatus status);
+        
     }
 }

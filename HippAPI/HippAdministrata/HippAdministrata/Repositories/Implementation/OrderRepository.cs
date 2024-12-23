@@ -35,10 +35,11 @@ namespace HippAdministrata.Repositories.Implementation
             return await _context.Set<Order>().Where(o => o.SalesPersonId == salesPersonId).ToListAsync();
         }
 
-        public async Task<bool> CreateAsync(Order order)
+        public async Task<Order> AddAsync(Order order)
         {
-            await _context.Set<Order>().AddAsync(order);
-            return await _context.SaveChangesAsync() > 0;
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+            return order;
         }
 
         public async Task<bool> UpdateAsync(Order order)

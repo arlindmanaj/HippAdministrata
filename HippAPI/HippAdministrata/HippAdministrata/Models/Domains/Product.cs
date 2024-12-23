@@ -7,8 +7,8 @@ namespace HippAdministrata.Models.Domains
        
         public int Id { get; set; }
         public string? Name { get; set; }      
-        public string? ImageUrl { get; set; }
-        public decimal TotalQuantity { get; set; }
+       
+      
         public decimal UnlabeledQuantity { get; set; }
         public decimal LabeledQuantity { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
