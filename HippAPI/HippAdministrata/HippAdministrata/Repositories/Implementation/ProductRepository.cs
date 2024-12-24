@@ -2,6 +2,7 @@
 using HippAdministrata.Models.Domains;
 using HippAdministrata.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace HippAdministrata.Repositories.Implementation
 {
@@ -9,77 +10,42 @@ namespace HippAdministrata.Repositories.Implementation
     {
         private readonly ApplicationDbContext _context;
 
-
         public ProductRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<Product?> GetByIdAsync(int id)
         {
-            return await _context.Set<Product>().FindAsync(id);
+            return await _context.Products.FindAsync(id);
         }
 
-       
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Set<Product>().ToListAsync();
+            return await _context.Products.ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetUnlabeledProductsAsync()
+        public async Task<Product> AddAsync(Product product)
         {
-            return await _context.Set<Product>().Where(p => p.UnlabeledQuantity > 0).ToListAsync();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product;
         }
 
-        public async Task<bool> CreateAsync(Product product)
+        public async Task DeleteAsync(int id)
         {
-            await _context.Set<Product>().AddAsync(product);
-            return await _context.SaveChangesAsync() > 0;
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) throw new Exception("Product not found");
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
         }
 
-
-        //public async Task<bool> UpdateAsync(Product product)
-        //{
-        //    _context.Set<Product>().Update(product);
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
-        public async Task<bool> UpdateAsync(Product product)
+        public async Task UpdateAsync(Product product)
         {
-            var existingProduct = await _context.Set<Product>().FindAsync(product.Id); // Solution 1
-            if (existingProduct == null) return false;
-
-            existingProduct.Name = product.Name;
-           
-            existingProduct.UnlabeledQuantity = product.UnlabeledQuantity;
-            existingProduct.LabeledQuantity = product.LabeledQuantity;
-            existingProduct.UpdatedAt = DateTime.UtcNow;
-
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var product = await GetByIdAsync(id);
-            if (product != null)
-            {
-                _context.Set<Product>().Remove(product);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            return false;
-        }
-
-        public async Task<bool> UpdateQuantitiesAsync(int id, decimal labeled, decimal unlabeled)
-        {
-            var product = await GetByIdAsync(id);
-            if (product != null)
-            {
-                product.LabeledQuantity = labeled;
-                product.UnlabeledQuantity = unlabeled;
-                _context.Set<Product>().Update(product);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            return false;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
         }
     }
+
 }

@@ -49,6 +49,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+
 
 
 

@@ -9,23 +9,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HippAdministrata.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        private readonly IDriverService _driverService;
-        private readonly IClientService _clientService;
-        private readonly IWarehouseService _warehouseService;
-        private readonly IEmployeeService _employeeService;
-        public OrderController(IOrderService orderService, IDriverService driverService, IClientService clientService, IEmployeeService employeeService, IWarehouseService warehouseService)
+       
+        
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            _driverService = driverService;
-            _clientService = clientService;
-            _warehouseService = warehouseService;
-            _employeeService = employeeService;
+           
+            
         }
 
         [HttpGet("{id}")]
