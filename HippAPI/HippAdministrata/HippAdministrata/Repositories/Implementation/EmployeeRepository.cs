@@ -29,17 +29,10 @@ namespace HippAdministrata.Repositories.Implementation
         }
 
 
-        public async Task<bool> UpdateAsync(int id, Employee updatedEmployee)
+        public async Task UpdateAsync(Employee Employee)
         {
-            var existingEmployee = await GetByIdAsync(id);
-            if (existingEmployee == null) return false;
-
-            existingEmployee.Name = updatedEmployee.Name;
-            existingEmployee.Password = updatedEmployee.Password;
-            existingEmployee.UserId = updatedEmployee.UserId;
-
-            _context.Set<Employee>().Update(existingEmployee);
-            return await _context.SaveChangesAsync() > 0;
+            _context.Employees.Update(Employee);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)

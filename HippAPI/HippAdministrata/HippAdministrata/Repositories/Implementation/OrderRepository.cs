@@ -15,9 +15,11 @@ namespace HippAdministrata.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<Order> GetByIdAsync(int id)
+        public async Task<Order?> GetByIdAsync(int id)
         {
-            return await _context.Set<Order>().FindAsync(id);
+            return await _context.Orders
+                .Include(o => o.Product) // Include navigation properties if needed
+                .FirstOrDefaultAsync(o => o.Id == id);
         }
         public async Task<Order?> GetByIdWithProductAsync(int orderId)
         {

@@ -13,11 +13,13 @@ namespace HippAdministrata.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IProductRepository _productRepository;
 
-        public OrderService(IOrderRepository orderRepository, ApplicationDbContext applicationDbContext)
+        public OrderService(IProductRepository productRepository, IOrderRepository orderRepository, ApplicationDbContext applicationDbContext)
         {
             _orderRepository = orderRepository;
             _applicationDbContext = applicationDbContext;
+            _productRepository = productRepository;
         }
 
         public async Task<Order> GetByIdAsync(int id)
@@ -43,26 +45,37 @@ namespace HippAdministrata.Services
 
         public async Task<Order> CreateOrderAsync(int clientId, OrderDto orderDto)
         {
-            // Automatically assign salesperson (example logic)
-            var salesperson =  _applicationDbContext.SalesPersons.FirstOrDefault();
-            if (salesperson == null)
-                throw new Exception("No default salesperson available for the client.");
+           
+                var product = await _productRepository.GetByIdAsync(orderDto.ProductId);
+                if (product == null) throw new Exception("Product not found");
 
-            // Create and save order
-            var order = new Order
-            {
-                ClientId = clientId,
-                ProductId = orderDto.ProductId,
-                SalesPersonId = salesperson.Id,
-                DeliveryDestination = orderDto.DeliveryDestination,
-                Quantity = orderDto.Quantity,
-                UnlabeledQuantity = orderDto.Quantity, // Initialize as total quantity
-                LabeledQuantity = 0,
-                OrderStatus = OrderStatus.Created,
-                CreatedAt = DateTime.UtcNow
-            };
+                // Automatically assign salesperson (example logic)
+                var salesperson = _applicationDbContext.SalesPersons.FirstOrDefault();
+                if (salesperson == null)
+                    throw new Exception("No default salesperson available for the client.");
 
-            return await _orderRepository.AddAsync(order);
+                if (orderDto.Quantity > product.UnlabeledQuantity)
+                    throw new Exception("Requested quantity exceeds available stock");
+
+                // Create and save order
+                var order = new Order
+                {
+                    ClientId = clientId,
+                    ProductId = orderDto.ProductId,
+                    SalesPersonId = salesperson.Id,
+                    DeliveryDestination = orderDto.DeliveryDestination,
+                    Quantity = orderDto.Quantity,
+                    UnlabeledQuantity = orderDto.Quantity, // Initialize as total quantity
+                    LabeledQuantity = 0,
+                    ProductPrice = product.Price,
+                    OrderStatus = OrderStatus.Created,
+                    CreatedAt = DateTime.UtcNow
+                };
+               
+
+                return await _orderRepository.AddAsync(order);
+           
+           
         }
 
         public async Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto)

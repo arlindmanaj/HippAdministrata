@@ -32,7 +32,9 @@ namespace HippAdministrata.Services
                 {
                     Name = productDto.Name,
                     UnlabeledQuantity = productDto.UnlabeledQuantity,
-                    LabeledQuantity = productDto.LabeledQuantity
+                    LabeledQuantity = productDto.LabeledQuantity,
+                    Price = productDto.Price, // Set price for the client
+                    PricePercentageForEmployee = productDto.PricePercentageForEmployee
                 };
 
                 return await _productRepository.AddAsync(product);

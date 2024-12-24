@@ -6,7 +6,7 @@ namespace HippAdministrata.Repositories.Interface
     {
         Task<Employee> GetByIdAsync(int id);
         Task<IEnumerable<Employee>> GetAllAsync();
-        Task<bool> UpdateAsync(int id, Employee updatedEmployee);
+        Task UpdateAsync(Employee Employee);
         Task<bool> DeleteAsync(int id);
     }
 }

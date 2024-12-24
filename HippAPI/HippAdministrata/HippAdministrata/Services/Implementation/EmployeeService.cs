@@ -2,6 +2,7 @@
 using HippAdministrata.Models.Domains;
 using HippAdministrata.Models.DTOs;
 using HippAdministrata.Models.Enums;
+using HippAdministrata.Repositories.Implementation;
 using HippAdministrata.Repositories.Interface;
 using HippAdministrata.Services.Interface;
 
@@ -11,11 +12,14 @@ namespace HippAdministrata.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeService(IProductRepository productRepository, IOrderRepository orderRepository)
+
+        public EmployeeService(IEmployeeRepository employeeRepository ,IProductRepository productRepository, IOrderRepository orderRepository)
         {
             _productRepository = productRepository;
             _orderRepository = orderRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task LabelOrderProductAsync(int employeeId, LabelingOrderDto labelingOrderDto)
@@ -27,14 +31,33 @@ namespace HippAdministrata.Services
             if (order.EmployeeId != employeeId)
                 throw new Exception("You are not assigned to this order");
 
+            var employee = await _employeeRepository.GetByIdAsync(employeeId);
+            if (employee == null) throw new Exception("Employee not found");
+
+
+            var product = await _productRepository.GetByIdAsync(order.ProductId);
+            if (product == null) throw new Exception("Product not found");
+
+
             // Validate labeling quantity
             if (labelingOrderDto.LabelingQuantity > order.UnlabeledQuantity)
                 throw new Exception("Labeling quantity exceeds available unlabeled quantity");
+
+            var paymentPerLabel = product.Price * product.PricePercentageForEmployee;
+            var totalPayment = labelingOrderDto.LabelingQuantity * paymentPerLabel;
+
+            // Update employee's total pay
+            employee.TotalPay += totalPayment;
+
 
             // Update quantities
             order.LabeledQuantity += labelingOrderDto.LabelingQuantity;
             order.UnlabeledQuantity -= labelingOrderDto.LabelingQuantity;
             order.LastUpdated = DateTime.UtcNow;
+
+
+
+
 
             // Check if all quantities are labeled
             if (order.UnlabeledQuantity == 0)
@@ -43,6 +66,7 @@ namespace HippAdministrata.Services
             }
 
             // Save changes
+            await _employeeRepository.UpdateAsync(employee);
             await _orderRepository.UpdateOrderAsync(order);
         }
     }

@@ -9,6 +9,8 @@ namespace HippAdministrata.Models.Domains
         public string? Name { get; set; }      
         public decimal UnlabeledQuantity { get; set; }
         public decimal LabeledQuantity { get; set; }
+        public decimal Price { get; set; } // Price per product for the client
+        public decimal PricePercentageForEmployee { get; set; } // Employee's pay percentage per label
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
     }
