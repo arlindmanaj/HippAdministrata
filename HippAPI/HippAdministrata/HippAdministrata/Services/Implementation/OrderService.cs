@@ -56,6 +56,8 @@ namespace HippAdministrata.Services
                 SalesPersonId = salesperson.Id,
                 DeliveryDestination = orderDto.DeliveryDestination,
                 Quantity = orderDto.Quantity,
+                UnlabeledQuantity = orderDto.Quantity, // Initialize as total quantity
+                LabeledQuantity = 0,
                 OrderStatus = OrderStatus.Created,
                 CreatedAt = DateTime.UtcNow
             };

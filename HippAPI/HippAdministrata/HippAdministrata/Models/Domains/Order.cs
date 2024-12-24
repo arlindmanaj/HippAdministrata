@@ -16,6 +16,8 @@ namespace HippAdministrata.Models.Domains
         // Order Details
         public string? DeliveryDestination { get; set; } // Delivery Address
         public int Quantity { get; set; }
+        public int UnlabeledQuantity { get; set; } // Specific to this order
+        public int LabeledQuantity { get; set; } // Specific to this order
 
         // Timestamps
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

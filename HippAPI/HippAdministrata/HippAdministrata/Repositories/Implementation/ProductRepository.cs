@@ -31,6 +31,11 @@ namespace HippAdministrata.Repositories.Implementation
             await _context.SaveChangesAsync();
             return product;
         }
+        public async Task UpdateProductAsync(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task DeleteAsync(int id)
         {

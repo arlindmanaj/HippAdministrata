@@ -8,6 +8,11 @@ namespace HippAdministrata.Repositories.Interface
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product> AddAsync(Product product);
         Task DeleteAsync(int id);
+        
+        Task UpdateProductAsync(Product product);
         Task UpdateAsync(Product product);
+        
+
+
     }
 }

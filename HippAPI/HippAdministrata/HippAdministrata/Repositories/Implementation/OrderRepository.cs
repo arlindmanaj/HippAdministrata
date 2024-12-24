@@ -19,7 +19,12 @@ namespace HippAdministrata.Repositories.Implementation
         {
             return await _context.Set<Order>().FindAsync(id);
         }
-
+        public async Task<Order?> GetByIdWithProductAsync(int orderId)
+        {
+            return await _context.Orders
+                .Include(o => o.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+        }
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await _context.Set<Order>().ToListAsync();
@@ -46,6 +51,12 @@ namespace HippAdministrata.Repositories.Implementation
         {
             _context.Set<Order>().Update(order);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task UpdateOrderAsync(Order order)
+        {
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)
