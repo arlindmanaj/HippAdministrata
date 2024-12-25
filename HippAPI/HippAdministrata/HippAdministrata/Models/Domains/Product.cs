@@ -13,5 +13,8 @@ namespace HippAdministrata.Models.Domains
         public decimal PricePercentageForEmployee { get; set; } // Employee's pay percentage per label
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+
+        public int WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
     }
 }

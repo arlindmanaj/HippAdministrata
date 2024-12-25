@@ -9,6 +9,7 @@ namespace HippAdministrata.Services.Interface
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product> AddAsync(ProductDto productDto);
         Task DeleteAsync(int id);
+       
         Task UpdateAsync(int id, ProductDto productDto);
     }
 

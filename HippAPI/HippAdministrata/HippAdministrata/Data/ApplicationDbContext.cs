@@ -30,7 +30,7 @@ namespace HippAdministrata.Data
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderHistoryConfiguration());
             
-            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+           
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
 

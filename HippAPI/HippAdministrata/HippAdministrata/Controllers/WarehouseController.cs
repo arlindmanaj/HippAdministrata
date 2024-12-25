@@ -1,57 +1,79 @@
-﻿//using HippAdministrata.Models.Domains;
-//using HippAdministrata.Services;
-//using Microsoft.AspNetCore.Mvc;
+﻿using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.DTOs;
+using HippAdministrata.Services;
+using HippAdministrata.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 
-//namespace HippAdministrata.Controllers
-//{
-//    [ApiController]
-//    [Route("api/[controller]")]
-//    public class WarehouseController : ControllerBase
-//    {
-//        private readonly WarehouseService _warehouseService;
+namespace HippAdministrata.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class WarehouseController : ControllerBase
+    {
+        private readonly IWarehouseService _service;
 
-//        public WarehouseController(WarehouseService warehouseService)
-//        {
-//            _warehouseService = warehouseService;
-//        }
+        public WarehouseController(IWarehouseService service)
+        {
+            _service = service;
+        }
 
-//        [HttpGet("{id}")]
-//        public async Task<IActionResult> GetWarehouseById(int id)
-//        {
-//            var warehouse = await _warehouseService.GetByIdAsync(id);
-//            if (warehouse == null) return NotFound();
-//            return Ok(warehouse);
-//        }
+        [HttpPost]
+        public async Task<IActionResult> CreateWarehouse([FromBody] CreateWarehouseDto dto)
+        {
+            try
+            {
+                var warehouse = await _service.CreateWarehouseAsync(dto.Name, dto.Location);
+                return Ok(warehouse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-//        [HttpGet]
-//        public async Task<IActionResult> GetAllWarehouses()
-//        {
-//            var warehouses = await _warehouseService.GetAllAsync();
-//            return Ok(warehouses);
-//        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetWarehouseById(int id)
+        {
+            var warehouse = await _service.GetWarehouseByIdAsync(id);
+            if (warehouse == null)
+                return NotFound($"Warehouse with ID {id} not found.");
+            return Ok(warehouse);
+        }
 
-//        [HttpPost]
-//        public async Task<IActionResult> CreateWarehouse(Warehouse warehouse)
-//        {
-//            if (await _warehouseService.CreateAsync(warehouse))
-//                return CreatedAtAction(nameof(GetWarehouseById), new { id = warehouse.Id }, warehouse);
-//            return BadRequest();
-//        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllWarehouses()
+        {
+            var warehouses = await _service.GetAllWarehousesAsync();
+            return Ok(warehouses);
+        }
 
-//        [HttpPut]
-//        public async Task<IActionResult> UpdateWarehouse(Warehouse warehouse)
-//        {
-//            if (await _warehouseService.UpdateAsync(warehouse))
-//                return NoContent();
-//            return BadRequest();
-//        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateWarehouse(int id, [FromBody] CreateWarehouseDto dto)
+        {
+            try
+            {
+                var warehouse = await _service.UpdateWarehouseAsync(id, dto.Name, dto.Location);
+                return Ok(warehouse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-//        [HttpDelete("{id}")]
-//        public async Task<IActionResult> DeleteWarehouse(int id)
-//        {
-//            if (await _warehouseService.DeleteAsync(id))
-//                return NoContent();
-//            return NotFound();
-//        }
-//    }
-//}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteWarehouse(int id)
+        {
+            try
+            {
+                await _service.DeleteWarehouseAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+
+}

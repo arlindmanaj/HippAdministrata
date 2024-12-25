@@ -1,5 +1,9 @@
 ﻿using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.DTOs;
+using HippAdministrata.Models.Enums;
 using HippAdministrata.Models.Requests;
+using HippAdministrata.Repositories.Interface;
+using HippAdministrata.Services;
 using HippAdministrata.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +20,13 @@ namespace HippAdministrata.Controllers
     {
        
             private readonly IDriverService _driverService;
-
-            public DriverController(IDriverService driverService)
+            private readonly IOrderService _orderService;
+            private readonly IProductService _productService;
+            public DriverController(IDriverService driverService, IProductService productService , IOrderService orderService)
             {
                 _driverService = driverService;
+                _orderService = orderService;
+                _productService = productService;
             }
 
             [HttpGet("{id}")]
@@ -62,7 +69,25 @@ namespace HippAdministrata.Controllers
                 return Ok("Driver updated successfully.");
             }
 
-            [HttpDelete("{id}")]
+        [HttpPost("{productId}/transfer")]
+        public async Task<IActionResult> TransferProductBetweenWarehouses(int productId, [FromBody] TransferProductDto transferDto)
+        {
+            try
+            {
+                await _driverService.TransferProductBetweenWarehouses(
+                    productId,
+                    transferDto.SourceWarehouseId,
+                    transferDto.DestinationWarehouseId);
+
+                return Ok($"Product {productId} has been transferred successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
             public async Task<IActionResult> Delete(int id)
             {
                 var result = await _driverService.DeleteAsync(id);
@@ -70,15 +95,24 @@ namespace HippAdministrata.Controllers
                 return Ok("Driver deleted successfully");
             }
 
-            
-            [HttpPut("{driverId}/order/{orderId}/ship")]
-            public async Task<IActionResult> ShipOrder(int driverId, int orderId)
+
+            [HttpPost("simulate-shipping/{orderId}")]
+            public async Task<IActionResult> SimulateShipping(int driverId, int orderId)
             {
-                var result = await _driverService.ShipOrderAsync(driverId, orderId);
-                if (!result) return BadRequest("Failed to ship order");
-                return Ok("Order shipped successfully");
+                try
+                {
+                    await _orderService.SimulateShippingAsync(driverId, orderId); // Invoke the service method
+                    return Ok("Shipping simulation completed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message); // Handle exceptions and provide feedback
+                }
             }
-            private static string HashPassword(string password)
+
+
+
+        private static string HashPassword(string password)
             {
                 using var sha256 = SHA256.Create();
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));

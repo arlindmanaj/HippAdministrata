@@ -7,6 +7,7 @@
         Labeled,
         Packaged,
         ReadyForShipping,
+        InTransit,
         Shipped,
         Completed
 

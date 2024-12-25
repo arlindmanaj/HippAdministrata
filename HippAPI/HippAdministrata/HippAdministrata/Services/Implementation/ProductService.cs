@@ -34,7 +34,8 @@ namespace HippAdministrata.Services
                     UnlabeledQuantity = productDto.UnlabeledQuantity,
                     LabeledQuantity = productDto.LabeledQuantity,
                     Price = productDto.Price, // Set price for the client
-                    PricePercentageForEmployee = productDto.PricePercentageForEmployee
+                    PricePercentageForEmployee = productDto.PricePercentageForEmployee,
+                    WarehouseId =  productDto.WarehouseId
                 };
 
                 return await _productRepository.AddAsync(product);

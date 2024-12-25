@@ -2,6 +2,7 @@
 using HippAdministrata.Models.Domains;
 using HippAdministrata.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace HippAdministrata.Repositories.Implementation
 {
@@ -14,37 +15,39 @@ namespace HippAdministrata.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<Warehouse> GetByIdAsync(int id) => await _context.Set<Warehouse>().FindAsync(id);
-
-        public async Task<IEnumerable<Warehouse>> GetAllAsync() => await _context.Set<Warehouse>().ToListAsync();
-
-        public async Task<IEnumerable<Order>> GetOrdersByWarehouseAsync(int warehouseId)
+        public async Task<Warehouse> CreateAsync(Warehouse warehouse)
         {
-            return await _context.Set<Order>().Where(o => o.WarehouseId == warehouseId).ToListAsync();
+            _context.Warehouses.Add(warehouse);
+            await _context.SaveChangesAsync();
+            return warehouse;
         }
 
-        public async Task<bool> CreateAsync(Warehouse warehouse)
+        public async Task<Warehouse?> GetByIdAsync(int id)
         {
-            await _context.Set<Warehouse>().AddAsync(warehouse);
-            return await _context.SaveChangesAsync() > 0;
+            return await _context.Warehouses.FindAsync(id);
         }
 
-        public async Task<bool> UpdateAsync(Warehouse warehouse)
+        public async Task<IEnumerable<Warehouse>> GetAllAsync()
         {
-            _context.Set<Warehouse>().Update(warehouse);
-            return await _context.SaveChangesAsync() > 0;
+            return await _context.Warehouses.ToListAsync();
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<Warehouse> UpdateAsync(Warehouse warehouse)
         {
-            var warehouse = await GetByIdAsync(id);
+            _context.Warehouses.Update(warehouse);
+            await _context.SaveChangesAsync();
+            return warehouse;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var warehouse = await _context.Warehouses.FindAsync(id);
             if (warehouse != null)
             {
-                _context.Set<Warehouse>().Remove(warehouse);
-                return await _context.SaveChangesAsync() > 0;
+                _context.Warehouses.Remove(warehouse);
+                await _context.SaveChangesAsync();
             }
-            return false;
         }
-
     }
+
 }

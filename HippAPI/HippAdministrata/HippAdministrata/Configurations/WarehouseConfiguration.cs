@@ -9,15 +9,7 @@ namespace HippAdministrata.Configurations
     {
         public void Configure(EntityTypeBuilder<Warehouse> entity)
         {
-            entity.HasKey(w => w.Id);
-
-            entity.Property(w => w.Location)
-                  .IsRequired()
-                  .HasConversion<string>();
-
-            entity.HasMany(w => w.Orders)
-                  .WithOne(o => o.Warehouse)
-                  .HasForeignKey(o => o.WarehouseId);
+          
         }
     }
 }

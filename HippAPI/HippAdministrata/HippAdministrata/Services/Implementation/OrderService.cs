@@ -42,42 +42,82 @@ namespace HippAdministrata.Services
             return await _orderRepository.GetBySalesPersonIdAsync(salesPersonId);
         }
 
-
-        public async Task<Order> CreateOrderAsync(int clientId, OrderDto orderDto)
+        public async Task<List<Order>> CreateMultipleOrdersAsync(int clientId, OrderDto orderDto)
         {
-           
-                var product = await _productRepository.GetByIdAsync(orderDto.ProductId);
-                if (product == null) throw new Exception("Product not found");
+            var salesperson = _applicationDbContext.SalesPersons.FirstOrDefault();
+            if (salesperson == null)
+                throw new Exception("No default salesperson available for the client.");
 
-                // Automatically assign salesperson (example logic)
-                var salesperson = _applicationDbContext.SalesPersons.FirstOrDefault();
-                if (salesperson == null)
-                    throw new Exception("No default salesperson available for the client.");
+            var createdOrders = new List<Order>();
 
-                if (orderDto.Quantity > product.UnlabeledQuantity)
-                    throw new Exception("Requested quantity exceeds available stock");
+            foreach (var productDto in orderDto.Products)
+            {
+                // Fetch the product
+                var product = await _productRepository.GetByIdAsync(productDto.ProductId);
+                if (product == null)
+                    throw new Exception($"Product with ID {productDto.ProductId} not found.");
 
-                // Create and save order
+                if (productDto.Quantity > product.UnlabeledQuantity)
+                    throw new Exception($"Requested quantity for product {product.Name} exceeds available stock.");
+
+                // Deduct stock
+                product.UnlabeledQuantity -= productDto.Quantity;
+                await _productRepository.UpdateProductAsync(product);
+
+                // Create the order
                 var order = new Order
                 {
                     ClientId = clientId,
-                    ProductId = orderDto.ProductId,
+                    ProductId = productDto.ProductId,
                     SalesPersonId = salesperson.Id,
                     DeliveryDestination = orderDto.DeliveryDestination,
-                    Quantity = orderDto.Quantity,
-                    UnlabeledQuantity = orderDto.Quantity, // Initialize as total quantity
+                    Quantity = productDto.Quantity,
+                    UnlabeledQuantity = productDto.Quantity,
                     LabeledQuantity = 0,
                     ProductPrice = product.Price,
                     OrderStatus = OrderStatus.Created,
                     CreatedAt = DateTime.UtcNow
                 };
-               
 
-                return await _orderRepository.AddAsync(order);
-           
-           
+                createdOrders.Add(await _orderRepository.AddAsync(order));
+            }
+
+            return createdOrders;
         }
 
+        public async Task SimulateShippingAsync(int driverId, int orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null) throw new Exception("Order not found");
+
+            if (order.DriverId != driverId)
+                throw new Exception("You are not assigned to this order");
+
+            if (order.OrderStatus != OrderStatus.ReadyForShipping)
+                throw new Exception("Order is not ready for shipping");
+
+            order.OrderStatus = OrderStatus.InTransit;
+            order.LastUpdated = DateTime.UtcNow;
+            await _orderRepository.UpdateOrderAsync(order);
+
+            // Simulate updates
+            for (int i = 1; i <= 5; i++)
+            {
+                await Task.Delay(2000); // Simulate time passing
+
+                // Update order status
+                order.LastUpdated = DateTime.UtcNow;
+                if (i == 5)
+                {
+                    order.OrderStatus = OrderStatus.Shipped;
+                }
+                else
+                {
+                    order.OrderStatus = OrderStatus.InTransit; 
+                }
+                await _orderRepository.UpdateOrderAsync(order);
+            }
+        }
         public async Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);

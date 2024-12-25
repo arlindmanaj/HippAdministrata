@@ -4,11 +4,11 @@ namespace HippAdministrata.Repositories.Interface
 {
     public interface IWarehouseRepository
     {
-        Task<Warehouse> GetByIdAsync(int id);
+        Task<Warehouse> CreateAsync(Warehouse warehouse);
+        Task<Warehouse?> GetByIdAsync(int id);
         Task<IEnumerable<Warehouse>> GetAllAsync();
-        Task<IEnumerable<Order>> GetOrdersByWarehouseAsync(int warehouseId);
-        Task<bool> CreateAsync(Warehouse warehouse);
-        Task<bool> UpdateAsync(Warehouse warehouse);
-        Task<bool> DeleteAsync(int id);
+        Task<Warehouse> UpdateAsync(Warehouse warehouse);
+        Task DeleteAsync(int id);
     }
+
 }

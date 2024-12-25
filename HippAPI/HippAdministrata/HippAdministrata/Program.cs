@@ -53,6 +53,7 @@ namespace HippAdministrata
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 
 
 
