@@ -34,7 +34,7 @@ namespace HippAdministrata.Repositories.Implementation
             var existingSalesPerson = await GetByIdAsync(id);
             if (existingSalesPerson == null) return false;
 
-            existingSalesPerson.Username =  updatedSalesPerson.Username;
+            existingSalesPerson.Name =  updatedSalesPerson.Name;
             existingSalesPerson.Password = updatedSalesPerson.Password;
             existingSalesPerson.UserId = updatedSalesPerson.UserId;
 

@@ -24,14 +24,6 @@
             <input type="text" placeholder="Car Model" [(ngModel)]="newDriverDetails.carModel" />
         </div>
 
-        <!-- Additional fields for SalesPerson -->
-        <div *ngIf="newUserRole === 'SalesPerson'">
-            <label for="location">Select Location</label>
-            <select id="location" [(ngModel)]="newSalesPersonDetails.location">
-                <option value="" disabled>Select Location</option>
-                <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
-            </select>
-        </div>
 
         <button (click)="addUser()">Add User</button>
     </div>

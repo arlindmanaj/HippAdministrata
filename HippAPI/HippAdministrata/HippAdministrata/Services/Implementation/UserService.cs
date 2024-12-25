@@ -20,7 +20,7 @@ namespace HippAdministrata.Services.Implementation
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
+        public async Task<List<UserDTO>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllUsersAsync();
             return users.Select(user => new UserDTO
@@ -28,7 +28,7 @@ namespace HippAdministrata.Services.Implementation
                 UserId = user.UserId,
                 Name = user.Name,
                 Role = user.Role?.RoleName ?? "Unknown" // Handle potential null Role
-            });
+            }).ToList(); // Convert to List
         }
 
         public async Task<UserDTO> GetUserByIdAsync(int id)

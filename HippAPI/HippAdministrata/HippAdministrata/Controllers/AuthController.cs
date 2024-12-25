@@ -140,7 +140,8 @@ namespace hippserver.Controllers
                     Name = request.Name,
                     PasswordHash = HashPassword(request.Password),
                     RoleId = role.RoleId,
-                    RoleName = role.RoleName
+                    RoleName = role.RoleName,
+                    Email = request.Email
                 };
 
                 await _dbContext.Users.AddAsync(user);
@@ -184,7 +185,8 @@ namespace hippserver.Controllers
                     Name = request.Name,
                     PasswordHash = HashPassword(request.Password),
                     RoleId = role.RoleId,
-                    RoleName = role.RoleName
+                    RoleName = role.RoleName,
+                    Email = request.Email
                 };
 
                 await _dbContext.Users.AddAsync(user);
@@ -216,7 +218,7 @@ namespace hippserver.Controllers
         {
             try
             {
-                _logger.LogInformation("Registering salesperson {Username}", request.Username);
+                _logger.LogInformation("Registering salesperson {Username}", request.Name);
 
                 var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleName == "SalesPerson");
                 if (role == null)
@@ -224,10 +226,11 @@ namespace hippserver.Controllers
 
                 var user = new User
                 {
-                    Name = request.Username,
+                    Name = request.Name,
                     PasswordHash = HashPassword(request.Password),
                     RoleId = role.RoleId,
-                    RoleName = role.RoleName
+                    RoleName = role.RoleName,
+                    Email = request.Email
                 };
 
                 await _dbContext.Users.AddAsync(user);
@@ -235,16 +238,16 @@ namespace hippserver.Controllers
 
                 var salesPerson = new SalesPerson
                 {
-                    Username = request.Username,
+                    Name = request.Name,
                     Password = HashPassword(request.Password),
-                    Location = request.Location,
+                    
                     UserId = user.UserId
                 };
 
                 await _dbContext.SalesPersons.AddAsync(salesPerson);
                 await _dbContext.SaveChangesAsync();
 
-                _logger.LogInformation("Salesperson {Username} registered successfully", request.Username);
+                _logger.LogInformation("Salesperson {Username} registered successfully", request.Name);
                 return Ok(new { message = "SalesPerson registered successfully." });
             }
             catch (Exception ex)

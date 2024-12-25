@@ -6,6 +6,7 @@ import { RegisterRequest } from '../models/register-request.model';
 import { HttpHeaders } from '@angular/common/http';
 
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -108,8 +109,8 @@ export class AuthService {
   }
 
   // Register SalesPerson
-  registerSalesPerson(name: string, password: string, location: string): Observable<any> {
-    const body = { username: name, password, location };
+  registerSalesPerson(name: string, password: string): Observable<any> {
+    const body = { name, password };
     return this.http.post(`${this.apiUrl}/Auth/register/salesperson`, body, { headers: this.getHeaders() });
   }
 }

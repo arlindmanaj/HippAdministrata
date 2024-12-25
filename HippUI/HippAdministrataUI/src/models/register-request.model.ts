@@ -1,3 +1,5 @@
+
+
 export interface RegisterRequest {
   name: string;
   password: string;
@@ -26,5 +28,5 @@ export interface RegisterManagerRequest {
 export interface RegisterSalesPersonRequest {
   name: string;
   password: string;
-  location: string;
+
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Location } from '../../../models/location';
+
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -16,12 +16,11 @@ export class AdminDashboardComponent implements OnInit {
   newUser = { name: '', password: '', email: '' };
   newUserRole = ''; // Role selected by the admin
   newDriverDetails = { licensePlate: '', carModel: '' };
-  newSalesPersonDetails = { location: '' };
+
+
   errorMessage = '';
   successMessage = '';
-  locations = Object.entries(Location)
-    .filter(([key, value]) => typeof value === 'number') // Get only numeric values
-    .map(([key, value]) => value); // Extract values for the dropdown
+
 
   constructor(private authService: AuthService) { }
 
@@ -64,14 +63,16 @@ export class AdminDashboardComponent implements OnInit {
         break;
 
       case 'SalesPerson':
-        const { location } = this.newSalesPersonDetails;
-        if (!location) {
-          this.errorMessage = 'Location is required for salespersons.';
-          return;
-        }
-        this.authService.registerSalesPerson(name, password, location).subscribe(
+
+
+        console.log('Registering SalesPerson with data:', { name, password });
+
+        this.authService.registerSalesPerson(name, password).subscribe(
           () => this.handleSuccess('SalesPerson registered successfully.'),
-          (error) => this.handleError('Failed to register salesperson.', error)
+          (error) => {
+            console.error('Failed to register salesperson:', error);
+            this.handleError('Failed to register salesperson.', error);
+          }
         );
         break;
 
@@ -104,7 +105,7 @@ export class AdminDashboardComponent implements OnInit {
     this.newUser = { name: '', password: '', email: '' }; // Reset user form
 
     this.newDriverDetails = { licensePlate: '', carModel: '' }; // Reset driver details
-    this.newSalesPersonDetails = { location: '' }; // Reset salesperson details
+
     this.loadUsers(); // Refresh the user list
   }
 

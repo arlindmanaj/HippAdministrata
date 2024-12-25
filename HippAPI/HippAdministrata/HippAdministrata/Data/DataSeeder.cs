@@ -120,16 +120,16 @@ namespace HippAdministrata.Data
                 context.SalesPersons.AddRange(
                     new SalesPerson
                     {
-                        Username = "Kevin",
+                        Name = "Kevin",
                         Password = HashPassword("Kevin123!"),
-                        Location = Location.Prishtina,
+                       
                         UserId = salesPersonUsers[0].UserId
                     },
                     new SalesPerson
                     {
-                        Username = "James",
+                        Name = "James",
                         Password = HashPassword("James123!"),
-                        Location = Location.Peja,
+                        
                         UserId = salesPersonUsers[1].UserId
                     }
                 );

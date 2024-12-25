@@ -5,7 +5,7 @@ namespace HippAdministrata.Services.Interface
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserDTO>> GetAllUsersAsync();
+        Task<List<UserDTO>> GetAllUsersAsync();
         Task<UserDTO> GetUserByIdAsync(int id);
         Task<bool> AddUserAsync(User model);
         Task<bool> DeleteUserAsync(int id);
