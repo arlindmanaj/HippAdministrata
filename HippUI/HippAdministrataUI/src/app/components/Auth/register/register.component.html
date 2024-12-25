@@ -1,0 +1,15 @@
+<div>
+    <h2>Register</h2>
+    <form (ngSubmit)="register()">
+      <label for="name">Username</label>
+      <input id="name" [(ngModel)]="name" name="name" required />
+      <label for="password">Password</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" required />
+      <label for="email">Email</label>
+      <input id="email" [(ngModel)]="email" name="email" />
+      <button type="submit">Register</button>
+    </form>
+    <p *ngIf="successMessage">{{ successMessage }}</p>
+    <p *ngIf="errorMessage">{{ errorMessage }}</p>
+  </div>
+  

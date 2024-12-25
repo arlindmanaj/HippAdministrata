@@ -1,0 +1,66 @@
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+
+    <h2>Manage Users</h2>
+    <h2>Manage Users</h2>
+    <div class="add-user">
+        <h3>Add User</h3>
+        <input type="text" placeholder="Name" [(ngModel)]="newUser.name" />
+        <input type="password" placeholder="Password" [(ngModel)]="newUser.password" />
+        <input type="email" placeholder="Email (optional)" [(ngModel)]="newUser.email" />
+
+        <label for="role">Select Role</label>
+        <select id="role" [(ngModel)]="newUserRole">
+            <option value="" disabled>Select Role</option>
+            <option value="Driver">Driver</option>
+            <option value="SalesPerson">SalesPerson</option>
+            <option value="Employee">Employee</option>
+            <option value="Manager">Manager</option>
+        </select>
+
+        <!-- Additional fields for Driver -->
+        <div *ngIf="newUserRole === 'Driver'">
+            <input type="text" placeholder="License Plate" [(ngModel)]="newDriverDetails.licensePlate" />
+            <input type="text" placeholder="Car Model" [(ngModel)]="newDriverDetails.carModel" />
+        </div>
+
+        <!-- Additional fields for SalesPerson -->
+        <div *ngIf="newUserRole === 'SalesPerson'">
+            <label for="location">Select Location</label>
+            <select id="location" [(ngModel)]="newSalesPersonDetails.location">
+                <option value="" disabled>Select Location</option>
+                <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+            </select>
+        </div>
+
+        <button (click)="addUser()">Add User</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+
+    <h3>Existing Users</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.userId }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email || 'N/A' }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <button (click)="deleteUser(user.userId)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
