@@ -37,6 +37,26 @@ namespace HippAdministrata.Repositories.Implementation
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Employee>> GetAllAsync()
+        {
+            return await _context.Employees.ToListAsync();
+        }
+
+        public async Task<List<Driver>> GetAllDriversAsync()
+        {
+            return await _context.Drivers.ToListAsync();
+        }
+        public async Task<List<Employee>> GetAllEmployeesAsync()
+        {
+            return await _context.Employees.ToListAsync();
+        }
+
+
+        public async Task<List<SalesPerson>> GetAllSalesPersonsAsync()
+        {
+            return await _context.SalesPersons.ToListAsync();
+        }
+
 
         public async Task<List<Client>> GetAllClientsAsync()
         {

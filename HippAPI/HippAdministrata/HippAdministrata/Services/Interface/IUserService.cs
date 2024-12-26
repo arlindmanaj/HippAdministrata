@@ -11,5 +11,9 @@ namespace HippAdministrata.Services.Interface
         Task<bool> DeleteUserAsync(int id);
         Task<bool> ChangeUserRoleAsync(int id, string newRole, string newUsername);
         Task<List<Client>> GetAllClientsAsync();
+        Task<List<Employee>> GetAllEmployeesAsync();
+        Task<List<Driver>> GetAllDriversAsync();
+        Task<List<SalesPerson>> GetAllSalesPersonsAsync();
+
     }
 }

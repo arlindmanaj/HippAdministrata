@@ -2,50 +2,95 @@
 <div class="order-dashboard">
     <h1>Order Dashboard</h1>
 
+    <!-- Role Selection -->
+    <div>
+        <h3>Select Role</h3>
+        <button (click)="loadClients()">Clients</button>
+        <button (click)="loadEmployees()">Employees</button>
+        <button (click)="loadDrivers()">Drivers</button>
+        <button (click)="loadSalesPersons()">SalesPersons</button>
+    </div>
 
+    <!-- Clients List -->
     <div *ngIf="clients.length">
         <h3>Select a Client</h3>
         <ul>
-          <li *ngFor="let client of clients">
-            <button (click)="loadClientOrders(client.id)">{{ client.name }}</button>
-          </li>
+            <li *ngFor="let client of clients">
+                <button (click)="loadClientOrders(client.id)">{{ client.name }}</button>
+            </li>
         </ul>
-      </div>
-    
-      <div *ngIf="selectedClientId && clientOrders.length">
+    </div>
+
+    <!-- Employees List
+    <div *ngIf="employees.length">
+        <h3>Select an Employee</h3>
+        <ul>
+            <li *ngFor="let employee of employees">
+                <button (click)="loadEmployeeTasks(employee.id)">{{ employee.name }}</button>
+            </li>
+        </ul>
+    </div>
+
+     Drivers List 
+    <div *ngIf="drivers.length">
+        <h3>Select a Driver</h3>
+        <ul>
+            <li *ngFor="let driver of drivers">
+                <button (click)="loadDriverTasks(driver.id)">{{ driver.name }}</button>
+            </li>
+        </ul>
+    </div>
+
+   SalesPersons List
+    <div *ngIf="salesPersons.length">
+        <h3>Select a SalesPerson</h3>
+        <ul>
+            <li *ngFor="let salesPerson of salesPersons">
+                <button (click)="loadSalesPersonTasks(salesPerson.id)">{{ salesPerson.name }}</button>
+            </li>
+        </ul>
+    </div> -->
+
+    <!-- Client Orders -->
+    <div *ngIf="selectedClientId && clientOrders.length">
         <h3>Orders for Client ID: {{ selectedClientId }}</h3>
         <table>
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let order of clientOrders">
-              <td>{{ order.id }}</td>
-              <td>{{ order.productId }}</td>
-              <td>{{ order.quantity }}</td>
-              <td>{{ getOrderStatus(order.orderStatus) }}</td>
-            </tr>
-          </tbody>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of clientOrders">
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.productId }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ getOrderStatus(order.orderStatus) }}</td>
+                </tr>
+            </tbody>
         </table>
-      </div>
-    
-      <div *ngIf="errorMessage">
-        <p>{{ errorMessage }}</p>
-      </div>
     </div>
-    <h2>Order List</h2>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+    </div>
+
+    <!-- Order List -->
+    <h2>All Orders</h2>
     <ul>
         <li *ngFor="let order of orders">
             Order ID: {{ order.id }}, Product ID: {{ order.productId }}, Quantity: {{ order.quantity }}, Status: {{
-            order.orderStatus }}
+            getOrderStatus(order.orderStatus) }}
             <button (click)="deleteOrder(order.id)">Delete</button>
         </li>
     </ul>
+
+    <!-- Go Back Button -->
     <div>
         <button (click)="goToManager()">Go Back</button>
     </div>
+</div>

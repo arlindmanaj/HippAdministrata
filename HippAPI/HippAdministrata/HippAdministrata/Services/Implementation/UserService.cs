@@ -1,6 +1,7 @@
 ﻿using HippAdministrata.Data;
 using HippAdministrata.Models.Domains;
 using HippAdministrata.Models.DTOs;
+using HippAdministrata.Repositories.Implementation;
 using HippAdministrata.Repositories.Interface;
 using HippAdministrata.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,23 @@ namespace HippAdministrata.Services.Implementation
                 Role = user.Role?.RoleName ?? "Unknown"
             };
         }
+
+        public async Task<List<Employee>> GetAllEmployeesAsync()
+        {
+            return await _userRepository.GetAllEmployeesAsync();
+        }
+
+        public async Task<List<Driver>> GetAllDriversAsync()
+        {
+            return await _userRepository.GetAllDriversAsync();
+        }
+
+        public async Task<List<SalesPerson>> GetAllSalesPersonsAsync()
+        {
+            return await _userRepository.GetAllSalesPersonsAsync();
+        }
+
+
         public async Task<List<Client>> GetAllClientsAsync()
         {
             return await _userRepository.GetAllClientsAsync();

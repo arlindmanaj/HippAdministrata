@@ -5,6 +5,8 @@ using HippAdministrata.Models.Requests;
 using HippAdministrata.Models.Responses;
 using HippAdministrata.Models.Enums;
 using HippAdministrata.Models.Domains;
+using HippAdministrata.Services.Implementation;
+using HippAdministrata.Services;
 
 namespace hippserver.Controllers
 {
@@ -25,8 +27,32 @@ namespace hippserver.Controllers
             var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
+        [HttpGet("employees")]
+        public async Task<IActionResult> GetAllEmployees()
+        {
+            var employees = await _userService.GetAllEmployeesAsync();
+            return Ok(employees);
+        }
 
-       
+        [HttpGet("drivers")]
+        public async Task<IActionResult> GetAllDrivers()
+        {
+            var drivers = await _userService.GetAllDriversAsync();
+            return Ok(drivers);
+        }
+
+        [HttpGet("salespersons")]
+        public async Task<IActionResult> GetAllSalesPersons()
+        {
+            var salespersons = await _userService.GetAllSalesPersonsAsync();
+            return Ok(salespersons);
+        }
+        [HttpGet("clients")]
+        public async Task<IActionResult> GetAllClients()
+        {
+            var clients = await _userService.GetAllClientsAsync();
+            return Ok(clients);
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

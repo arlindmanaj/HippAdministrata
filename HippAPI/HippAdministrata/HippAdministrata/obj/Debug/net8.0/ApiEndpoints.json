@@ -97,16 +97,6 @@
   },
   {
     "ContainingType": "HippAdministrata.Controllers.ClientController",
-    "Method": "GetAllClients",
-    "RelativePath": "api/clients",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HippAdministrata.Controllers.ClientController",
     "Method": "CreateMultipleOrders",
     "RelativePath": "api/clients/{clientId}/orders",
     "HttpMethod": "POST",
@@ -471,6 +461,46 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "hippserver.Controllers.UsersController",
+    "Method": "GetAllClients",
+    "RelativePath": "api/Users/clients",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "hippserver.Controllers.UsersController",
+    "Method": "GetAllDrivers",
+    "RelativePath": "api/Users/drivers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "hippserver.Controllers.UsersController",
+    "Method": "GetAllEmployees",
+    "RelativePath": "api/Users/employees",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "hippserver.Controllers.UsersController",
+    "Method": "GetAllSalesPersons",
+    "RelativePath": "api/Users/salespersons",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

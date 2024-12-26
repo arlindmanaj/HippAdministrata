@@ -31,12 +31,7 @@ namespace HippAdministrata.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllClients()
-        {
-            var clients = await _userService.GetAllClientsAsync();
-            return Ok(clients);
-        }
+       
     }
 
 }

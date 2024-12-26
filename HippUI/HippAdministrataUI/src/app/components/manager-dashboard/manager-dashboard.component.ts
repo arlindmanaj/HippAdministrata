@@ -8,12 +8,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./manager-dashboard.component.css']
 })
 export class ManagerDashboardComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   navigateToProducts(): void {
     this.router.navigate(['/manager/products']);
   }
 
+  logout(): void {
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
+  }
   navigateToOrders(): void {
     this.router.navigate(['/manager/orders']);
   }

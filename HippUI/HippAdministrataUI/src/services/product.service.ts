@@ -21,7 +21,7 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
     return this.http.post(`${this.apiUrl}/products`, product, { headers });
   }
-
+  
 
   deleteProduct(productId: number): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
