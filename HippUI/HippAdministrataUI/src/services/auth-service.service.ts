@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment/environment.component.spec';
-import { RegisterRequest } from '../models/register-request.model';
-import { HttpHeaders } from '@angular/common/http';
-
-
 
 @Injectable({
   providedIn: 'root',
@@ -13,30 +9,38 @@ import { HttpHeaders } from '@angular/common/http';
 export class AuthService {
   private apiUrl = `${environment.apiUrl}`;
   private tokenKey = 'authToken';
+
+  constructor(private http: HttpClient) {}
+
+  // Helper to get headers with token
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken');
+    const token = this.getToken();
+    if (!token) {
+      console.warn('No token found for authenticated requests.');
+      return new HttpHeaders();
+    }
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     });
   }
 
-  constructor(private http: HttpClient) { }
-
+  // Save token to localStorage
   saveToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
   }
 
-  // Retrieve the token from localStorage
+  // Retrieve token from localStorage
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
-  // Remove the token (logout)
+  // Remove token from localStorage
   removeToken(): void {
     localStorage.removeItem(this.tokenKey);
   }
 
-  // Decode the token (requires a JWT decoding library like `jwt-decode`)
+  // Decode token to get payload
   decodeToken(): any {
     const token = this.getToken();
     if (!token) return null;
@@ -50,8 +54,7 @@ export class AuthService {
     }
   }
 
-
-  // Check if the user is authenticated
+  // Check if user is authenticated
   isAuthenticated(): boolean {
     const token = this.getToken();
     if (!token) return false;
@@ -60,33 +63,39 @@ export class AuthService {
     if (!payload) return false;
 
     const currentTime = Math.floor(new Date().getTime() / 1000);
-    return payload.exp > currentTime; // Check if token is expired
+    return payload.exp > currentTime; // Token expiration check
   }
 
-  // Check if the user is an Admin
+  // Check if user is an Admin
   isAdmin(): boolean {
     const payload = this.decodeToken();
     return payload && payload.role === 'Admin';
   }
 
+  // Get all users
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/Users`);
+    return this.http.get<any[]>(`${this.apiUrl}/Users`, { headers: this.getHeaders() });
   }
 
-  // Delete user
+  // Delete a user by ID
   deleteUser(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/Users/${id}`);
+    return this.http.delete(`${this.apiUrl}/Users/${id}`, { headers: this.getHeaders() });
   }
 
+<<<<<<< HEAD
   // Login
   login(name: string, password: string): Observable<{ token: { token: string }; role: string; roleSpecificId: number }> {
+=======
+  // Login method
+  login(name: string, password: string): Observable<{ token: string; role: string }> {
+>>>>>>> 1cc5353751bb6ed10821e173d4b9e011e141bc68
     const body = { name, password };
     return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body);
   }
   
 
 
-  // Register User
+  // General user registration
   registerUser(name: string, password: string, email?: string): Observable<any> {
     const body = { name, password, email };
     return this.http.post(`${this.apiUrl}/Auth/register`, body);
@@ -105,15 +114,17 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/Auth/register/employee`, body, { headers: this.getHeaders() });
   }
 
-  // Register Manager
-  registerManager(name: string, password: string): Observable<any> {
-    const body = { name, password };
-    return this.http.post(`${this.apiUrl}/Auth/register/manager`, body, { headers: this.getHeaders() });
+  // Register SalesPerson
+  registerSalesPerson(name: string, password: string, email: string): Observable<any> {
+    const body = { name, password, email };
+    console.log('Calling API to register SalesPerson:', body); // Debugging log
+    return this.http.post(`${this.apiUrl}/Auth/register/salesperson`, body, { headers: this.getHeaders() });
   }
 
-  // Register SalesPerson
-  registerSalesPerson(name: string, password: string): Observable<any> {
-    const body = { name, password };
-    return this.http.post(`${this.apiUrl}/Auth/register/salesperson`, body, { headers: this.getHeaders() });
+  // Register Manager
+  registerManager(name: string, password: string, email: string): Observable<any> {
+    const body = { name, password, email };
+    console.log('Calling API to register Manager:', body); // Debugging log
+    return this.http.post(`${this.apiUrl}/Auth/register/manager`, body, { headers: this.getHeaders() });
   }
 }

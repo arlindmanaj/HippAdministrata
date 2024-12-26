@@ -1,30 +1,63 @@
 <div class="admin-dashboard">
-    <h1>Admin Dashboard</h1>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
 
-    <h2>Manage Users</h2>
-    <h2>Manage Users</h2>
-    <div class="add-user">
-        <h3>Add User</h3>
-        <input type="text" placeholder="Name" [(ngModel)]="newUser.name" />
-        <input type="password" placeholder="Password" [(ngModel)]="newUser.password" />
-        <input type="email" placeholder="Email (optional)" [(ngModel)]="newUser.email" />
+    <!-- Add User Section -->
+    <section class="add-user-section">
+        <h2>Add User</h2>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter name" [(ngModel)]="newUser.name" />
+            </div>
 
-        <label for="role">Select Role</label>
-        <select id="role" [(ngModel)]="newUserRole">
-            <option value="" disabled>Select Role</option>
-            <option value="Driver">Driver</option>
-            <option value="SalesPerson">SalesPerson</option>
-            <option value="Employee">Employee</option>
-            <option value="Manager">Manager</option>
-        </select>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" [(ngModel)]="newUser.password" />
+            </div>
 
-        <!-- Additional fields for Driver -->
-        <div *ngIf="newUserRole === 'Driver'">
-            <input type="text" placeholder="License Plate" [(ngModel)]="newDriverDetails.licensePlate" />
-            <input type="text" placeholder="Car Model" [(ngModel)]="newDriverDetails.carModel" />
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter email" [(ngModel)]="newUser.email" />
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" [(ngModel)]="newUserRole">
+                    <option value="" disabled>Select Role</option>
+                    <option value="Driver">Driver</option>
+                    <option value="SalesPerson">SalesPerson</option>
+                    <option value="Employee">Employee</option>
+                    <option value="Manager">Manager</option>
+                </select>
+            </div>
+
+            <div class="driver-details" *ngIf="newUserRole === 'Driver'">
+                <div class="form-group">
+                    <label for="licensePlate">License Plate</label>
+                    <input type="text" id="licensePlate" placeholder="License Plate" [(ngModel)]="newDriverDetails.licensePlate" />
+                </div>
+
+                <div class="form-group">
+                    <label for="carModel">Car Model</label>
+                    <input type="text" id="carModel" placeholder="Car Model" [(ngModel)]="newDriverDetails.carModel" />
+                </div>
+            </div>
+
+            <p *ngIf="['SalesPerson', 'Manager'].includes(newUserRole) && !newUser.email" class="validation-message">
+                Email is required for {{ newUserRole }}.
+            </p>
+
+            <button class="btn btn-add" (click)="addUser()">Add User</button>
         </div>
+    </section>
 
+    <!-- Messages -->
+    <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
 
+<<<<<<< HEAD
         <button (click)="addUser()">Add User</button>
     </div>
 
@@ -63,3 +96,32 @@
     </div>
 
 </div>
+=======
+    <!-- Existing Users Table -->
+    <section class="user-table-section">
+        <h2>Existing Users</h2>
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.userId }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email || 'N/A' }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>
+                        <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+>>>>>>> 1cc5353751bb6ed10821e173d4b9e011e141bc68
