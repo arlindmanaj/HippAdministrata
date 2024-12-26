@@ -36,7 +36,8 @@
             <div class="driver-details" *ngIf="newUserRole === 'Driver'">
                 <div class="form-group">
                     <label for="licensePlate">License Plate</label>
-                    <input type="text" id="licensePlate" placeholder="License Plate" [(ngModel)]="newDriverDetails.licensePlate" />
+                    <input type="text" id="licensePlate" placeholder="License Plate"
+                        [(ngModel)]="newDriverDetails.licensePlate" />
                 </div>
 
                 <div class="form-group">
@@ -57,71 +58,39 @@
     <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
 
-<<<<<<< HEAD
-        <button (click)="addUser()">Add User</button>
-    </div>
-
-    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-    <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
-
-
-    <h3>Existing Users</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users">
-                <td>{{ user.userId }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email || 'N/A' }}</td>
-                <td>{{ user.role }}</td>
-                <td>
-
-                    <button (click)="deleteUser(user.userId)">Delete</button>
-                </td>
-
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="logout">
-        <button (click)="logout()">Logout</button>
-    </div>
-
+    <button (click)="addUser()">Add User</button>
 </div>
-=======
-    <!-- Existing Users Table -->
-    <section class="user-table-section">
-        <h2>Existing Users</h2>
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users">
-                    <td>{{ user.userId }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email || 'N/A' }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>
-                        <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+<div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+
+<h3>Existing Users</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{ user.userId }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email || 'N/A' }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+
+                <button (click)="deleteUser(user.userId)">Delete</button>
+            </td>
+
+        </tr>
+    </tbody>
+</table>
+
+<div class="logout">
+    <button (click)="logout()">Logout</button>
 </div>
->>>>>>> 1cc5353751bb6ed10821e173d4b9e011e141bc68

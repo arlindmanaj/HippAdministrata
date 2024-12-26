@@ -10,7 +10,7 @@ export class AuthService {
   private apiUrl = `${environment.apiUrl}`;
   private tokenKey = 'authToken';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Helper to get headers with token
   private getHeaders(): HttpHeaders {
@@ -82,17 +82,12 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/Users/${id}`, { headers: this.getHeaders() });
   }
 
-<<<<<<< HEAD
   // Login
   login(name: string, password: string): Observable<{ token: { token: string }; role: string; roleSpecificId: number }> {
-=======
-  // Login method
-  login(name: string, password: string): Observable<{ token: string; role: string }> {
->>>>>>> 1cc5353751bb6ed10821e173d4b9e011e141bc68
     const body = { name, password };
     return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body);
   }
-  
+
 
 
   // General user registration

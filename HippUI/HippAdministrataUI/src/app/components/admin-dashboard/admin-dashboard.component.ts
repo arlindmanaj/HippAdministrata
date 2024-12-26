@@ -3,12 +3,9 @@ import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-<<<<<<< HEAD
 import { Route } from '@angular/router';
 import { Router } from '@angular/router';
 
-=======
->>>>>>> 1cc5353751bb6ed10821e173d4b9e011e141bc68
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -25,12 +22,8 @@ export class AdminDashboardComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
 
-<<<<<<< HEAD
 
   constructor(private authService: AuthService, private router: Router) { }
-=======
-  constructor(private authService: AuthService) {}
->>>>>>> 1cc5353751bb6ed10821e173d4b9e011e141bc68
 
   ngOnInit(): void {
     this.loadUsers();
