@@ -1,0 +1,45 @@
+.client-dashboard {
+    margin: 20px;
+  }
+  
+  .logout button {
+    float: right;
+  }
+  
+  .create-order {
+    margin-top: 20px;
+  }
+  
+  .orders-list {
+    margin-top: 20px;
+  }
+  
+  .status-bar {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .status-point {
+    padding: 5px 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: lightgray;
+  }
+  
+  .status-point.active {
+    background-color: green;
+    color: white;
+  }
+  button.active {
+    background-color: #4caf50; /* Green */
+    color: white;
+    font-weight: bold;
+  }
+  
+  button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  

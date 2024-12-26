@@ -33,25 +33,43 @@ namespace hippserver.Controllers
         {
             try
             {
-                _logger.LogInformation("Login attempt for user {Username}", model.Name);
                 var token = await _jwtService.AuthenticateAsync(model);
                 if (token == null)
-                {
-                    _logger.LogWarning("Login failed for user {Username}", model.Name);
                     return Unauthorized();
-                }
-                _logger.LogInformation("Login successful for user {Username}", model.Name);
 
-                _logger.LogInformation("Generated JWT Token: {Token}", token);
+                var user = await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == model.Name);
+                if (user == null)
+                    return Unauthorized();
 
-                return Ok(token);
+                int? roleSpecificId = await GetRoleSpecificIdAsync(user.UserId, user.Role.RoleName);
+
+                return Ok(new
+                {
+                    token,
+                    userId = user.UserId,
+                    role = user.Role.RoleName,
+                    roleSpecificId
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred during login for user {Username}", model.Name);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        private async Task<int?> GetRoleSpecificIdAsync(int userId, string roleName)
+        {
+            return roleName switch
+            {
+                "Client" => (await _dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId))?.Id,
+                "SalesPerson" => (await _dbContext.SalesPersons.FirstOrDefaultAsync(sp => sp.UserId == userId))?.Id,
+                "Manager" => (await _dbContext.Managers.FirstOrDefaultAsync(m => m.UserId == userId))?.Id,
+                "Employee" => (await _dbContext.Employees.FirstOrDefaultAsync(e => e.UserId == userId))?.Id,
+                "Driver" => (await _dbContext.Drivers.FirstOrDefaultAsync(d => d.UserId == userId))?.Id,
+                _ => null
+            };
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost("register")]
         

@@ -1,0 +1,48 @@
+<div class="client-dashboard">
+    <h1>Your Orders</h1>
+
+    <button (click)="openOrderModal()" class="create-order-btn">Create Order</button>
+
+    <!-- Order Modal -->
+    <div *ngIf="isOrderModalOpen" class="modal">
+        <div class="modal-content">
+            <h2>Create Order</h2>
+            <form>
+                <label for="product">Product</label>
+                <select id="product" [(ngModel)]="newOrder.productId" name="product">
+                    <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
+                </select>
+
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" [(ngModel)]="newOrder.quantity" name="quantity" required />
+
+                <label for="deliveryDestination">Delivery Destination</label>
+                <input type="text" id="deliveryDestination" [(ngModel)]="newOrder.deliveryDestination"
+                    name="deliveryDestination" required />
+
+                <button type="button" (click)="createOrder()">Place Order</button>
+                <button type="button" (click)="closeOrderModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Orders List -->
+    <div *ngIf="orders.length > 0; else noOrders">
+        <div *ngFor="let order of orders">
+            <p>Order ID: {{ order.id }}</p>
+            <p>Product: {{ order.productName }}</p>
+            <p>Quantity: {{ order.quantity }}</p>
+            <p>Price: ${{ order.productPrice }}</p>
+            <p>Status: {{ order.orderStatusDisplay }}</p>
+            <hr />
+        </div>
+    </div>
+
+    <ng-template #noOrders>
+        <p>You have no orders yet.</p>
+    </ng-template>
+
+    <div class="logout">
+        <button (click)="logout()">Logout</button>
+    </div>
+</div>

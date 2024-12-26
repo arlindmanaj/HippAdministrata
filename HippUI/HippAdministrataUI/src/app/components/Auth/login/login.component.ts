@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,7 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.component.css'],
   imports: [FormsModule, CommonModule]
 })
-
 export class LoginComponent {
   name: string = '';
   password: string = '';
@@ -21,31 +19,37 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   login(): void {
-    console.log('Attempting to log in with:', { name: this.name, password: this.password });
-
     this.authService.login(this.name, this.password).subscribe(
       (response) => {
-        console.log('Login successful, response:', response);
-        const { token, role } = response;
+        const token = response.token.token; // Extract the actual token string
+        const { role, roleSpecificId } = response;
 
-        // Save token
-        this.authService.saveToken(token);
+        // Save the token, role, and role-specific ID in localStorage
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('role', role);
+        localStorage.setItem('roleSpecificId', roleSpecificId?.toString() || '');
 
         // Redirect based on role
-        if (role === 'Admin') {
+        if (role === 'Client') {
+          this.router.navigate(['/client-dashboard']);
+        } else if (role === 'Admin') {
           this.router.navigate(['/admin-dashboard']);
+        } else if (role === 'SalesPerson') {
+          this.router.navigate(['/salesperson-dashboard']);
+        } else if (role === 'Manager') {
+          this.router.navigate(['/manager-dashboard']);
+        } else if (role === 'Employee') {
+          this.router.navigate(['/employee-dashboard']);
+        } else if (role === 'Driver') {
+          this.router.navigate(['/driver-dashboard']);
         } else {
-          this.errorMessage = 'Unauthorized access';
+          this.errorMessage = 'Unauthorized access.';
         }
       },
       (error) => {
-        console.error('Login failed, error:', error);
         this.errorMessage = 'Invalid username or password. Please try again.';
       }
     );
   }
 
-
-
 }
-

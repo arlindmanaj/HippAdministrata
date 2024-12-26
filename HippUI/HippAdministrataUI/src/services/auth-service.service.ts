@@ -79,15 +79,18 @@ export class AuthService {
   }
 
   // Login
-  login(name: string, password: string): Observable<{ token: string; role: string }> {
+  login(name: string, password: string): Observable<{ token: { token: string }; role: string; roleSpecificId: number }> {
     const body = { name, password };
-    return this.http.post<{ token: string; role: string }>(`${this.apiUrl}/Auth/login`, body);
+    return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body);
   }
+  
+
 
   // Register User
   registerUser(name: string, password: string, email?: string): Observable<any> {
     const body = { name, password, email };
     return this.http.post(`${this.apiUrl}/Auth/register`, body);
+
   }
 
   // Register Driver

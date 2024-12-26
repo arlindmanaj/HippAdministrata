@@ -3,6 +3,8 @@ import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { Route } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -22,7 +24,7 @@ export class AdminDashboardComponent implements OnInit {
   successMessage = '';
 
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -128,4 +130,16 @@ export class AdminDashboardComponent implements OnInit {
       }
     );
   }
+
+
+  logout(): void {
+    // Clear the token from localStorage
+    localStorage.removeItem('authToken');
+
+    // Navigate back to the login page
+    this.router.navigate(['/login']);
+  }
+
+
+
 }

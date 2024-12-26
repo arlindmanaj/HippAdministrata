@@ -24,5 +24,12 @@ export const route: Route[] = [
                 (m) => m.RegisterComponent
             ),
     },
+    {
+        path: 'client-dashboard',
+        loadComponent: () =>
+            import('./components/client-dashboard/client-dashboard.component').then(
+                (m) => m.ClientDashboardComponent
+            ),
+    },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];

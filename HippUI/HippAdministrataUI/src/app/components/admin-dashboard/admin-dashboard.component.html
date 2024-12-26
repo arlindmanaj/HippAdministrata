@@ -50,9 +50,16 @@
                 <td>{{ user.email || 'N/A' }}</td>
                 <td>{{ user.role }}</td>
                 <td>
+
                     <button (click)="deleteUser(user.userId)">Delete</button>
                 </td>
+
             </tr>
         </tbody>
     </table>
+
+    <div class="logout">
+        <button (click)="logout()">Logout</button>
+    </div>
+
 </div>
