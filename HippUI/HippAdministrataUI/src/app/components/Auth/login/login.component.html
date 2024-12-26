@@ -1,11 +1,48 @@
-<div>
-  <h2>Login</h2>
-  <form (ngSubmit)="login()">
-    <label for="name">Username</label>
-    <input id="name" [(ngModel)]="name" name="name" required />
-    <label for="password">Password</label>
-    <input id="password" type="password" [(ngModel)]="password" name="password" required />
-    <button type="submit">Login</button>
-  </form>
-  <p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<div class="login-page">
+  <div class="login-container">
+    <!-- Logo -->
+    <div class="logo-container">
+      <img
+        src="https://res.cloudinary.com/dpha0wzqx/image/upload/v1735180579/HIPP-Logo.svg_ymbt40.png"
+        alt="Company Logo"
+        class="logo"
+      />
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-form">
+      <h2>Account Login</h2>
+      <form (ngSubmit)="login()">
+        <label for="name">Username</label>
+        <input
+          id="name"
+          [(ngModel)]="name"
+          name="name"
+          required
+          placeholder="Enter your username"
+        />
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          placeholder="Enter your password"
+        />
+        <button type="submit" class="btn-submit">Log In</button>
+      </form>
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <!-- Blue Decorative Area -->
+  <div class="blue-decor">
+    <img
+      src="https://res.cloudinary.com/dpha0wzqx/image/upload/v1735180228/n66vrwyauiwetpadlsoz.png"
+      alt="Decorative Blue Element"
+      class="blue-decor-image"
+    />
+  </div>
 </div>

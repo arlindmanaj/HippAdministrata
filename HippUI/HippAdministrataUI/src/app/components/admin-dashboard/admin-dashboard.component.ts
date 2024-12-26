@@ -2,16 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-import { Route } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
-  standalone: true,
   styleUrls: ['./admin-dashboard.component.css'],
-  imports: [FormsModule, CommonModule], // Add FormsModule and CommonModule if needed for template bindings
+  standalone: true,
+  imports: [FormsModule, CommonModule], // Import FormsModule and CommonModule
 })
 export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
@@ -21,12 +19,17 @@ export class AdminDashboardComponent implements OnInit {
 
   errorMessage = '';
   successMessage = '';
+  activeSection = 'registration'; // Default section
 
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadUsers();
+  }
+
+  // Switch sections
+  viewSection(section: string): void {
+    this.activeSection = section;
   }
 
   // Load all users
@@ -42,17 +45,15 @@ export class AdminDashboardComponent implements OnInit {
     );
   }
 
-  // Add user based on role
+  // Add user
   addUser(): void {
     const { name, password, email } = this.newUser;
 
-    // General validation for all roles
     if (!name || !password || !this.newUserRole) {
       this.errorMessage = 'Name, password, and role are required.';
       return;
     }
 
-    // Role-specific validation
     if (['SalesPerson', 'Manager'].includes(this.newUserRole) && !email) {
       this.errorMessage = 'Email is required for this role.';
       return;
@@ -70,65 +71,46 @@ export class AdminDashboardComponent implements OnInit {
           (error) => this.handleError('Failed to register driver.', error)
         );
         break;
-
-        case 'SalesPerson':
-          if (!email) {
-              this.errorMessage = 'Email is required for SalesPerson.';
-              return;
-          }
-          console.log('Registering SalesPerson with data:', { name, password, email }); // Ensure email is logged
-          this.authService.registerSalesPerson(name, password, email).subscribe(
-              () => this.handleSuccess('SalesPerson registered successfully.'),
-              (error) => this.handleError('Failed to register SalesPerson.', error)
-          );
-          break;
-      
+      case 'SalesPerson':
+        this.authService.registerSalesPerson(name, password, email).subscribe(
+          () => this.handleSuccess('SalesPerson registered successfully.'),
+          (error) => this.handleError('Failed to register SalesPerson.', error)
+        );
+        break;
       case 'Manager':
-          if (!email) {
-              this.errorMessage = 'Email is required for Manager.';
-              return;
-          }
-          console.log('Registering Manager with data:', { name, password, email }); // Ensure email is logged
-          this.authService.registerManager(name, password, email).subscribe(
-              () => this.handleSuccess('Manager registered successfully.'),
-              (error) => this.handleError('Failed to register Manager.', error)
-          );
-          break;
-      
-
+        this.authService.registerManager(name, password, email).subscribe(
+          () => this.handleSuccess('Manager registered successfully.'),
+          (error) => this.handleError('Failed to register Manager.', error)
+        );
+        break;
       case 'Employee':
         this.authService.registerEmployee(name, password).subscribe(
           () => this.handleSuccess('Employee registered successfully.'),
           (error) => this.handleError('Failed to register employee.', error)
         );
         break;
-        
       default:
         this.errorMessage = 'Invalid role selected.';
-        break;
     }
   }
 
-  // Handle successful user addition
   private handleSuccess(message: string): void {
     this.successMessage = message;
     this.errorMessage = '';
-    this.newUser = { name: '', password: '', email: '' }; // Reset user form
-    this.newDriverDetails = { licensePlate: '', carModel: '' }; // Reset driver details
-    this.loadUsers(); // Refresh the user list
+    this.newUser = { name: '', password: '', email: '' };
+    this.newDriverDetails = { licensePlate: '', carModel: '' };
+    this.loadUsers();
   }
 
-  // Handle errors
   private handleError(message: string, error: any): void {
     console.error(message, error);
     this.errorMessage = message;
   }
 
-  // Delete a user
   deleteUser(userId: number): void {
     this.authService.deleteUser(userId).subscribe(
       () => {
-        this.users = this.users.filter((user) => user.userId !== userId); // Remove user from the list
+        this.users = this.users.filter((user) => user.userId !== userId);
         this.successMessage = 'User deleted successfully.';
       },
       (error) => {
@@ -138,15 +120,8 @@ export class AdminDashboardComponent implements OnInit {
     );
   }
 
-
   logout(): void {
-    // Clear the token from localStorage
     localStorage.removeItem('authToken');
-
-    // Navigate back to the login page
     this.router.navigate(['/login']);
   }
-
-
-
 }

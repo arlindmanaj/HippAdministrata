@@ -16,9 +16,11 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
+  // Login function
   login(): void {
+    // Call the authentication service's login function
     this.authService.login(this.name, this.password).subscribe(
       (response) => {
         const token = response.token.token; // Extract the actual token string
@@ -29,27 +31,34 @@ export class LoginComponent {
         localStorage.setItem('role', role);
         localStorage.setItem('roleSpecificId', roleSpecificId?.toString() || '');
 
-        // Redirect based on role
-        if (role === 'Client') {
-          this.router.navigate(['/client-dashboard']);
-        } else if (role === 'Admin') {
-          this.router.navigate(['/admin-dashboard']);
-        } else if (role === 'SalesPerson') {
-          this.router.navigate(['/salesperson-dashboard']);
-        } else if (role === 'Manager') {
-          this.router.navigate(['/manager-dashboard']);
-        } else if (role === 'Employee') {
-          this.router.navigate(['/employee-dashboard']);
-        } else if (role === 'Driver') {
-          this.router.navigate(['/driver-dashboard']);
-        } else {
-          this.errorMessage = 'Unauthorized access.';
+        // Redirect user based on role
+        switch (role) {
+          case 'Client':
+            this.router.navigate(['/client-dashboard']);
+            break;
+          case 'Admin':
+            this.router.navigate(['/admin-dashboard']);
+            break;
+          case 'SalesPerson':
+            this.router.navigate(['/salesperson-dashboard']);
+            break;
+          case 'Manager':
+            this.router.navigate(['/manager-dashboard']);
+            break;
+          case 'Employee':
+            this.router.navigate(['/employee-dashboard']);
+            break;
+          case 'Driver':
+            this.router.navigate(['/driver-dashboard']);
+            break;
+          default:
+            this.errorMessage = 'Unauthorized access.';
         }
       },
       (error) => {
+        // Handle login failure
         this.errorMessage = 'Invalid username or password. Please try again.';
       }
     );
   }
-
 }
