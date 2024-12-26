@@ -57,24 +57,22 @@ export class ClientDashboardComponent implements OnInit {
       alert('Client ID not found. Please log in again.');
       return;
     }
-
-    this.clientService.getOrders().subscribe(
+  
+    this.clientService.getOrdersByClientId(clientId).subscribe(
       (orders) => {
-        this.orders = orders.map(order => {
-          return {
-            ...order,
-            orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
-            productName: this.getProductName(order.productId)
-          };
-        });
+        this.orders = orders.map(order => ({
+          ...order,
+          orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
+          productName: this.getProductName(order.productId)
+        }));
       },
       (error) => {
         console.error('Failed to load orders:', error);
         alert('Failed to load orders. Please try again later.');
       }
     );
-    this.loadProducts();
   }
+  
 
 
   getOrderStatusDisplay(status: number): string {
