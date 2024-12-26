@@ -43,6 +43,12 @@ namespace HippAdministrata.Services.Implementation
                 Role = user.Role?.RoleName ?? "Unknown"
             };
         }
+        public async Task<List<Client>> GetAllClientsAsync()
+        {
+            return await _userRepository.GetAllClientsAsync();
+        }
+
+
 
         public async Task<bool> AddUserAsync(User model)
         {

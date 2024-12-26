@@ -24,4 +24,14 @@ export class ClientService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
     return this.http.post(`${this.apiUrl}/clients/${clientId}/orders`, order, { headers });
   }
+  getAllClients(): Observable<any[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.get<any[]>(`${this.apiUrl}/clients`, { headers });
+  }
+  getOrdersByClientId(clientId: number): Observable<any[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.get<any[]>(`${this.apiUrl}/Order/client/${clientId}`, { headers });
+  }
+
+
 }

@@ -97,6 +97,16 @@
   },
   {
     "ContainingType": "HippAdministrata.Controllers.ClientController",
+    "Method": "GetAllClients",
+    "RelativePath": "api/clients",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.ClientController",
     "Method": "CreateMultipleOrders",
     "RelativePath": "api/clients/{clientId}/orders",
     "HttpMethod": "POST",

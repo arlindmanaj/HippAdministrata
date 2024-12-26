@@ -2,21 +2,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment/environment.component.spec';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'https://localhost:7136/api/orders';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
   getOrders(): Observable<any[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
-    return this.http.get<any[]>(this.apiUrl, { headers });
+    return this.http.get<any[]>(`${this.apiUrl}/Order`, { headers });
   }
   deleteOrder(orderId: number): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
-    return this.http.delete(`${this.apiUrl}/${orderId}`, { headers });
+    return this.http.delete(`${this.apiUrl}/Order/${orderId}`, { headers });
   }
 }

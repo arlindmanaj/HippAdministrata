@@ -2,6 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../../services/order.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ClientService } from '../../../services/client.service';
+import { OrderStatus } from '../../../models/OrderStatus';
 
 @Component({
   selector: 'app-order-dashboard',
@@ -12,11 +15,17 @@ import { CommonModule } from '@angular/common';
 })
 export class OrderDashboardComponent implements OnInit {
   orders: any[] = [];
+  clients: any[] = [];
+  selectedClientId: number | null = null;
+  clientOrders: any[] = [];
+  errorMessage: string = '';
+  orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
 
-  constructor(private orderService: OrderService) { }
+  constructor(private clientService: ClientService, private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadOrders();
+    this.loadClients();
   }
 
   loadOrders(): void {
@@ -38,5 +47,27 @@ export class OrderDashboardComponent implements OnInit {
         }
       );
     }
+  }
+
+  loadClients(): void {
+    this.clientService.getAllClients().subscribe(
+      (data) => (this.clients = data),
+      (error) => (this.errorMessage = 'Failed to load clients')
+    );
+  }
+
+  loadClientOrders(clientId: number): void {
+    this.selectedClientId = clientId;
+    this.clientService.getOrdersByClientId(clientId).subscribe(
+      (data) => (this.clientOrders = data),
+      (error) => (this.errorMessage = 'Failed to load client orders')
+    );
+  }
+  getOrderStatus(status: number): string {
+    return OrderStatus[status];
+  }
+
+  goToManager(): void {
+    this.router.navigate(['/manager-dashboard']);
   }
 }

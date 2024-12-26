@@ -2,6 +2,42 @@
 <div class="order-dashboard">
     <h1>Order Dashboard</h1>
 
+
+    <div *ngIf="clients.length">
+        <h3>Select a Client</h3>
+        <ul>
+          <li *ngFor="let client of clients">
+            <button (click)="loadClientOrders(client.id)">{{ client.name }}</button>
+          </li>
+        </ul>
+      </div>
+    
+      <div *ngIf="selectedClientId && clientOrders.length">
+        <h3>Orders for Client ID: {{ selectedClientId }}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of clientOrders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productId }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ getOrderStatus(order.orderStatus) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      <div *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
     <h2>Order List</h2>
     <ul>
         <li *ngFor="let order of orders">
@@ -10,4 +46,6 @@
             <button (click)="deleteOrder(order.id)">Delete</button>
         </li>
     </ul>
-</div>
+    <div>
+        <button (click)="goToManager()">Go Back</button>
+    </div>

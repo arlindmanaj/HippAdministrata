@@ -38,7 +38,11 @@ namespace HippAdministrata.Repositories.Implementation
             await _context.SaveChangesAsync();
         }
 
-       
+        public async Task<List<Client>> GetAllClientsAsync()
+        {
+            return await _context.Clients.ToListAsync();
+        }
+
 
         public async Task DeleteUserAsync(User user)
         {

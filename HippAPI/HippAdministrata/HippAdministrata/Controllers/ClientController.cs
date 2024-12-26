@@ -10,10 +10,12 @@ namespace HippAdministrata.Controllers
     public class ClientController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IUserService _userService;
 
-        public ClientController(IOrderService orderService)
+        public ClientController(IOrderService orderService, IUserService userService)
         {
             _orderService = orderService;
+            _userService = userService;
         }
 
         [HttpPost("{clientId}/orders")]
@@ -29,7 +31,12 @@ namespace HippAdministrata.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetAllClients()
+        {
+            var clients = await _userService.GetAllClientsAsync();
+            return Ok(clients);
+        }
     }
 
 }
