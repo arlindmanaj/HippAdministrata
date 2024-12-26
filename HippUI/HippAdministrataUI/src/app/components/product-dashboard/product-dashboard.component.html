@@ -1,21 +1,45 @@
 <!-- product-dashboard.component.html -->
 <div class="product-dashboard">
-    <h1>Product Dashboard</h1>
-    
-    <div class="add-product">
-      <h2>Add Product</h2>
-      <input [(ngModel)]="newProduct.name" placeholder="Product Name" />
-      <input [(ngModel)]="newProduct.price" type="number" placeholder="Product Price" />
-      <input [(ngModel)]="newProduct.quantity" type="number" placeholder="Product Quantity" />
-      <button (click)="addProduct()">Add Product</button>
-    </div>
-    
-    <h2>Product List</h2>
-    <ul>
-      <li *ngFor="let product of products">
-        {{ product.name }} - ${{ product.price }} ({{ product.quantity }} in stock)
-        <button (click)="deleteProduct(product.id)">Delete</button>
-      </li>
-    </ul>
+  <h1>Product Dashboard</h1>
+
+  <div>
+    <h3>Add Product</h3>
+    <label>
+      Name:
+      <input [(ngModel)]="newProduct.name" name="name" required />
+    </label>
+    <label>
+      Unlabeled Quantity:
+      <input type="number" [(ngModel)]="newProduct.unlabeledQuantity" name="unlabeledQuantity" required />
+    </label>
+    <label>
+      Labeled Quantity:
+      <input type="number" [(ngModel)]="newProduct.labeledQuantity" name="labeledQuantity" />
+    </label>
+    <label>
+      Price:
+      <input type="number" [(ngModel)]="newProduct.price" name="price" required />
+    </label>
+    <label>
+      Price Percentage for Employee:
+      <input type="number" [(ngModel)]="newProduct.pricePercentageForEmployee" name="pricePercentageForEmployee"
+        required />
+    </label>
+    <label>
+      Warehouse ID:
+      <input type="number" [(ngModel)]="newProduct.warehouseId" name="warehouseId" required />
+    </label>
+    <button (click)="addProduct()">Add Product</button>
   </div>
-  
+
+  <h2>Product List</h2>
+  <ul>
+    <li *ngFor="let product of products">
+      {{ product.name }} - ${{ product.price }} ({{ product.quantity }} in stock)
+      <button (click)="deleteProduct(product.id)">Delete</button>
+    </li>
+  </ul>
+  <div>
+    <button (click)="goToManager()">Go back</button>
+  </div>
+</div>

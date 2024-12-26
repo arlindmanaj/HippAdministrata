@@ -37,12 +37,24 @@ namespace HippAdministrata.Repositories.Implementation
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int productId)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new Exception("Product not found");
+            // Fetch the product and related orders
+            var product = await _context.Products
+                                         // Assuming there's a navigation property `Orders` in Product
+                                        .FirstOrDefaultAsync(p => p.Id == productId);
 
+            if (product == null)
+                throw new Exception("Product not found");
+
+            // Delete all orders associated with the product
+            var relatedOrders = await _context.Orders.Where(o => o.ProductId == productId).ToListAsync();
+            _context.Orders.RemoveRange(relatedOrders);
+
+            // Delete the product
             _context.Products.Remove(product);
+
+            // Save changes to the database
             await _context.SaveChangesAsync();
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using HippAdministrata.Models.Domains;
+using System.Reflection.Emit;
 
 namespace HippAdministrata.Configurations
 {
@@ -39,6 +40,8 @@ namespace HippAdministrata.Configurations
                .WithMany() // Assuming a Product can be part of multiple Orders
                .HasForeignKey(o => o.ProductId)
                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade deletes on Product
+
+            
         }
     }
 
