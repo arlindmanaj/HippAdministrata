@@ -275,6 +275,55 @@ namespace hippserver.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost("register/client")]
+        public async Task<IActionResult> RegisterClient([FromBody] RegisterClientRequest request)
+        {
+            try
+            {
+                _logger.LogInformation("Registering client {Name}", request.Name);
+
+                // Verify the Client role exists in the database
+                var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleName == "Client");
+                if (role == null)
+                    return BadRequest(new { message = "Client role not found." });
+
+                // Create a new user entry for the client
+                var user = new User
+                {
+                    Name = request.Name,
+                    PasswordHash = HashPassword(request.Password),
+                    RoleId = role.RoleId,
+                    RoleName = role.RoleName,
+                    Email = request.Email
+                };
+
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
+
+                // Create a new client entry linked to the user
+                var client = new Client
+                {
+                    Name = request.Name,
+                    Password = HashPassword(request.Password),
+                    UserId = user.UserId,
+                    Email = request.Email // Add Email to the Client entity if applicable
+                };
+
+
+                await _dbContext.Clients.AddAsync(client);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Client {Name} registered successfully", request.Name);
+                return Ok(new { message = "Client registered successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during client registration.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
 
         private static string HashPassword(string password)
         {

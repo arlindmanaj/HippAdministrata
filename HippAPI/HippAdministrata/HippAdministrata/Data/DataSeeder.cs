@@ -77,17 +77,15 @@ namespace HippAdministrata.Data
                     new Client
                     {
                         Name = "John Doe",
+                        Password = HashPassword("John123!"),
                         Email = "john.doe@example.com",
-                        Phone = "123-456-7890",
-                        Address = "123 Main St",
                         UserId = clientUsers[0].UserId
                     },
                     new Client
                     {
                         Name = "Jane Smith",
+                        Password = HashPassword("Jane123!"),
                         Email = "jane.smith@example.com",
-                        Phone = "987-654-3210",
-                        Address = "456 Elm St",
                         UserId = clientUsers[1].UserId
                     }
                 );
