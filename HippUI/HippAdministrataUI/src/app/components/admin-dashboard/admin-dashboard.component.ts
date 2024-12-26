@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,8 @@ export class AdminDashboardComponent implements OnInit {
   newUser = { name: '', password: '', email: '' };
   newUserRole = ''; // Role selected by the admin
   newDriverDetails = { licensePlate: '', carModel: '' };
+  newClientDetails = { phone: '', address: '' };
+
 
   errorMessage = '';
   successMessage = '';
@@ -89,6 +92,18 @@ export class AdminDashboardComponent implements OnInit {
           (error) => this.handleError('Failed to register employee.', error)
         );
         break;
+      case 'Client':
+          const { phone, address } = this.newClientDetails;
+          if (!phone || !address) {
+            this.errorMessage = 'Phone and address are required for clients.';
+            return;
+          }
+          this.authService.registerClient(name, email, password, phone, address).subscribe(
+            () => this.handleSuccess('Client registered successfully.'),
+            (error) => this.handleError('Failed to register client.', error)
+          );
+          break;
+        
       default:
         this.errorMessage = 'Invalid role selected.';
     }

@@ -122,4 +122,10 @@ export class AuthService {
     console.log('Calling API to register Manager:', body); // Debugging log
     return this.http.post(`${this.apiUrl}/Auth/register/manager`, body, { headers: this.getHeaders() });
   }
+  // Register Client
+  registerClient(name: string, email: string, password: string, phone: string, address: string): Observable<any> {
+    const body = { name, email, password, phone, address };
+    return this.http.post(`${this.apiUrl}/Auth/register/client`, body, { headers: this.getHeaders() });
+  }
+
 }
