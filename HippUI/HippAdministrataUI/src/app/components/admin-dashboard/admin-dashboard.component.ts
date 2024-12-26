@@ -3,7 +3,6 @@ import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -17,12 +16,10 @@ export class AdminDashboardComponent implements OnInit {
   newUserRole = ''; // Role selected by the admin
   newDriverDetails = { licensePlate: '', carModel: '' };
 
-
   errorMessage = '';
   successMessage = '';
 
-
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -41,11 +38,19 @@ export class AdminDashboardComponent implements OnInit {
     );
   }
 
+  // Add user based on role
   addUser(): void {
     const { name, password, email } = this.newUser;
 
+    // General validation for all roles
     if (!name || !password || !this.newUserRole) {
       this.errorMessage = 'Name, password, and role are required.';
+      return;
+    }
+
+    // Role-specific validation
+    if (['SalesPerson', 'Manager'].includes(this.newUserRole) && !email) {
+      this.errorMessage = 'Email is required for this role.';
       return;
     }
 
@@ -62,19 +67,30 @@ export class AdminDashboardComponent implements OnInit {
         );
         break;
 
-      case 'SalesPerson':
-
-
-        console.log('Registering SalesPerson with data:', { name, password });
-
-        this.authService.registerSalesPerson(name, password).subscribe(
-          () => this.handleSuccess('SalesPerson registered successfully.'),
-          (error) => {
-            console.error('Failed to register salesperson:', error);
-            this.handleError('Failed to register salesperson.', error);
+        case 'SalesPerson':
+          if (!email) {
+              this.errorMessage = 'Email is required for SalesPerson.';
+              return;
           }
-        );
-        break;
+          console.log('Registering SalesPerson with data:', { name, password, email }); // Ensure email is logged
+          this.authService.registerSalesPerson(name, password, email).subscribe(
+              () => this.handleSuccess('SalesPerson registered successfully.'),
+              (error) => this.handleError('Failed to register SalesPerson.', error)
+          );
+          break;
+      
+      case 'Manager':
+          if (!email) {
+              this.errorMessage = 'Email is required for Manager.';
+              return;
+          }
+          console.log('Registering Manager with data:', { name, password, email }); // Ensure email is logged
+          this.authService.registerManager(name, password, email).subscribe(
+              () => this.handleSuccess('Manager registered successfully.'),
+              (error) => this.handleError('Failed to register Manager.', error)
+          );
+          break;
+      
 
       case 'Employee':
         this.authService.registerEmployee(name, password).subscribe(
@@ -82,30 +98,19 @@ export class AdminDashboardComponent implements OnInit {
           (error) => this.handleError('Failed to register employee.', error)
         );
         break;
-
-      case 'Manager':
-        this.authService.registerManager(name, password).subscribe(
-          () => this.handleSuccess('Manager registered successfully.'),
-          (error) => this.handleError('Failed to register manager.', error)
-        );
-        break;
-
+        
       default:
         this.errorMessage = 'Invalid role selected.';
         break;
     }
   }
 
-
-
   // Handle successful user addition
   private handleSuccess(message: string): void {
     this.successMessage = message;
     this.errorMessage = '';
     this.newUser = { name: '', password: '', email: '' }; // Reset user form
-
     this.newDriverDetails = { licensePlate: '', carModel: '' }; // Reset driver details
-
     this.loadUsers(); // Refresh the user list
   }
 
