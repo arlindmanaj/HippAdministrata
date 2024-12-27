@@ -76,5 +76,28 @@ namespace HippAdministrata.Services
             await _productRepository.UpdateAsync(product); // Save product changes
         }
 
+        public async Task<IEnumerable<OrderDto>> GetAssignedOrdersAsync(int employeeId)
+        {
+            // Ensure the employee exists
+            var employee = await _employeeRepository.GetByIdAsync(employeeId);
+            if (employee == null) throw new Exception("Employee not found");
+
+            // Fetch orders assigned to the employee
+            var orders = await _orderRepository.GetOrdersByEmployeeIdAsync(employeeId);
+
+            // Map orders to DTOs (if needed)
+            return orders.Select(order => new OrderDto
+            {
+                Id = order.Id,
+                ProductName = order.Product.Name,
+                UnlabeledQuantity = order.UnlabeledQuantity,
+                LabeledQuantity = order.LabeledQuantity,
+                ProductPrice = order.Product.Price,
+                PricePercentageForEmployee = order.Product.PricePercentageForEmployee,
+                OrderStatus = OrderStatus.InProgress
+            });
+        }
+
+
     }
-    }
+}

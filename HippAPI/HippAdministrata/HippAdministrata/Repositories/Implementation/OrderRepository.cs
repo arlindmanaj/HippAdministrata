@@ -22,12 +22,14 @@ namespace HippAdministrata.Repositories.Implementation
                 .Include(o => o.Product) // Include navigation properties if needed
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
+
         public async Task<Order?> GetByIdWithProductAsync(int orderId)
         {
             return await _context.Orders
                 .Include(o => o.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
+
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await _context.Set<Order>().ToListAsync();
@@ -73,7 +75,6 @@ namespace HippAdministrata.Repositories.Implementation
             return false;
         }
 
-
         public async Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId)
         {
             return await _context.Orders
@@ -95,8 +96,6 @@ namespace HippAdministrata.Repositories.Implementation
                 .ToListAsync();
         }
 
-
-
         public async Task<bool> UpdateOrderStatusAsync(int id, string status)
         {
             var order = await GetByIdAsync(id);
@@ -108,5 +107,14 @@ namespace HippAdministrata.Repositories.Implementation
             }
             return false;
         }
+
+        public async Task<IEnumerable<Order>> GetOrdersByEmployeeIdAsync(int employeeId)
+        {
+            return await _context.Orders
+                .Where(order => order.EmployeeId == employeeId)
+                .Include(order => order.Product) // Include related product details
+                .ToListAsync();
+        }
+
     }
 }

@@ -29,6 +29,21 @@ namespace HippAdministrata.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("orders/{employeeId}")]
+        public async Task<IActionResult> GetAssignedOrders(int employeeId)
+        {
+            try
+            {
+                var orders = await _employeeService.GetAssignedOrdersAsync(employeeId);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
+
 
 }

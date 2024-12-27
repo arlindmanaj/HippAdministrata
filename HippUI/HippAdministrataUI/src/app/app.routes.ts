@@ -5,6 +5,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { ManagerDashboardComponent } from './components/manager-dashboard/manager-dashboard.component';
 import { ProductDashboardComponent } from './components/product-dashboard/product-dashboard.component';
 import { OrderDashboardComponent } from './components/order-dashboard/order-dashboard.component';
+import { EmployeeDashboardComponent } from './components/employee-dashboard/employee-dashboard.component';
 export const route: Route[] = [
     {
         path: 'login',
@@ -61,6 +62,13 @@ export const route: Route[] = [
             import('./components/salesperson-dashboard/salesperson-dashboard.component').then(
                 (m) => m.SalespersonDashboardComponent
             ),
+    },
+    {
+        path: 'employee-dashboard',
+        loadComponent: () =>
+            import('./components/employee-dashboard/employee-dashboard.component').then(
+                (m) => m.EmployeeDashboardComponent
+            )
     },
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },

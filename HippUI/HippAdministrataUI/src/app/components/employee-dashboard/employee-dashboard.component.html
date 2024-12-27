@@ -1,0 +1,30 @@
+<div class="employee-dashboard">
+    <h1>Employee Dashboard</h1>
+    <h2>Total Pay: {{ employeeTotalPay | currency }}</h2>
+
+    <h3>Assigned Orders</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Unlabeled Quantity</th>
+                <th>Labeled Quantity</th>
+                <th>Add Labels</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of orders">
+                <td>{{ order.id }}</td>
+                <td>{{ order.productName }}</td>
+                <td>{{ order.unlabeledQuantity }}</td>
+                <td>{{ order.labeledQuantity }}</td>
+                <td>
+                    <input type="number" [(ngModel)]="labelingQuantity[order.id]" placeholder="Enter quantity" />
+                    <button (click)="addLabels(order.id, labelingQuantity[order.id])">Add Labels</button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

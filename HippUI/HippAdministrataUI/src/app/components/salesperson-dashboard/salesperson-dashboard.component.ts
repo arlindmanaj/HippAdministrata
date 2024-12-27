@@ -155,6 +155,7 @@ export class SalespersonDashboardComponent implements OnInit {
       0: 'Created',
       1: 'In Progress',
       2: 'Completed',
+      3: 'Ready for shipping'
     };
     return OrderStatus[status] || 'Unknown';
   }

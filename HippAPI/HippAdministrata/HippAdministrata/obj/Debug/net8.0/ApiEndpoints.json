@@ -259,6 +259,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "HippAdministrata.Controllers.EmployeeController",
+    "Method": "GetAssignedOrders",
+    "RelativePath": "api/employees/orders/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "HippAdministrata.Controllers.OrderController",
     "Method": "GetAll",
     "RelativePath": "api/Order",

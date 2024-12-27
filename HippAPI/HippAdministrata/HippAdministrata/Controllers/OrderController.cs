@@ -46,11 +46,6 @@ namespace HippAdministrata.Controllers
             return Ok(orders);
         }
 
-       
-
-       
-
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
