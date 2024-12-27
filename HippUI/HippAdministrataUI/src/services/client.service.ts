@@ -29,6 +29,12 @@ export class ClientService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
     return this.http.get<any[]>(`${this.apiUrl}/Order/client/${clientId}`, { headers });
   }
+  createMultipleOrders(clientId: number, orders: any): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.post(`${this.apiUrl}/clients/${clientId}/orders`, orders, { headers });
+
+  }
+  
 
 
 }

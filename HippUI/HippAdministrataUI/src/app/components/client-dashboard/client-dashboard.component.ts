@@ -5,6 +5,21 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OrderStatus } from '../../../models/OrderStatus';
 
+interface Product {
+  productName: string;
+  quantity: number;
+  productPrice: number;
+}
+
+interface Order {
+  orderId: number;
+  deliveryDestination: string;
+  orderStatusDisplay: string;
+  products: Product[];
+}
+
+
+
 @Component({
   selector: 'app-client-dashboard',
   templateUrl: './client-dashboard.component.html',
@@ -15,35 +30,31 @@ import { OrderStatus } from '../../../models/OrderStatus';
 export class ClientDashboardComponent implements OnInit {
   products: any[] = []; // List of products
   orders: any[] = []; // List of orders
-  newOrder = { productId: null, quantity: 0, deliveryDestination: '' }; // Order form
+  newOrder = { 
+    products: [{ productId: null, quantity: 0 }], // Track multiple products
+    deliveryDestination: '' 
+  };
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
   isOrderModalOpen = false;
 
-  constructor(private router: Router, private clientService: ClientService) { }
+  constructor(private router: Router, private clientService: ClientService) {}
 
   ngOnInit(): void {
     this.loadProducts();
     this.loadOrders();
   }
 
+  // Modal Handling
   openOrderModal(): void {
     this.isOrderModalOpen = true;
   }
 
   closeOrderModal(): void {
     this.isOrderModalOpen = false;
-    this.newOrder = { productId: null, quantity: 0, deliveryDestination: '' };
+    this.newOrder = { products: [{ productId: null, quantity: 0 }], deliveryDestination: '' };
   }
 
-  logout(): void {
-    localStorage.removeItem('authToken');
-    this.router.navigate(['/login']);
-  }
-
-  getOrderStatus(status: number): string {
-    return OrderStatus[status];
-  }
-
+  // Load Data
   loadProducts(): void {
     this.clientService.getProducts().subscribe(
       (data) => (this.products = data),
@@ -51,30 +62,69 @@ export class ClientDashboardComponent implements OnInit {
     );
   }
 
-  loadOrders(): void {
-    const clientId = Number(localStorage.getItem('roleSpecificId')); // Fetch clientId from localStorage
-    if (!clientId) {
-      alert('Client ID not found. Please log in again.');
-      return;
-    }
-  
-    this.clientService.getOrdersByClientId(clientId).subscribe(
-      (orders) => {
-        this.orders = orders.map(order => ({
-          ...order,
-          orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
-          productName: this.getProductName(order.productId)
-        }));
-      },
-      (error) => {
-        console.error('Failed to load orders:', error);
-        alert('Failed to load orders. Please try again later.');
-      }
-    );
+  groupedOrders: any[] = [];
+
+loadOrders(): void {
+  const clientId = Number(localStorage.getItem('roleSpecificId')); // Fetch clientId from localStorage
+  if (!clientId) {
+    alert('Client ID not found. Please log in again.');
+    return;
   }
-  
+
+  this.clientService.getOrdersByClientId(clientId).subscribe(
+    (orders) => {
+      // Map the orders to display order details
+      const formattedOrders = orders.map(order => ({
+        ...order,
+        orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
+        productName: this.getProductName(order.productId)
+      }));
+
+      // Group orders for frontend display
+      this.groupedOrders = this.groupOrders(formattedOrders);
+    },
+    (error) => {
+      console.error('Failed to load orders:', error);
+      alert('Failed to load orders. Please try again later.');
+    }
+  );
+}
+
+groupOrders(orders: any[]): Order[] {
+  const grouped: Order[] = orders.reduce((acc: Order[], order: any) => {
+    const existingGroup = acc.find(
+      (group: Order) =>
+        group.deliveryDestination === order.deliveryDestination &&
+        group.orderStatusDisplay === order.orderStatusDisplay
+    );
+    if (existingGroup) {
+      existingGroup.products.push({
+        productName: order.productName,
+        quantity: order.quantity,
+        productPrice: order.productPrice
+      });
+    } else {
+      acc.push({
+        orderId: order.id, // Use the first order's ID for display
+        deliveryDestination: order.deliveryDestination,
+        orderStatusDisplay: order.orderStatusDisplay,
+        products: [
+          {
+            productName: order.productName,
+            quantity: order.quantity,
+            productPrice: order.productPrice
+          }
+        ]
+      });
+    }
+    return acc;
+  }, []);
+  return grouped;
+}
 
 
+
+  // Helpers
   getOrderStatusDisplay(status: number): string {
     const statusMap: { [key: number]: string } = {
       0: 'Created',
@@ -88,49 +138,57 @@ export class ClientDashboardComponent implements OnInit {
     };
     return statusMap[status] || 'Unknown';
   }
+
   getProductName(productId: number): string {
     const product = this.products.find(p => p.id === productId);
     return product ? product.name : 'Unknown Product';
   }
 
+  // Add Product to Order
+  addProduct(): void {
+    this.newOrder.products.push({ productId: null, quantity: 0 });
+  }
 
-  createOrder(): void {
-    const clientId = Number(localStorage.getItem('roleSpecificId')); // Fetch clientId from localStorage
+  // Create Multiple Orders
+  createMultipleOrders(): void {
+    const clientId = Number(localStorage.getItem('roleSpecificId'));
     if (!clientId) {
       alert('Client ID not found. Please log in again.');
       return;
     }
 
-    if (!this.newOrder.productId || !this.newOrder.quantity || !this.newOrder.deliveryDestination) {
+    if (!this.newOrder.deliveryDestination || this.newOrder.products.length === 0) {
       alert('Please fill out all fields.');
       return;
     }
 
-    // Build the correct payload
     const payload = {
       deliveryDestination: this.newOrder.deliveryDestination,
-      products: [
-        {
-          productId: this.newOrder.productId,
-          quantity: this.newOrder.quantity
-        }
-      ]
+      products: this.newOrder.products.filter(p => p.productId && p.quantity > 0)
     };
 
-    console.log('Order Payload:', payload); // Log the payload for debugging
-    console.log('Selected Product ID:', this.newOrder.productId);
+    if (payload.products.length === 0) {
+      alert('Please add at least one valid product with quantity.');
+      return;
+    }
 
-    this.clientService.createOrder(clientId, payload).subscribe(
+    this.clientService.createMultipleOrders(clientId, payload).subscribe(
       () => {
-        alert('Order placed successfully!');
-        this.newOrder = { productId: null, quantity: 0, deliveryDestination: '' };
+        alert('Orders placed successfully!');
+        this.newOrder = { products: [{ productId: null, quantity: 0 }], deliveryDestination: '' };
         this.loadOrders();
+        this.closeOrderModal();
       },
       (error) => {
-        console.error('Failed to place order:', error);
-        alert('Failed to place order. Please try again.');
+        console.error('Failed to place orders:', error);
+        alert('Failed to place orders. Please try again.');
       }
     );
   }
 
+  // Logout
+  logout(): void {
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
+  }
 }
