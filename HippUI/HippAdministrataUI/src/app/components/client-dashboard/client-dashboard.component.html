@@ -24,7 +24,7 @@
             </button>
             <div class="order-details" *ngIf="isOrderOpen(order.orderId)">
               <p><strong>Delivery Destination:</strong> {{ order.deliveryDestination }}</p>
-              <p><strong>Status:</strong> {{ order.orderStatusDisplay }}</p>
+              <p><strong>Status:</strong>{{ getOrderStatusLabel(order.orderStatus)}} </p>
               <p><strong>Products:</strong></p>
               <ul>
                 <li *ngFor="let product of order.products">

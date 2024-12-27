@@ -3,6 +3,7 @@ import { DriverService } from '../../../services/driver.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { OrderStatus } from '../../../models/OrderStatus';
 
 @Component({
   selector: 'app-driver-dashboard',
@@ -79,6 +80,15 @@ export class DriverDashboardComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('authToken');
+
+
     this.router.navigate(['/login']);
   }
+  getOrderStatusLabel(status: number): string {
+    return getOrderStatusLabel(status);
+  }
+
+}
+export function getOrderStatusLabel(status: number): string {
+  return OrderStatus[status] || 'Unknown';
 }

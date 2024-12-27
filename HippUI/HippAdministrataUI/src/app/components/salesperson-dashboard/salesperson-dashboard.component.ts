@@ -150,17 +150,19 @@ export class SalespersonDashboardComponent implements OnInit {
 
 
 
-  getOrderStatus(status: number): string {
-    const statusMap = {
-      0: 'Created',
-      1: 'In Progress',
-      2: 'Completed',
-      3: 'Ready for shipping'
-    };
-    return OrderStatus[status] || 'Unknown';
-  }
+
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
+
+
+  getOrderStatusLabel(status: number): string {
+    return getOrderStatusLabel(status);
+  }
+
 }
+export function getOrderStatusLabel(status: number): string {
+  return OrderStatus[status] || 'Unknown';
+}
+

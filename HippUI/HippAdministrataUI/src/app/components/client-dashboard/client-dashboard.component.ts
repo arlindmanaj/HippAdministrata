@@ -218,4 +218,10 @@ export class ClientDashboardComponent implements OnInit {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
+  getOrderStatusLabel(status: number): string {
+      return getOrderStatusLabel(status);
+    }
+}
+export function getOrderStatusLabel(status: number): string {
+  return OrderStatus[status] || 'Unknown';
 }

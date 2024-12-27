@@ -19,6 +19,7 @@
                 <td>{{ order.productName }}</td>
                 <td>{{ order.unlabeledQuantity }}</td>
                 <td>{{ order.labeledQuantity }}</td>
+                <td>{{ getOrderStatusLabel(order.orderStatus)}}</td>
                 <td>
                     <input type="number" [(ngModel)]="labelingQuantity[order.id]" placeholder="Enter quantity" />
                     <button (click)="addLabels(order.id, labelingQuantity[order.id])">Add Labels</button>

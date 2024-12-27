@@ -23,7 +23,7 @@ export class OrderDashboardComponent implements OnInit {
   salesPersons: any[] = [];
   selectedClientId: number | null = null;
   clientOrders: any[] = [];
-  salesPersonsOrders: any[] =[];
+  salesPersonsOrders: any[] = [];
   errorMessage: string = '';
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
 
@@ -72,8 +72,8 @@ export class OrderDashboardComponent implements OnInit {
       (error) => (this.errorMessage = 'Failed to load client orders')
     );
   }
-  getOrderStatus(status: number): string {
-    return OrderStatus[status];
+  getOrderStatusLabel(status: number): string {
+    return getOrderStatusLabel(status);
   }
 
   goToManager(): void {
@@ -121,4 +121,7 @@ export class OrderDashboardComponent implements OnInit {
     );
   }
 
+}
+export function getOrderStatusLabel(status: number): string {
+  return OrderStatus[status] || 'Unknown';
 }
