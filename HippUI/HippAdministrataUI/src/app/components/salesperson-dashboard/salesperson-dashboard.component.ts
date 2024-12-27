@@ -4,6 +4,7 @@ import { UserService } from '../../../services/user.service';
 import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-salesperson-dashboard',
@@ -23,7 +24,8 @@ export class SalespersonDashboardComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private salesPersonService: SalesPersonService
+    private salesPersonService: SalesPersonService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -155,5 +157,9 @@ export class SalespersonDashboardComponent implements OnInit {
       2: 'Completed',
     };
     return OrderStatus[status] || 'Unknown';
+  }
+  logout(): void {
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
   }
 }
