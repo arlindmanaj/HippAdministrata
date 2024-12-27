@@ -10,6 +10,8 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ManagerDashboardComponent {
   constructor(private router: Router) {}
+  activeSection: string = 'orders'; // Default active section
+
 
   // Method to navigate to specific paths based on dashboard
   navigateTo(path: string): void {

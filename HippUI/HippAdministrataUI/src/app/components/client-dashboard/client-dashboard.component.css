@@ -12,10 +12,29 @@
 }
 
 .sidebar h2 {
-  font-size: 20px; /* Match admin sidebar title size */
-  margin-bottom: 20px;
-  color: #333; /* Match admin text color */
+  font-size: 24px; /* Larger font size */
+  font-weight: 700; /* Bold the text for better emphasis */
+  color: #333; /* Dark color for readability */
+  margin-bottom: 30px; /* Increased margin for spacing */
+  letter-spacing: 1px; /* Slight letter spacing for a cleaner look */
+  text-transform: uppercase; /* Makes the text uppercase for a more prominent look */
+  font-family: 'Arial', sans-serif; /* Consistent, clean font */
+  
+  text-align: center; /* Center-align the "Menu" text */
 }
+
+/* Optional: Adding a subtle underline effect */
+.sidebar h2::after {
+  content: "";
+  display: block;
+  width: 50%; /* Underline width */
+  height: 2px; /* Underline thickness */
+  background-color: #007bff; /* Underline color */
+  margin-top: 10px; /* Space between the text and the underline */
+  margin-left: auto;
+  margin-right: auto; /* Center the underline */
+}
+
 
 .sidebar ul {
   list-style: none;

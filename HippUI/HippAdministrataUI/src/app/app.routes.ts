@@ -3,7 +3,6 @@ import { LoginComponent } from './components/Auth/login/login.component';
 import { RegisterComponent } from './components/Auth/register/register.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ManagerDashboardComponent } from './components/manager-dashboard/manager-dashboard.component';
-
 import { ProductDashboardComponent } from './components/product-dashboard/product-dashboard.component';
 import { OrderDashboardComponent } from './components/order-dashboard/order-dashboard.component';
 import { EmployeeDashboardComponent } from './components/employee-dashboard/employee-dashboard.component';
