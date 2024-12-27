@@ -3,6 +3,7 @@ import { EmployeeService } from '../../../services/employee.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderStatus } from '../../../models/OrderStatus';
+import { getOrderStatusLabel } from '../../../services/order-status.util';
 import { Router } from '@angular/router';
 
 @Component({
@@ -96,10 +97,4 @@ export class EmployeeDashboardComponent implements OnInit {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
-  getOrderStatusLabel(status: number): string {
-    return getOrderStatusLabel(status);
-  }
-}
-export function getOrderStatusLabel(status: number): string {
-  return OrderStatus[status] || 'Unknown';
 }

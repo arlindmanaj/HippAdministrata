@@ -5,5 +5,6 @@ export enum OrderStatus {
     ReadyForShipping = 3,
     InTransit = 4,
     Shipped = 5,
-    Completed = 6,
-}
+    Completed = 6
+  }
+  

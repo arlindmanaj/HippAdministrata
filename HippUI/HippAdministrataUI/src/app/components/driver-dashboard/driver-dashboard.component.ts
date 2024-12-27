@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OrderStatus } from '../../../models/OrderStatus';
-
+import { getOrderStatusLabel } from '../../../services/order-status.util';
 @Component({
   selector: 'app-driver-dashboard',
   templateUrl: './driver-dashboard.component.html',
@@ -24,14 +24,20 @@ export class DriverDashboardComponent implements OnInit {
   constructor(private driverService: DriverService, private router: Router) { }
 
   ngOnInit(): void {
-    this.loadDriverAssignedOrders();
+    this.loadDriverAssignedOrders(this.driverId);
   }
 
-  loadDriverAssignedOrders(): void {
-    this.driverService.getDriverAssignedOrders(this.driverId).subscribe(
-      (data) => {
-        this.assignedOrders = data;
-      },
+  
+
+
+  loadDriverAssignedOrders(driverId: number ): void {
+    this.driverService.getDriverAssignedOrders(driverId).subscribe(
+      (orders) => {
+        const formattedOrders = orders.map(order => ({
+          ...order,
+          orderStatusDisplay: getOrderStatusLabel(order.orderStatus), // Use utility function
+          productName: order.productName
+        }));
       (error) => {
         console.error('Failed to load assigned orders:', error);
         alert('Failed to load assigned orders.');
@@ -84,11 +90,4 @@ export class DriverDashboardComponent implements OnInit {
 
     this.router.navigate(['/login']);
   }
-  getOrderStatusLabel(status: number): string {
-    return getOrderStatusLabel(status);
-  }
-
-}
-export function getOrderStatusLabel(status: number): string {
-  return OrderStatus[status] || 'Unknown';
 }

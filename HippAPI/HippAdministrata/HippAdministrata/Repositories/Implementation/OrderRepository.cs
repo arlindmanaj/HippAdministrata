@@ -91,7 +91,7 @@ namespace HippAdministrata.Repositories.Implementation
                     LabeledQuantity = o.LabeledQuantity,
                     ProductPrice = o.ProductPrice,
                     CreatedAt = o.CreatedAt,
-                    OrderStatus = o.OrderStatus
+                    OrderStatus = o.OrderStatus.ToString()
                 })
                 .ToListAsync();
         }

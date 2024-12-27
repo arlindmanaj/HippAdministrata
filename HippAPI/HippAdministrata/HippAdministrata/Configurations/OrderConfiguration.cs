@@ -41,6 +41,9 @@ namespace HippAdministrata.Configurations
                .HasForeignKey(o => o.ProductId)
                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade deletes on Product
 
+            entity.Property(o => o.OrderStatus)
+                .HasConversion<string>();
+
             
         }
     }

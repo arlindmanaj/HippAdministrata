@@ -5,6 +5,7 @@ import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { getOrderStatusLabel } from '../../../services/order-status.util';
 
 @Component({
   selector: 'app-salesperson-dashboard',
@@ -49,6 +50,15 @@ export class SalespersonDashboardComponent implements OnInit {
         alert('Failed to load orders. Please try again.');
       }
     );
+  }
+  getOrderStatusLabel(status: number | string): string {
+    // If the status is already a string, return it
+    if (typeof status === 'string') {
+      return status;
+    }
+
+    // Convert numeric status to the corresponding string value
+    return OrderStatus[status] || 'Unknown';
   }
 
   loadUserData(type: string): void {
@@ -157,12 +167,4 @@ export class SalespersonDashboardComponent implements OnInit {
   }
 
 
-  getOrderStatusLabel(status: number): string {
-    return getOrderStatusLabel(status);
-  }
-
 }
-export function getOrderStatusLabel(status: number): string {
-  return OrderStatus[status] || 'Unknown';
-}
-

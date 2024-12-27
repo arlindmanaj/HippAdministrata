@@ -94,7 +94,7 @@ namespace HippAdministrata.Services
                 LabeledQuantity = order.LabeledQuantity,
                 ProductPrice = order.Product.Price,
                 PricePercentageForEmployee = order.Product.PricePercentageForEmployee,
-                OrderStatus = OrderStatus.InProgress
+                OrderStatus = order.OrderStatus.ToString()
             });
         }
 

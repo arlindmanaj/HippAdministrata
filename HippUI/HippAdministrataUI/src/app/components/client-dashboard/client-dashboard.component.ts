@@ -4,6 +4,7 @@ import { ClientService } from '../../../services/client.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OrderStatus } from '../../../models/OrderStatus';
+import { getOrderStatusLabel } from '../../../services/order-status.util';
 
 interface Product {
   productName: string;
@@ -28,24 +29,30 @@ interface Order {
 export class ClientDashboardComponent implements OnInit {
   products: any[] = []; // List of products
   orders: any[] = []; // List of orders
-  newOrder = { 
+  newOrder = {
     products: [{ productId: null, quantity: 0 }], // Track multiple products
-    deliveryDestination: '' 
+    deliveryDestination: ''
   };
-  orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
+  orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key))); // Available statuses
   isOrderModalOpen = false;
 
+  assignedOrders: any[] = [];
   activeSection: string = 'orders'; // Default active section
-  groupedOrders: any[] = []; // Grouped orders for display
+  groupedOrders: Order[] = []; // Grouped orders for display
   recentOrders: Order[] = []; // To store the two most recent orders
+  expandedOrders: Set<number> = new Set(); // Track expanded orders
 
-  constructor(private router: Router, private clientService: ClientService) {}
+  constructor(private router: Router, private clientService: ClientService) { }
 
   ngOnInit(): void {
     this.loadProducts();
     this.loadOrders();
   }
 
+  // Expose the utility function for order status
+  getOrderStatusLabel = getOrderStatusLabel;
+
+  // Section Handling
   viewSection(section: string): void {
     this.activeSection = section;
     if (section === 'create-order') {
@@ -63,7 +70,7 @@ export class ClientDashboardComponent implements OnInit {
     this.newOrder = { products: [{ productId: null, quantity: 0 }], deliveryDestination: '' };
   }
 
-  // Load Data
+  // Load Products
   loadProducts(): void {
     this.clientService.getProducts().subscribe(
       (data) => (this.products = data),
@@ -71,6 +78,7 @@ export class ClientDashboardComponent implements OnInit {
     );
   }
 
+  // Load Orders
   loadOrders(): void {
     const clientId = Number(localStorage.getItem('roleSpecificId')); // Fetch clientId from localStorage
     if (!clientId) {
@@ -83,13 +91,13 @@ export class ClientDashboardComponent implements OnInit {
         // Map the orders to display order details
         const formattedOrders = orders.map(order => ({
           ...order,
-          orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
+          orderStatusDisplay: this.getOrderStatusLabel(order.orderStatus), // Use utility function
           productName: this.getProductName(order.productId)
         }));
 
         // Group orders for frontend display
         this.groupedOrders = this.groupOrders(formattedOrders);
-        this.loadRecentOrders(); // Refresh recent orders whenever orders are loaded
+
       },
       (error) => {
         console.error('Failed to load orders:', error);
@@ -98,16 +106,18 @@ export class ClientDashboardComponent implements OnInit {
     );
   }
 
+  // Load Recent Orders
   loadRecentOrders(): void {
     if (this.groupedOrders.length > 0) {
       this.recentOrders = this.groupedOrders
-        .sort((a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()) // Sort by most recent
+
         .slice(0, 2); // Take the first two orders
     }
   }
 
+  // Group Orders
   groupOrders(orders: any[]): Order[] {
-    const grouped: Order[] = orders.reduce((acc: Order[], order: any) => {
+    return orders.reduce((acc: Order[], order: any) => {
       const existingGroup = acc.find(
         (group: Order) =>
           group.deliveryDestination === order.deliveryDestination &&
@@ -135,24 +145,10 @@ export class ClientDashboardComponent implements OnInit {
       }
       return acc;
     }, []);
-    return grouped;
   }
 
-  // Helpers
-  getOrderStatusDisplay(status: number): string {
-    const statusMap: { [key: number]: string } = {
-      0: 'Created',
-      1: 'InProgress',
-      2: 'Labeled',
-      3: 'Packaged',
-      4: 'Ready For Shipping',
-      5: 'In Transit',
-      6: 'Shipped',
-      7: 'Completed',
-    };
-    return statusMap[status] || 'Unknown';
-  }
 
+  // Get Product Name
   getProductName(productId: number): string {
     const product = this.products.find(p => p.id === productId);
     return product ? product.name : 'Unknown Product';
@@ -199,8 +195,8 @@ export class ClientDashboardComponent implements OnInit {
       }
     );
   }
-  expandedOrders: Set<number> = new Set(); // Track expanded orders
 
+  // Expand/Collapse Orders
   toggleOrder(orderId: number): void {
     if (this.expandedOrders.has(orderId)) {
       this.expandedOrders.delete(orderId);
@@ -218,10 +214,4 @@ export class ClientDashboardComponent implements OnInit {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
-  getOrderStatusLabel(status: number): string {
-      return getOrderStatusLabel(status);
-    }
-}
-export function getOrderStatusLabel(status: number): string {
-  return OrderStatus[status] || 'Unknown';
 }
