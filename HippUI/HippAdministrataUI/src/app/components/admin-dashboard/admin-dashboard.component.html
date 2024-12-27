@@ -93,9 +93,19 @@
       <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
       <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
   
-      <!-- Users Section -->
+     <!-- Users Section -->
       <section *ngIf="activeSection === 'users'" class="user-table-section">
         <h2>Existing Users</h2>
+
+        <!-- Role Filter Dropdown -->
+        <div>
+          <label for="roleFilter">Filter by Role:</label>
+          <select id="roleFilter" [(ngModel)]="selectedRole" (change)="filterUsersByRole()">
+            <option value="">All Roles</option>
+            <option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</option>
+          </select>
+        </div>
+
         <table class="user-table">
           <thead>
             <tr>
@@ -107,7 +117,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of users">
+            <tr *ngFor="let user of filteredUsers">
               <td>{{ user.userId }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email || 'N/A' }}</td>
@@ -116,7 +126,6 @@
                 <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
               </td>
             </tr>
-            <button (click)="logout()">Log out</button>
           </tbody>
         </table>
       </section>

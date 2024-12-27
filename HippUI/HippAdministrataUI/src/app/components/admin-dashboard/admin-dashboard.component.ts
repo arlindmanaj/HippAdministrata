@@ -18,6 +18,9 @@ export class AdminDashboardComponent implements OnInit {
   newUserRole = ''; // Role selected by the admin
   newDriverDetails = { licensePlate: '', carModel: '' };
   newClientDetails = { phone: '', address: '' };
+  filteredUsers: any[] = [];
+  selectedRole: string = '';
+  uniqueRoles: string[] = [];
 
 
   errorMessage = '';
@@ -40,12 +43,26 @@ export class AdminDashboardComponent implements OnInit {
     this.authService.getUsers().subscribe(
       (data) => {
         this.users = data;
+        this.filteredUsers = [...this.users];
+        this.extractUniqueRoles();
       },
       (error) => {
         console.error('Failed to load users:', error);
         this.errorMessage = 'Failed to load users. Please try again later.';
       }
     );
+  }
+
+  extractUniqueRoles(): void {
+    this.uniqueRoles = Array.from(new Set(this.users.map((user) => user.role)));
+  }
+
+  filterUsersByRole(): void {
+    if (this.selectedRole) {
+      this.filteredUsers = this.users.filter((user) => user.role === this.selectedRole);
+    } else {
+      this.filteredUsers = [...this.users]; // Reset to show all users
+    }
   }
 
   // Add user
