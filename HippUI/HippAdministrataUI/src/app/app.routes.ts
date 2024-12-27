@@ -55,6 +55,13 @@ export const route: Route[] = [
                 (m) => m.OrderDashboardComponent
             ),
     },
+    {
+        path: 'salesperson-dashboard',
+        loadComponent: () =>
+            import('./components/salesperson-dashboard/salesperson-dashboard.component').then(
+                (m) => m.SalespersonDashboardComponent
+            ),
+    },
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];

@@ -28,4 +28,8 @@ export class UserService {
     return this.http.get<any[]>(`${this.apiUrl}/Users/salespersons`, { headers });
   }
 
+  getAllWarehouses(): Observable<any[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.get<any[]>(`${this.apiUrl}/Warehouse`, { headers });
+  }
 }

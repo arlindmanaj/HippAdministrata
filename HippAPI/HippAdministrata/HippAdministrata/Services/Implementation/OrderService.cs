@@ -141,6 +141,13 @@ namespace HippAdministrata.Services
             return order;
         }
 
+        public async Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId)
+        {
+            return await _orderRepository.GetOrdersBySalesPersonIdAsync(salesPersonId);
+        }
+
+
+
 
         public async Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto)
         {

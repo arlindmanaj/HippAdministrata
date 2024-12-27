@@ -413,6 +413,22 @@
   },
   {
     "ContainingType": "HippAdministrata.Controllers.SalesPersonController",
+    "Method": "GetOrdersBySalesPersonId",
+    "RelativePath": "api/SalesPerson/orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "salesPersonId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.SalesPersonController",
     "Method": "AssignOrder",
     "RelativePath": "api/SalesPerson/orders/{orderId}/assign",
     "HttpMethod": "PUT",

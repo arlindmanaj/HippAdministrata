@@ -46,13 +46,7 @@ namespace HippAdministrata.Controllers
             return Ok(orders);
         }
 
-        [HttpGet("salesperson/{salesPersonId}")]
-        public async Task<IActionResult> GetBySalesPersonId(int salesPersonId)
-        {
-            var orders = await _orderService.GetBySalesPersonIdAsync(salesPersonId);
-            return Ok(orders);
-        }
-
+       
 
        
 

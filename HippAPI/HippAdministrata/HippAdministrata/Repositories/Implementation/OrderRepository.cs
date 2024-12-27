@@ -1,5 +1,6 @@
 ﻿using HippAdministrata.Data;
 using HippAdministrata.Models.Domains;
+using HippAdministrata.Models.DTOs;
 using HippAdministrata.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -71,6 +72,30 @@ namespace HippAdministrata.Repositories.Implementation
             }
             return false;
         }
+
+
+        public async Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId)
+        {
+            return await _context.Orders
+                .Where(o => o.SalesPersonId == salesPersonId)
+                .Select(o => new OrderDto
+                {
+                    Id = o.Id,
+                    ProductName = o.Product.Name, // Assuming navigation property exists
+                    ClientName = o.Client.Name,  // Assuming navigation property exists
+                    SalesPersonName = o.SalesPerson.Name, // Assuming navigation property exists
+                    DeliveryDestination = o.DeliveryDestination,
+                    Quantity = o.Quantity,
+                    UnlabeledQuantity = o.UnlabeledQuantity,
+                    LabeledQuantity = o.LabeledQuantity,
+                    ProductPrice = o.ProductPrice,
+                    CreatedAt = o.CreatedAt,
+                    OrderStatus = o.OrderStatus
+                })
+                .ToListAsync();
+        }
+
+
 
         public async Task<bool> UpdateOrderStatusAsync(int id, string status)
         {
