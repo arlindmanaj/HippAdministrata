@@ -55,6 +55,7 @@
               </div>
               
               
+
             <!-- Orders for SalesPerson -->
             <section *ngIf="salesPersonsOrders.length" class="orders-section">
                 <h3>Orders for SalesPerson</h3>
@@ -102,31 +103,32 @@
             </section>
 
             <!-- All Orders List -->
-            <section *ngIf="showAllOrders" class="all-orders-section">
+            <section *ngIf="showAllOrders" class="all-orders-section" [ngClass]="{'active': activeSection === 'allOrders'}">
                 <h2>All Orders</h2>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Product ID</th>
-                            <th>Quantity</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let order of orders">
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.productId }}</td>
-                            <td>{{ order.quantity }}</td>
-                            <td>{{ getOrderStatus(order.orderStatus) }}</td>
-                            <td>
-                                <button (click)="deleteOrder(order.id)">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Product ID</th>
+                      <th>Quantity</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let order of orders">
+                      <td>{{ order.id }}</td>
+                      <td>{{ order.productId }}</td>
+                      <td>{{ order.quantity }}</td>
+                      <td>{{ getOrderStatus(order.orderStatus) }}</td>
+                      <td>
+                        <button (click)="deleteOrder(order.id)">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
-            </section>
+              </section>
+              
             
             <!-- Error Message -->
             <section *ngIf="errorMessage" class="error-section">

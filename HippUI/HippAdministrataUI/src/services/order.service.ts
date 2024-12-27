@@ -18,6 +18,7 @@ export class OrderService {
   }
   deleteOrder(orderId: number): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
-    return this.http.delete(`${this.apiUrl}/Order/${orderId}`, { headers });
+    // Add responseType: 'text' to handle the plain text response from the backend
+    return this.http.delete(`${this.apiUrl}/Order/${orderId}`, { headers, responseType: 'text' });
   }
 }

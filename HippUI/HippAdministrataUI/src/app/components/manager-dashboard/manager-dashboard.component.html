@@ -4,8 +4,8 @@
     <ul class="navigation">
       <li><button (click)="navigateTo('products')">Product Dashboard</button></li>
       <li><button (click)="navigateTo('orders')">Order Dashboard</button></li>
-      <li><button (click)="logout()">Log Out</button></li>
     </ul>
+    <button class="logout-button" (click)="logout()">Logout</button>
   </aside>
   <main class="content">
     <router-outlet></router-outlet>
