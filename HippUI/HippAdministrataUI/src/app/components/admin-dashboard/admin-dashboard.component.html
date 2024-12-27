@@ -84,7 +84,9 @@
           </p>
   
           <button class="btn btn-add" (click)="addUser()">Add User</button>
+
         </div>
+        <button (click)="logout()">Log out</button>
       </section>
   
       <!-- Messages -->
@@ -114,6 +116,7 @@
                 <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
               </td>
             </tr>
+            <button (click)="logout()">Log out</button>
           </tbody>
         </table>
       </section>

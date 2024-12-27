@@ -33,6 +33,22 @@
   },
   {
     "ContainingType": "hippserver.Controllers.AuthController",
+    "Method": "RegisterClient",
+    "RelativePath": "api/Auth/register/client",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "HippAdministrata.Models.Requests.RegisterClientRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "hippserver.Controllers.AuthController",
     "Method": "RegisterDriver",
     "RelativePath": "api/Auth/register/driver",
     "HttpMethod": "POST",

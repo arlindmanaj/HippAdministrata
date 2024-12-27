@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using HippAdministrata.Data;
 using System.Text;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto.Generators;
 
 
 namespace hippserver.Controllers
@@ -37,9 +38,13 @@ namespace hippserver.Controllers
                 if (token == null)
                     return Unauthorized();
 
+
                 var user = await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == model.Name);
                 if (user == null)
                     return Unauthorized();
+
+
+               
 
                 int? roleSpecificId = await GetRoleSpecificIdAsync(user.UserId, user.Role.RoleName);
 
@@ -57,6 +62,7 @@ namespace hippserver.Controllers
             }
         }
 
+        
         private async Task<int?> GetRoleSpecificIdAsync(int userId, string roleName)
         {
             return roleName switch

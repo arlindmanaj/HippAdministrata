@@ -60,7 +60,16 @@ namespace HippAdministrata.Repositories.Implementation
 
         public async Task<List<Client>> GetAllClientsAsync()
         {
-            return await _context.Clients.ToListAsync();
+            return await _context.Clients
+                 .Include(c => c.User) // Assuming Clients have a navigation property to User
+                 .Select(c => new Client
+                 {
+                     Id = c.Id,
+                     Name = c.User.Name
+                     // Map email explicitly
+                                           // Other properties...
+                 })
+                 .ToListAsync();
         }
 
 

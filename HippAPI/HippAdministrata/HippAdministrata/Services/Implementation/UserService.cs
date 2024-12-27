@@ -28,7 +28,8 @@ namespace HippAdministrata.Services.Implementation
             {
                 UserId = user.UserId,
                 Name = user.Name,
-                Role = user.Role?.RoleName ?? "Unknown" // Handle potential null Role
+                Role = user.Role?.RoleName ?? "Unknown", // Handle potential null Role
+                Email = user.Email
             }).ToList(); // Convert to List
         }
 
