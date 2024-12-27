@@ -40,8 +40,9 @@
             </li>
         </ul>
     </div>
+-->
 
-   SalesPersons List
+
     <div *ngIf="salesPersons.length">
         <h3>Select a SalesPerson</h3>
         <ul>
@@ -49,8 +50,28 @@
                 <button (click)="loadSalesPersonTasks(salesPerson.id)">{{ salesPerson.name }}</button>
             </li>
         </ul>
-    </div> -->
-
+    </div>
+    <div *ngIf="salesPersonsOrders.length">
+        <h3>Orders for SalesPerson</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of salesPersonsOrders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productName }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     <!-- Client Orders -->
     <div *ngIf="selectedClientId && clientOrders.length">
         <h3>Orders for Client ID: {{ selectedClientId }}</h3>

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ClientService } from '../../../services/client.service';
 import { OrderStatus } from '../../../models/OrderStatus';
 import { UserService } from '../../../services/user.service';
+import { SalesPersonService } from '../../../services/salesperson.service';
 
 @Component({
   selector: 'app-order-dashboard',
@@ -22,10 +23,11 @@ export class OrderDashboardComponent implements OnInit {
   salesPersons: any[] = [];
   selectedClientId: number | null = null;
   clientOrders: any[] = [];
+  salesPersonsOrders: any[] =[];
   errorMessage: string = '';
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
 
-  constructor(private userService: UserService, private clientService: ClientService, private orderService: OrderService, private router: Router) { }
+  constructor(private salesPersonService: SalesPersonService, private userService: UserService, private clientService: ClientService, private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -112,11 +114,11 @@ export class OrderDashboardComponent implements OnInit {
   //   );
   // }
 
-  // loadSalesPersonTasks(salesPersonId: number): void {
-  //   this.salesPersonService.getTasksBySalesPersonId(salesPersonId).subscribe(
-  //     (data) => (this.salesPersonTasks = data),
-  //     (error) => console.error('Failed to load salesperson tasks:', error)
-  //   );
-  // }
+  loadSalesPersonTasks(salesPersonId: number): void {
+    this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
+      (data) => (this.salesPersonsOrders = data),
+      (error) => console.error('Failed to load salesperson tasks:', error)
+    );
+  }
 
 }
