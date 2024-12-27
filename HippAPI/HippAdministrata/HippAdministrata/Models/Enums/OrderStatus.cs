@@ -5,7 +5,6 @@
         Created,
         InProgress,
         Labeled,
-        Packaged,
         ReadyForShipping,
         InTransit,
         Shipped,

@@ -14,6 +14,7 @@ namespace HippAdministrata.Models.DTOs
             public string ClientName { get; set; }
             public string SalesPersonName { get; set; }
             public decimal PricePercentageForEmployee { get; set; }
+            public string Destination { get; set; } 
             public int Quantity { get; set; }
             public int UnlabeledQuantity { get; set; }
             public int LabeledQuantity { get; set; }

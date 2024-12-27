@@ -3,6 +3,7 @@ import { EmployeeService } from '../../../services/employee.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderStatus } from '../../../models/OrderStatus';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -20,7 +21,7 @@ export class EmployeeDashboardComponent implements OnInit {
 
 
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadEmployeeTasks();
@@ -91,5 +92,8 @@ export class EmployeeDashboardComponent implements OnInit {
       return total + order.labeledQuantity * productPaymentPerLabel;
     }, 0);
   }
-
+  logout(): void {
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
+  }
 }

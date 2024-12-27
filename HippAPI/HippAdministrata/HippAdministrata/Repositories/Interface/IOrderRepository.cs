@@ -18,5 +18,6 @@ namespace HippAdministrata.Repositories.Interface
         Task<Order> AddAsync(Order order);
         Task<bool> DeleteAsync(int id);
         Task<bool> UpdateOrderStatusAsync(int id, string status);
+        Task<IEnumerable<Order>> GetOrdersByDriverIdAsync(int driverId);
     }
 }

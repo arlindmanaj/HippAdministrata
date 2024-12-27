@@ -70,6 +70,13 @@ export const route: Route[] = [
                 (m) => m.EmployeeDashboardComponent
             )
     },
+    {
+        path: 'driver-dashboard',
+        loadComponent: () =>
+            import('./components/driver-dashboard/driver-dashboard.component').then(
+                (m) => m.DriverDashboardComponent
+            )
+    },
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
