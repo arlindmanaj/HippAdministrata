@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductDashboardComponent implements OnInit {
   products: any[] = [];
+  activeSection: string = 'createProduct';
   newProduct = {
     name: '',
     unlabeledQuantity: 0,
@@ -36,6 +37,8 @@ export class ProductDashboardComponent implements OnInit {
   }
 
   addProduct(): void {
+    console.log('Current Product Data:', this.newProduct);
+  
     if (
       !this.newProduct.name ||
       this.newProduct.price <= 0 ||
@@ -46,7 +49,7 @@ export class ProductDashboardComponent implements OnInit {
       alert('Please fill all product details correctly.');
       return;
     }
-
+  
     this.productService.addProduct(this.newProduct).subscribe(
       () => {
         alert('Product added successfully!');
@@ -63,18 +66,15 @@ export class ProductDashboardComponent implements OnInit {
       (error) => console.error('Failed to add product:', error)
     );
   }
-
-  // Implement navigation method to switch between dashboards
-  navigateTo(path: string): void {
-    this.router.navigate([`/manager/${path}`]);
-  }
-    // Add this to your class
-  activeSection: string = 'products'; // Default section on page load
+  
 
   setActiveSection(section: string): void {
     this.activeSection = section;
   }
 
+  navigateTo(path: string): void {
+    this.router.navigate([`/manager/${path}`]);
+  }
 
   deleteProduct(productId: number): void {
     this.productService.deleteProduct(productId).subscribe(
