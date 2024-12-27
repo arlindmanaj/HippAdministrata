@@ -18,8 +18,6 @@ interface Order {
   products: Product[];
 }
 
-
-
 @Component({
   selector: 'app-client-dashboard',
   templateUrl: './client-dashboard.component.html',
@@ -37,11 +35,22 @@ export class ClientDashboardComponent implements OnInit {
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
   isOrderModalOpen = false;
 
+  activeSection: string = 'orders'; // Default active section
+  groupedOrders: any[] = []; // Grouped orders for display
+  recentOrders: Order[] = []; // To store the two most recent orders
+
   constructor(private router: Router, private clientService: ClientService) {}
 
   ngOnInit(): void {
     this.loadProducts();
     this.loadOrders();
+  }
+
+  viewSection(section: string): void {
+    this.activeSection = section;
+    if (section === 'create-order') {
+      this.loadRecentOrders(); // Load recent orders when switching to "Create Order" page
+    }
   }
 
   // Modal Handling
@@ -62,67 +71,72 @@ export class ClientDashboardComponent implements OnInit {
     );
   }
 
-  groupedOrders: any[] = [];
+  loadOrders(): void {
+    const clientId = Number(localStorage.getItem('roleSpecificId')); // Fetch clientId from localStorage
+    if (!clientId) {
+      alert('Client ID not found. Please log in again.');
+      return;
+    }
 
-loadOrders(): void {
-  const clientId = Number(localStorage.getItem('roleSpecificId')); // Fetch clientId from localStorage
-  if (!clientId) {
-    alert('Client ID not found. Please log in again.');
-    return;
+    this.clientService.getOrdersByClientId(clientId).subscribe(
+      (orders) => {
+        // Map the orders to display order details
+        const formattedOrders = orders.map(order => ({
+          ...order,
+          orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
+          productName: this.getProductName(order.productId)
+        }));
+
+        // Group orders for frontend display
+        this.groupedOrders = this.groupOrders(formattedOrders);
+        this.loadRecentOrders(); // Refresh recent orders whenever orders are loaded
+      },
+      (error) => {
+        console.error('Failed to load orders:', error);
+        alert('Failed to load orders. Please try again later.');
+      }
+    );
   }
 
-  this.clientService.getOrdersByClientId(clientId).subscribe(
-    (orders) => {
-      // Map the orders to display order details
-      const formattedOrders = orders.map(order => ({
-        ...order,
-        orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
-        productName: this.getProductName(order.productId)
-      }));
-
-      // Group orders for frontend display
-      this.groupedOrders = this.groupOrders(formattedOrders);
-    },
-    (error) => {
-      console.error('Failed to load orders:', error);
-      alert('Failed to load orders. Please try again later.');
+  loadRecentOrders(): void {
+    if (this.groupedOrders.length > 0) {
+      this.recentOrders = this.groupedOrders
+        .sort((a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()) // Sort by most recent
+        .slice(0, 2); // Take the first two orders
     }
-  );
-}
+  }
 
-groupOrders(orders: any[]): Order[] {
-  const grouped: Order[] = orders.reduce((acc: Order[], order: any) => {
-    const existingGroup = acc.find(
-      (group: Order) =>
-        group.deliveryDestination === order.deliveryDestination &&
-        group.orderStatusDisplay === order.orderStatusDisplay
-    );
-    if (existingGroup) {
-      existingGroup.products.push({
-        productName: order.productName,
-        quantity: order.quantity,
-        productPrice: order.productPrice
-      });
-    } else {
-      acc.push({
-        orderId: order.id, // Use the first order's ID for display
-        deliveryDestination: order.deliveryDestination,
-        orderStatusDisplay: order.orderStatusDisplay,
-        products: [
-          {
-            productName: order.productName,
-            quantity: order.quantity,
-            productPrice: order.productPrice
-          }
-        ]
-      });
-    }
-    return acc;
-  }, []);
-  return grouped;
-}
-
-
+  groupOrders(orders: any[]): Order[] {
+    const grouped: Order[] = orders.reduce((acc: Order[], order: any) => {
+      const existingGroup = acc.find(
+        (group: Order) =>
+          group.deliveryDestination === order.deliveryDestination &&
+          group.orderStatusDisplay === order.orderStatusDisplay
+      );
+      if (existingGroup) {
+        existingGroup.products.push({
+          productName: order.productName,
+          quantity: order.quantity,
+          productPrice: order.productPrice
+        });
+      } else {
+        acc.push({
+          orderId: order.id, // Use the first order's ID for display
+          deliveryDestination: order.deliveryDestination,
+          orderStatusDisplay: order.orderStatusDisplay,
+          products: [
+            {
+              productName: order.productName,
+              quantity: order.quantity,
+              productPrice: order.productPrice
+            }
+          ]
+        });
+      }
+      return acc;
+    }, []);
+    return grouped;
+  }
 
   // Helpers
   getOrderStatusDisplay(status: number): string {
@@ -184,6 +198,19 @@ groupOrders(orders: any[]): Order[] {
         alert('Failed to place orders. Please try again.');
       }
     );
+  }
+  expandedOrders: Set<number> = new Set(); // Track expanded orders
+
+  toggleOrder(orderId: number): void {
+    if (this.expandedOrders.has(orderId)) {
+      this.expandedOrders.delete(orderId);
+    } else {
+      this.expandedOrders.add(orderId);
+    }
+  }
+
+  isOrderOpen(orderId: number): boolean {
+    return this.expandedOrders.has(orderId);
   }
 
   // Logout

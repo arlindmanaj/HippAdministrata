@@ -1,45 +1,265 @@
 .client-dashboard {
-    margin: 20px;
-  }
+  display: flex;
+  height: 100vh; /* Full height for the layout */
+  margin: 0;
+}
+
+.sidebar {
+  width: 250px; /* Consistent width */
+  background-color: #f7f7f9; /* Match admin sidebar background */
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.sidebar h2 {
+  font-size: 20px; /* Match admin sidebar title size */
+  margin-bottom: 20px;
+  color: #333; /* Match admin text color */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  background-color: #e9ecef; /* Match admin sidebar item background */
+  color: #333; /* Match admin sidebar text color */
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left; /* Align text to the left */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+  background-color: #007bff; /* Match admin hover/active color */
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto; /* Scroll if content overflows */
+  margin: 0; /* Remove unwanted margins */
+}
+
+button.logout-btn {
+  background-color: #ff5c5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition: background-color 0.3s;
+}
+
+button.logout-btn:hover {
+  background-color: #ff3232;
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 450px;
+  text-align: center; /* Center-align the text */
+  font-family: "Arial", sans-serif;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left; /* Align labels to the left */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: calc(100% - 10px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}
+
+.add-product-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  background-color: #28a745;
+  color: white;
+  font-size: 14px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-product-btn:hover {
+  background-color: #218838;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 48%;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  font-size: 14px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 48%;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.recent-orders {
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+}
+
+.order-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  width: 100%;
+  background-color: #f7f7f7;
+  border: none;
+  text-align: left;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-header:hover {
+  background-color: #eaeaea;
+}
+
+.order-details {
+  padding: 10px;
+  background-color: #fff;
+}
+
+.order-details p {
+  margin: 5px 0;
+}
+
+.logout-button {
+  background-color: #ff5c5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 30px; /* Keep this to control the vertical position */
   
-  .logout button {
-    float: right;
-  }
-  
-  .create-order {
-    margin-top: 20px;
-  }
-  
-  .orders-list {
-    margin-top: 20px;
-  }
-  
-  .status-bar {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .status-point {
-    padding: 5px 10px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    background-color: lightgray;
-  }
-  
-  .status-point.active {
-    background-color: green;
-    color: white;
-  }
-  button.active {
-    background-color: #4caf50; /* Green */
-    color: white;
-    font-weight: bold;
-  }
-  
-  button[disabled] {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  
+  transform: translateX(100%); /* Move it slightly to the left */
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ff3232;
+}
+
+
+.create-order-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.create-order-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Orders List */
+.order-group {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.order-group h3 {
+  margin-top: 0;
+}
+
+/* No Orders Message */
+.no-orders {
+  text-align: center;
+  color: #555;
+  font-size: 18px;
+}
