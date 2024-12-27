@@ -1,19 +1,20 @@
-// order-dashboard.component.ts
-import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../../../services/order.service';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { OrderService } from '../../../services/order.service';
 import { ClientService } from '../../../services/client.service';
-import { OrderStatus } from '../../../models/OrderStatus';
 import { UserService } from '../../../services/user.service';
 import { SalesPersonService } from '../../../services/salesperson.service';
+import { OrderStatus } from '../../../models/OrderStatus';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-order-dashboard',
   templateUrl: './order-dashboard.component.html',
-  standalone: true,
   styleUrls: ['./order-dashboard.component.css'],
-  imports: [CommonModule]
+  standalone: true,
+  imports: [CommonModule,FormsModule]
+  
 })
 export class OrderDashboardComponent implements OnInit {
   orders: any[] = [];
@@ -26,8 +27,17 @@ export class OrderDashboardComponent implements OnInit {
   salesPersonsOrders: any[] = [];
   errorMessage: string = '';
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
+  showAllOrders: boolean = false; // New variable to toggle All Orders view
+  selectedSalesPersonId: string | null = null;
 
-  constructor(private salesPersonService: SalesPersonService, private userService: UserService, private clientService: ClientService, private orderService: OrderService, private router: Router) { }
+  constructor(
+    private salesPersonService: SalesPersonService,
+    private userService: UserService,
+    private clientService: ClientService,
+    private orderService: OrderService,
+    private router: Router,
+    private cdr: ChangeDetectorRef // Add this
+  ) {}
 
   ngOnInit(): void {
     this.loadOrders();
@@ -39,24 +49,48 @@ export class OrderDashboardComponent implements OnInit {
 
   loadOrders(): void {
     this.orderService.getOrders().subscribe(
-      (orders) => (this.orders = orders),
-      (error) => console.error('Failed to load orders:', error)
+      (orders) => {
+        this.orders = orders; // Update the orders array with the latest data
+        this.cdr.detectChanges(); // Trigger change detection
+      },
+      (error) => {
+        console.error('Failed to load orders:', error);
+      }
     );
   }
+  
+
   deleteOrder(orderId: number): void {
     if (confirm('Are you sure you want to delete this order?')) {
-      this.orderService.deleteOrder(orderId).subscribe(
-        () => {
+      this.orderService.deleteOrder(orderId).subscribe({
+        next: (response) => {
+          console.log(response);  // Logs the plain text response (e.g., "Order deleted successfully")
           alert('Order deleted successfully!');
-          this.loadOrders(); // Reload orders after deletion
+          
+          // Update the orders array to remove the deleted order
+          this.orders = this.orders.filter(order => order.id !== orderId);
+  
+          // Optionally reload orders if All Orders is active
+          if (this.showAllOrders) {
+            this.loadOrders();
+          }
+  
+          // Trigger change detection manually
+          this.cdr.detectChanges();
         },
-        (error) => {
+        error: (error) => {
           console.error('Failed to delete order:', error);
-          alert('Failed to delete order. Please try again.');
-        }
-      );
+          alert('Failed to delete the order. Please try again.');
+        },
+      });
     }
   }
+  
+  
+  
+  
+  
+
 
   loadClients(): void {
     this.userService.getAllClients().subscribe(
@@ -65,20 +99,85 @@ export class OrderDashboardComponent implements OnInit {
     );
   }
 
-  loadClientOrders(clientId: number): void {
-    this.selectedClientId = clientId;
-    this.clientService.getOrdersByClientId(clientId).subscribe(
-      (data) => (this.clientOrders = data),
-      (error) => (this.errorMessage = 'Failed to load client orders')
-    );
+  // loadClientOrders(clientId: number): void {
+  //   this.selectedClientId = clientId;
+  //   this.clientService.getOrdersByClientId(clientId).subscribe(
+  //     (data) => (this.clientOrders = data),
+  //     (error) => (this.errorMessage = 'Failed to load client orders')
+  //   );
+  // }
+  loadClientOrders(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedClientId = Number(target.value);
+  
+    if (selectedClientId) {
+      this.selectedClientId = selectedClientId;
+      this.salesPersonsOrders = []; // Clear SalesPerson orders
+      this.showAllOrders = false; // Turn off "All Orders" section
+      
+      // Set 'orders' as the active section immediately after selecting client
+      this.activeSection = 'orders';
+  
+      // Reset SalesPerson dropdown
+      (document.getElementById('salesPersonDropdown') as HTMLSelectElement).value = '';
+  
+      this.clientService.getOrdersByClientId(selectedClientId).subscribe(
+        (data) => (this.clientOrders = data),
+        (error) => (this.errorMessage = 'Failed to load client orders')
+      );
+    } else {
+      // If no client is selected, keep the "Orders" section active
+      this.clientOrders = [];
+      this.showAllOrders = false; // Turn off "All Orders" section if no client is selected
+      this.activeSection = 'orders'; // Keep 'orders' as active section
+    }
   }
+<<<<<<< HEAD
   getOrderStatusLabel(status: number): string {
     return getOrderStatusLabel(status);
+=======
+  
+  
+  loadSalesPersonTasks(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedSalesPersonId = Number(target.value);
+  
+    if (selectedSalesPersonId) {
+      this.selectedClientId = null; // Clear selected client
+      this.clientOrders = []; // Clear client orders
+      this.showAllOrders = false; // Turn off "All Orders" section
+      
+      // Set 'orders' as the active section immediately after selecting salesperson
+      this.activeSection = 'orders';
+  
+      // Reset the Client dropdown
+      (document.getElementById('clientDropdown') as HTMLSelectElement).value = '';
+  
+      this.salesPersonService.getOrdersBySalesPersonId(selectedSalesPersonId).subscribe(
+        (data) => (this.salesPersonsOrders = data),
+        (error) => (this.errorMessage = 'Failed to load salesperson tasks')
+      );
+    } else {
+      // If no salesperson is selected, keep the "Orders" section active
+      this.salesPersonsOrders = [];
+      this.showAllOrders = false; // Turn off "All Orders" section if no salesperson is selected
+      this.activeSection = 'orders'; // Keep 'orders' as active section
+    }
+  }
+  
+  
+
+  getOrderStatus(status: number): string {
+    return OrderStatus[status];
+>>>>>>> b8502692a50906cb9db28e04d55fc1c866593dc3
   }
 
-  goToManager(): void {
-    this.router.navigate(['/manager-dashboard']);
+  // Updated navigateTo method for dynamic routing within Manager Dashboard
+  navigateTo(route: string): void {
+    // Navigate based on the route passed ('products' or 'orders')
+    this.router.navigate([`/manager/${route}`]);
   }
+
   loadEmployees(): void {
     this.userService.getAllEmployees().subscribe(
       (data) => (this.employees = data),
@@ -100,26 +199,49 @@ export class OrderDashboardComponent implements OnInit {
     );
   }
 
-  // loadEmployeeTasks(employeeId: number): void {
-  //   this.employeeService.getTasksByEmployeeId(employeeId).subscribe(
-  //     (data) => (this.employeeTasks = data),
-  //     (error) => console.error('Failed to load employee tasks:', error)
+  // loadSalesPersonTasks(salesPersonId: number): void {
+  //   this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
+  //     (data) => (this.salesPersonsOrders = data),
+  //     (error) => console.error('Failed to load salesperson tasks:', error)
   //   );
   // }
 
-  // loadDriverTasks(driverId: number): void {
-  //   this.driverService.getTasksByDriverId(driverId).subscribe(
-  //     (data) => (this.driverTasks = data),
-  //     (error) => console.error('Failed to load driver tasks:', error)
-  //   );
-  // }
+    // Add this to your class
+  activeSection: string = 'orders'; // Default section on page load
 
-  loadSalesPersonTasks(salesPersonId: number): void {
-    this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
-      (data) => (this.salesPersonsOrders = data),
-      (error) => console.error('Failed to load salesperson tasks:', error)
-    );
+  setActiveSection(section: string): void {
+    this.activeSection = section;
   }
+
+    roles: string[] = ['SalesPerson', 'Driver', 'Employee'];
+  filteredPeople: any[] = [];
+
+ 
+
+
+  // Logout method
+  logout() {
+    // Perform any logout logic (like clearing session or tokens)
+    console.log('Logging out...');
+    
+    // Redirect to the login page or another route if needed
+    this.router.navigate(['/login']);  // Adjust the route as needed
+  }
+  
+  toggleAllOrders(): void {
+    this.showAllOrders = !this.showAllOrders;
+  
+    if (this.showAllOrders) {
+      this.activeSection = 'allOrders';
+      this.selectedClientId = null;
+      this.selectedSalesPersonId = null;
+      this.clientOrders = [];
+      this.salesPersonsOrders = [];
+    } else {
+      this.activeSection = 'orders';
+    }
+  }
+  
 
 }
 export function getOrderStatusLabel(status: number): string {

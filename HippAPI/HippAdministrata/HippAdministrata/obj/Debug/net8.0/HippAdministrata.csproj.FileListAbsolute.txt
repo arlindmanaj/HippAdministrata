@@ -519,3 +519,5 @@ C:\Users\lorik\Source\Repos\HippAdministrata\HippAPI\HippAdministrata\HippAdmini
 C:\Users\lorik\Source\Repos\HippAdministrata\HippAPI\HippAdministrata\HippAdministrata\obj\Debug\net8.0\ref\HippAdministrata.dll
 C:\Users\lorik\OneDrive\Desktop\HippAdministrata\HippAPI\HippAdministrata\HippAdministrata\bin\Debug\net8.0\BouncyCastle.Crypto.dll
 C:\Users\lorik\OneDrive\Desktop\HippAdministrata\HippAPI\HippAdministrata\HippAdministrata\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\Melos\Source\Repos\HippAdministrata\HippAPI\HippAdministrata\HippAdministrata\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\Melos\Source\Repos\HippAdministrata\HippAPI\HippAdministrata\HippAdministrata\bin\Debug\net8.0\BouncyCastle.Crypto.dll

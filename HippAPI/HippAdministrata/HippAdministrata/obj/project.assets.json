@@ -6430,24 +6430,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lorik\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Melos\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lorik\\OneDrive\\Desktop\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
+      "projectUniqueName": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
       "projectName": "HippAdministrata",
-      "projectPath": "C:\\Users\\lorik\\OneDrive\\Desktop\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
-      "packagesPath": "C:\\Users\\lorik\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lorik\\OneDrive\\Desktop\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\obj\\",
+      "projectPath": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\HippAdministrata.csproj",
+      "packagesPath": "C:\\Users\\Melos\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Melos\\Source\\Repos\\HippAdministrata\\HippAPI\\HippAdministrata\\HippAdministrata\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\lorik\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Melos\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6533,7 +6528,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,24 +1,24 @@
-// manager-dashboard.component.ts
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-manager-dashboard',
   templateUrl: './manager-dashboard.component.html',
-  styleUrls: ['./manager-dashboard.component.css']
+  styleUrls: ['./manager-dashboard.component.css'],
+  standalone: true,
+  imports: [RouterModule]
 })
 export class ManagerDashboardComponent {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
-  navigateToProducts(): void {
-    this.router.navigate(['/manager/products']);
+  // Method to navigate to specific paths based on dashboard
+  navigateTo(path: string): void {
+    this.router.navigate([`/manager/${path}`]);  // Dynamic path for 'products' or 'orders'
   }
 
+  // Method for logout
   logout(): void {
     localStorage.removeItem('authToken');
-    this.router.navigate(['/login']);
-  }
-  navigateToOrders(): void {
-    this.router.navigate(['/manager/orders']);
+    this.router.navigate(['/login']); // Navigate to login page
   }
 }

@@ -1,0 +1,356 @@
+/* Main Dashboard Container */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f5f7;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: #f7f7f9;
+    color: #333;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Sidebar Title */
+  .sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Sidebar List */
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Sidebar List Items */
+  .sidebar li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Sidebar Button Styling */
+  .sidebar li button {
+    background-color: #e9ecef;
+    color: #333;
+    border: none !important; /* Force remove any border */
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    outline: none !important; /* Ensure no outline on focus or active state */
+    box-shadow: none; /* Ensure no shadow is applied */
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Sidebar Button Hover & Active State */
+  .sidebar li button:hover,
+  .sidebar li button.active {
+    background-color: #007bff;
+    color: white;
+    box-shadow: none; /* Ensure no shadow is applied during hover/active */
+  }
+  
+  /* Remove outline on focus */
+  .sidebar li button:focus {
+    outline: none !important; /* Ensure no outline when focused */
+    box-shadow: none; /* Ensure no box-shadow */
+  }
+  
+
+  
+  /* Logout Button */
+  .logout-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #ff5c5c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-button:hover {
+    background-color: #ff3232;
+  }
+  
+  /* Content Area */
+  .content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: white;
+  }
+  
+  /* Content Header */
+  .content header h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  /* Table Styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background-color: white;
+  }
+  
+  table th,
+  table td {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #e5e7eb;
+    font-weight: bold;
+  }
+  
+  /* Error Section */
+  .error-section {
+    margin-top: 15px;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 10px;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+  }
+  
+  /* Order Cards */
+  .order-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-header {
+    width: 100%;
+    background-color: #f7f7f7;
+    border: none;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .order-header:hover {
+    background-color: #eaeaea;
+  }
+  
+  .order-details {
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+  .order-details p {
+    margin: 5px 0;
+  }
+  
+  /* Create Order Button */
+  .create-order-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .create-order-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Recent Orders Section */
+  .recent-orders {
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .order-group {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .order-group h3 {
+    margin-top: 0;
+  }
+  
+  /* No Orders Message */
+  .no-orders {
+    text-align: center;
+    color: #555;
+    font-size: 18px;
+  }
+  
+  /* Modal Styling */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 450px;
+    text-align: center;
+    font-family: "Arial", sans-serif;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: calc(100% - 10px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+  }
+  
+  .add-product-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    background-color: #28a745;
+    color: white;
+    font-size: 14px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .add-product-btn:hover {
+    background-color: #218838;
+  }
+  
+  .submit-btn {
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 48%;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    font-size: 14px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 48%;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  .selection-section {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px; /* Adds space between dropdowns */
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown label {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dropdown select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+.dropdown-container {
+    display: flex;
+    gap: 1rem; /* Space between the dropdowns */
+  }
+  
+  .dropdown-container select {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
+
+  

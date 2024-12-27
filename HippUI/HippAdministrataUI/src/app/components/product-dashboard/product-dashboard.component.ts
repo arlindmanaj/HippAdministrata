@@ -1,9 +1,8 @@
-// product-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-dashboard',
@@ -23,8 +22,7 @@ export class ProductDashboardComponent implements OnInit {
     warehouseId: 0
   };
 
-
-  constructor(private productService: ProductService, private router: Router) { }
+  constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -66,20 +64,25 @@ export class ProductDashboardComponent implements OnInit {
     );
   }
 
+  // Implement navigation method to switch between dashboards
+  navigateTo(path: string): void {
+    this.router.navigate([`/manager/${path}`]);
+  }
+    // Add this to your class
+  activeSection: string = 'products'; // Default section on page load
+
+  setActiveSection(section: string): void {
+    this.activeSection = section;
+  }
+
+
   deleteProduct(productId: number): void {
-    console.log('Deleting product with ID:', productId); // Debugging
     this.productService.deleteProduct(productId).subscribe(
       () => {
         alert('Product deleted successfully!');
         this.loadProducts();
       },
-      (error) => {
-        console.error('Failed to delete product:', error); // Log the error for debugging
-      }
+      (error) => console.error('Failed to delete product:', error)
     );
   }
-  goToManager(): void {
-    this.router.navigate(['/manager-dashboard']);
-  }
-
 }

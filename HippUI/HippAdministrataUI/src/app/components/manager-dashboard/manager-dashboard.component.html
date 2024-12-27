@@ -1,9 +1,13 @@
-<!-- manager-dashboard.component.html -->
 <div class="manager-dashboard">
-  <h1>Manager Dashboard</h1>
-  <div class="dashboard-options">
-    <button (click)="navigateToProducts()">Product Dashboard</button>
-    <button (click)="navigateToOrders()">Order Dashboard</button>
-    <button (click)="logout()">Log out</button>
-  </div>
+  <aside class="sidebar">
+    <h1>Manager Dashboard</h1>
+    <ul class="navigation">
+      <li><button (click)="navigateTo('products')">Product Dashboard</button></li>
+      <li><button (click)="navigateTo('orders')">Order Dashboard</button></li>
+    </ul>
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </aside>
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
 </div>
