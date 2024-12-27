@@ -42,7 +42,7 @@ namespace HippAdministrata.Services
             return await _orderRepository.GetBySalesPersonIdAsync(salesPersonId);
         }
 
-        public async Task<List<Order>> CreateMultipleOrdersAsync(int clientId, OrderDto orderDto)
+        public async Task<List<Order>> CreateMultipleOrdersAsync(int clientId, CreateOrderDto createOrderDto)
         {
             var salesperson = _applicationDbContext.SalesPersons.FirstOrDefault();
             if (salesperson == null)
@@ -50,7 +50,7 @@ namespace HippAdministrata.Services
 
             var createdOrders = new List<Order>();
 
-            foreach (var productDto in orderDto.Products)
+            foreach (var productDto in createOrderDto.Products)
             {
                 // Fetch the product
                 var product = await _productRepository.GetByIdAsync(productDto.ProductId);
@@ -70,7 +70,7 @@ namespace HippAdministrata.Services
                     ClientId = clientId,
                     ProductId = productDto.ProductId,
                     SalesPersonId = salesperson.Id,
-                    DeliveryDestination = orderDto.DeliveryDestination,
+                    DeliveryDestination = createOrderDto.DeliveryDestination,
                     Quantity = productDto.Quantity,
                     UnlabeledQuantity = productDto.Quantity,
                     LabeledQuantity = 0,

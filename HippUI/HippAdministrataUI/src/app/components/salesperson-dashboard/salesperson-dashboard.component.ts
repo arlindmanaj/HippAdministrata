@@ -78,7 +78,7 @@ export class SalespersonDashboardComponent implements OnInit {
   openDetailsModal(order: any): void {
     this.selectedOrder = order;
 
-    // Prefill assignment values if they exist, otherwise reset to null
+    // Prefill the assignment values based on the order data
     this.assignment = {
       employeeId: order.assignment?.employeeId || null,
       driverId: order.assignment?.driverId || null,
@@ -92,6 +92,40 @@ export class SalespersonDashboardComponent implements OnInit {
     this.isModalOpen = false;
     this.selectedOrder = null;
   }
+
+  saveAssignment(): void {
+    if (!this.assignment.employeeId || !this.assignment.driverId || !this.assignment.warehouseId) {
+      alert('Please select Employee, Driver, and Warehouse.');
+      return;
+    }
+
+    const isCreated = this.selectedOrder.orderStatus === 0; // 0 is "Created"
+    const apiCall = isCreated
+      ? this.salesPersonService.assignOrder(this.selectedOrder.id, this.assignment)
+      : this.salesPersonService.updateOrder(this.selectedOrder.id, this.assignment);
+
+    apiCall.subscribe(
+      (response) => {
+        alert(isCreated ? 'Duties assigned successfully!' : 'Assignment updated successfully!');
+
+        // Check if the response contains the updated order status and update UI
+        if (response.orderStatus && isCreated) {
+          this.selectedOrder.orderStatus = response.orderStatus; // Update local order status
+        }
+
+        // Refresh orders to ensure the latest data is displayed
+        this.loadSalesPersonOrders();
+
+        // Close the modal
+        this.closeModal();
+      },
+      (error) => {
+        console.error('Failed to save assignment:', error);
+        alert('Failed to save assignment. Please try again.');
+      }
+    );
+  }
+
 
   assignAttributes(): void {
     if (!this.assignment.employeeId || !this.assignment.driverId || !this.assignment.warehouseId) {
@@ -112,7 +146,7 @@ export class SalespersonDashboardComponent implements OnInit {
     );
   }
 
-  
+
 
   getOrderStatus(status: number): string {
     const statusMap = {

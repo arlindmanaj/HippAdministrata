@@ -12,7 +12,7 @@ namespace HippAdministrata.Services.Interface
         Task SimulateShippingAsync(int driverId, int orderId);
         Task<IEnumerable<Order>> GetBySalesPersonIdAsync(int salesPersonId);
         Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto);
-        Task<List<Order>> CreateMultipleOrdersAsync(int clientId, OrderDto orderDto);
+        Task<List<Order>> CreateMultipleOrdersAsync(int clientId, CreateOrderDto createOrderDto);
         Task<Order> UpdateOrderAssignmentAsync(int orderId, OrderAssignmentDto assignmentDto);
         Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId);
 

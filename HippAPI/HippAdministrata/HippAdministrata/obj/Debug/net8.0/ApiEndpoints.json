@@ -125,8 +125,8 @@
         "IsRequired": true
       },
       {
-        "Name": "orderDto",
-        "Type": "HippAdministrata.Models.DTOs.OrderDto",
+        "Name": "createOrderDto",
+        "Type": "HippAdministrata.Models.DTOs.CreateOrderDto",
         "IsRequired": true
       }
     ],
@@ -310,22 +310,6 @@
     "Parameters": [
       {
         "Name": "clientId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HippAdministrata.Controllers.OrderController",
-    "Method": "GetBySalesPersonId",
-    "RelativePath": "api/Order/salesperson/{salesPersonId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "salesPersonId",
         "Type": "System.Int32",
         "IsRequired": true
       }

@@ -1,67 +1,76 @@
 <div class="salesperson-dashboard">
     <h1>SalesPerson Dashboard</h1>
-    
+
     <h2>Orders</h2>
     <table>
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Product Name</th>
-          <th>Client Name</th>
-          <th>Delivery Destination</th>
-          <th>Quantity</th>
-          <th>Unlabeled Quantity</th>
-          <th>Labeled Quantity</th>
-          <th>Product Price</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let order of orders">
-          <td>{{ order.id }}</td>
-          <td>{{ order.productName }}</td>
-          <td>{{ order.clientName }}</td>
-          <td>{{ order.deliveryDestination }}</td>
-          <td>{{ order.quantity }}</td>
-          <td>{{ order.unlabeledQuantity }}</td>
-          <td>{{ order.labeledQuantity }}</td>
-          <td>{{ order.productPrice }}</td>
-          <td>{{ order.createdAt | date: 'yyyy/MM/dd' }}</td>
-          <td>{{ getOrderStatus(order.orderStatus) }}</td>
-          <td>
-            <button (click)="openDetailsModal(order)">View Details</button>
-          </td>
-        </tr>
-      </tbody>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Product Name</th>
+                <th>Client Name</th>
+                <th>Delivery Destination</th>
+                <th>Quantity</th>
+                <th>Unlabeled Quantity</th>
+                <th>Labeled Quantity</th>
+                <th>Product Price</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of orders">
+                <td>{{ order.id }}</td>
+                <td>{{ order.productName }}</td>
+                <td>{{ order.clientName }}</td>
+                <td>{{ order.deliveryDestination }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.unlabeledQuantity }}</td>
+                <td>{{ order.labeledQuantity }}</td>
+                <td>{{ order.productPrice }}</td>
+                <td>{{ order.createdAt | date: 'yyyy/MM/dd' }}</td>
+                <td>{{ getOrderStatus(order.orderStatus) }}</td>
+                <td>
+                    <button (click)="openDetailsModal(order)">View Details</button>
+                </td>
+            </tr>
+        </tbody>
     </table>
-  
+
     <!-- Modal -->
     <div class="modal" [class.open]="isModalOpen">
-      <div class="modal-content">
-        <h2>Assign Duties</h2>
-        <p>Order ID: {{ selectedOrder?.id }}</p>
-        <p>Product Name: {{ selectedOrder?.productName }}</p>
-        
-        <label for="employee">Employee:</label>
-        <select [(ngModel)]="assignment.employeeId">
-          <option *ngFor="let employee of employees" [value]="employee.id">{{ employee.name }}</option>
-        </select>
-  
-        <label for="driver">Driver:</label>
-        <select [(ngModel)]="assignment.driverId">
-          <option *ngFor="let driver of drivers" [value]="driver.id">{{ driver.name }}</option>
-        </select>
-  
-        <label for="warehouse">Warehouse:</label>
-        <select [(ngModel)]="assignment.warehouseId">
-          <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{ warehouse.name }}</option>
-        </select>
-  
-        <button (click)="assignAttributes()">Assign</button>
-        <button (click)="closeModal()">Close</button>
-      </div>
+        <div class="modal-content">
+            <h2>{{ selectedOrder?.orderStatus === 'Created' ? 'Assign Duties' : 'Update Assignment' }}</h2>
+            <p>Order ID: {{ selectedOrder?.id }}</p>
+            <p>Product Name: {{ selectedOrder?.productName }}</p>
+
+            <label for="employee">Employee:</label>
+            <select [(ngModel)]="assignment.employeeId">
+                <option *ngFor="let employee of employees" [value]="employee.id"
+                    [selected]="employee.id === assignment.employeeId">
+                    {{ employee.name }}
+                </option>
+            </select>
+
+            <label for="driver">Driver:</label>
+            <select [(ngModel)]="assignment.driverId">
+                <option *ngFor="let driver of drivers" [value]="driver.id"
+                    [selected]="driver.id === assignment.driverId">
+                    {{ driver.name }}
+                </option>
+            </select>
+
+            <label for="warehouse">Warehouse:</label>
+            <select [(ngModel)]="assignment.warehouseId">
+                <option *ngFor="let warehouse of warehouses" [value]="warehouse.id"
+                    [selected]="warehouse.id === assignment.warehouseId">
+                    {{ warehouse.name }}
+                </option>
+            </select>
+
+            <button (click)="saveAssignment()">
+                {{ selectedOrder?.orderStatus === 0 ? 'Assign Duties' : 'Update Assignment' }}
+            </button>
+            <button (click)="closeModal()">Close</button>
+        </div>
     </div>
-  </div>
-  

@@ -19,11 +19,11 @@ namespace HippAdministrata.Controllers
         }
 
         [HttpPost("{clientId}/orders")]
-        public async Task<IActionResult> CreateMultipleOrders(int clientId, [FromBody] OrderDto orderDto)
+        public async Task<IActionResult> CreateMultipleOrders(int clientId, [FromBody] CreateOrderDto createOrderDto)
         {
             try
             {
-                var orders = await _orderService.CreateMultipleOrdersAsync(clientId, orderDto);
+                var orders = await _orderService.CreateMultipleOrdersAsync(clientId, createOrderDto);
                 return Ok(orders);
             }
             catch (Exception ex)
