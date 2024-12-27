@@ -13,7 +13,8 @@ namespace HippAdministrata.Services.Interface
         Task<IEnumerable<Order>> GetBySalesPersonIdAsync(int salesPersonId);
         Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto);
         Task<List<Order>> CreateMultipleOrdersAsync(int clientId, OrderDto orderDto);
-        Task<bool> UpdateAsync(Order order);
+        Task<Order> UpdateOrderAssignmentAsync(int orderId, OrderAssignmentDto assignmentDto);
+        
         Task<bool> DeleteAsync(int id);
         
     }

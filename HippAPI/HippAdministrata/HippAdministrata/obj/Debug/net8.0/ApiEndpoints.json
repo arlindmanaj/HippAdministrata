@@ -433,6 +433,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "HippAdministrata.Controllers.SalesPersonController",
+    "Method": "UpdateOrderAssignment",
+    "RelativePath": "api/SalesPerson/orders/{orderId}/update-assignment",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "assignmentDto",
+        "Type": "HippAdministrata.Models.DTOs.OrderAssignmentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "hippserver.Controllers.UsersController",
     "Method": "GetUsers",
     "RelativePath": "api/Users",

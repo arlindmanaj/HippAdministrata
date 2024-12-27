@@ -118,6 +118,30 @@ namespace HippAdministrata.Services
                 await _orderRepository.UpdateOrderAsync(order);
             }
         }
+
+        public async Task<Order> UpdateOrderAssignmentAsync(int orderId, OrderAssignmentDto assignmentDto)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found.");
+
+            // Allow updating assignments regardless of status
+            if (assignmentDto.EmployeeId.HasValue)
+                order.EmployeeId = assignmentDto.EmployeeId.Value;
+
+            if (assignmentDto.DriverId.HasValue)
+                order.DriverId = assignmentDto.DriverId.Value;
+
+            if (assignmentDto.WarehouseId.HasValue)
+                order.WarehouseId = assignmentDto.WarehouseId.Value;
+
+            order.LastUpdated = DateTime.UtcNow;
+
+            await _orderRepository.UpdateAsync(order);
+            return order;
+        }
+
+
         public async Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
@@ -135,10 +159,7 @@ namespace HippAdministrata.Services
             return order;
         }
 
-        public async Task<bool> UpdateAsync(Order order)
-        {
-            return await _orderRepository.UpdateAsync(order);
-        }
+       
 
         public async Task<bool> DeleteAsync(int id)
         {

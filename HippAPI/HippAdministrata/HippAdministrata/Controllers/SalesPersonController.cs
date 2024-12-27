@@ -28,5 +28,20 @@ namespace HippAdministrata.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("orders/{orderId}/update-assignment")]
+        public async Task<IActionResult> UpdateOrderAssignment(int orderId, [FromBody] OrderAssignmentDto assignmentDto)
+        {
+            try
+            {
+                var order = await _orderService.UpdateOrderAssignmentAsync(orderId, assignmentDto);
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
