@@ -31,4 +31,6 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
     return this.http.get(`${this.apiUrl}/products/${productId}`, { headers });
   }
+  
 }
+

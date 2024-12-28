@@ -1,4 +1,5 @@
 <div class="salesperson-dashboard">
+<<<<<<< HEAD
     <h1>SalesPerson Dashboard</h1>
 
     <h2>Orders</h2>
@@ -74,7 +75,96 @@
             <button (click)="closeModal()">Close</button>
         </div>
 
+=======
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-content">
+        <h2>Menu</h2>
+        <ul>
+        </ul>
+      </div>
+      <button class="logout-button" (click)="logout()">Logout</button>
+>>>>>>> f8e85cfe04a3401b5b96eff1a87de72801965624
     </div>
-    <div>
-        <button (click)="logout()">Log out</button>
+  
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Orders Section -->
+      <div *ngIf="activeSection === 'orders'">
+        <h1>SalesPerson Dashboard</h1>
+        <h2>Orders</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product Name</th>
+              <th>Client Name</th>
+              <th>Delivery Destination</th>
+              <th>Quantity</th>
+              <th>Unlabeled Quantity</th>
+              <th>Labeled Quantity</th>
+              <th>Product Price</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productName }}</td>
+              <td>{{ order.clientName }}</td>
+              <td>{{ order.deliveryDestination }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.unlabeledQuantity }}</td>
+              <td>{{ order.labeledQuantity }}</td>
+              <td>{{ order.productPrice }}</td>
+              <td>{{ order.createdAt | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ getOrderStatus(order.orderStatus) }}</td>
+              <td>
+                <button (click)="openDetailsModal(order)">View Details</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Modal -->
+      <div class="modal" [class.open]="isModalOpen">
+        <div class="modal-content">
+          <h2>{{ selectedOrder?.orderStatus === 0 ? 'Assign Duties' : 'Update Assignment' }}</h2>
+          <p>Order ID: {{ selectedOrder?.id }}</p>
+          <p>Product Name: {{ selectedOrder?.productName }}</p>
+  
+          <label for="employee">Employee:</label>
+          <select [(ngModel)]="assignment.employeeId">
+            <option *ngFor="let employee of employees" [value]="employee.id">
+              {{ employee.name }}
+            </option>
+          </select>
+  
+          <label for="driver">Driver:</label>
+          <select [(ngModel)]="assignment.driverId">
+            <option *ngFor="let driver of drivers" [value]="driver.id">
+              {{ driver.name }}
+            </option>
+          </select>
+  
+          <label for="warehouse">Warehouse:</label>
+          <select [(ngModel)]="assignment.warehouseId">
+            <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">
+              {{ warehouse.name }}
+            </option>
+          </select>
+  
+          <div class="button-group">
+            <button (click)="saveAssignment()" class="submit-btn">
+              {{ selectedOrder?.orderStatus === 0 ? 'Assign Duties' : 'Update Assignment' }}
+            </button>
+            <button (click)="closeModal()" class="cancel-btn">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  

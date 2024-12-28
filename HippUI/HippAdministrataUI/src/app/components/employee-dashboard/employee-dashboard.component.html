@@ -1,20 +1,30 @@
 <div class="employee-dashboard">
-    <h1>Employee Dashboard</h1>
-    <h2>Total Pay: {{ employeeTotalPay | currency }}</h2>
-
-    <h3>Assigned Orders</h3>
-    <table>
-        <thead>
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <h2>Sales Person Dashboard</h2>
+          </div>
+          <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  
+    <div class="content">
+      <h1>Employee Dashboard</h1>
+      <div class="pay-info">
+        <h2 id="animated-total-pay" class="animated-counter">{{ animatedTotalPay | currency }}</h2>
+  
+        <h3>Assigned Orders</h3>
+        <table>
+          <thead>
             <tr>
-                <th>Order ID</th>
-                <th>Product</th>
-                <th>Unlabeled Quantity</th>
-                <th>Labeled Quantity</th>
-                <th>Add Labels</th>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Unlabeled Quantity</th>
+              <th>Labeled Quantity</th>
+              <th>Add Labels</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr *ngFor="let order of orders">
+<<<<<<< HEAD
                 <td>{{ order.id }}</td>
                 <td>{{ order.productName }}</td>
                 <td>{{ order.unlabeledQuantity }}</td>
@@ -30,3 +40,23 @@
     </table>
     <button (click)="logout()">Log out</button>
 </div>
+=======
+              <td>{{ order.id }}</td>
+              <td>{{ order.productName }}</td>
+              <td>{{ order.unlabeledQuantity }}</td>
+              <td>{{ order.labeledQuantity }}</td>
+              <td>
+                <input type="number" [(ngModel)]="labelingQuantity[order.id]" placeholder="Enter quantity" />
+                <button (click)="addLabels(order.id, labelingQuantity[order.id])">Add Labels</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <!-- Chart.js Graph Section -->
+        <canvas id="payChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+>>>>>>> f8e85cfe04a3401b5b96eff1a87de72801965624

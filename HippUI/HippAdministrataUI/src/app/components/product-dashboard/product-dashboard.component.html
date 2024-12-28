@@ -1,75 +1,148 @@
-<!-- product-dashboard.component.html -->
 <div class="dashboard-container">
   <!-- Sidebar -->
   <div class="sidebar">
     <h2>Manager Dashboard</h2>
     <ul>
       <li>
-          <button 
-            [class.active]="activeSection === 'products'" 
-            (click)="navigateTo('products'); setActiveSection('products')"
-          >
-            Product Dashboard
-          </button>
-        </li>
-        <li>
-          <button 
-            [class.active]="activeSection === 'orders'" 
-            (click)="navigateTo('orders'); setActiveSection('orders')"
-          >
-            Order Dashboard
-          </button>
-        </li>
-
-        
-  </ul>
+        <button 
+        [class.active]="activeSection === 'manager'" 
+        (click)="router.navigate(['/manager-dashboard']); setActiveSection('manager')"
+          >Manager Dashboard
+        </button>
+      </li>
+      <li>
+        <button
+          [class.active]="activeSection === 'orders'"
+          (click)="navigateTo('orders'); setActiveSection('orders')"
+        >
+          Order Dashboard
+        </button>
+      </li>
+      <li>
+        <button
+          [class.active]="activeSection === 'createProduct'"
+          (click)="setActiveSection('createProduct')"
+        >
+          Create Product
+        </button>
+      </li>
+      <li>
+        <button
+          [class.active]="activeSection === 'listProducts'"
+          (click)="setActiveSection('listProducts')"
+        >
+          List Products
+        </button>
+      </li>
+    </ul>
   </div>
 
   <!-- Main Content Area -->
   <div class="content">
-    <h1>Product Dashboard</h1>
-
-    <div>
-      <h3>Add Product</h3>
-      <label>
-        Name:
-        <input [(ngModel)]="newProduct.name" name="name" required />
-      </label>
-      <label>
-        Unlabeled Quantity:
-        <input type="number" [(ngModel)]="newProduct.unlabeledQuantity" name="unlabeledQuantity" required />
-      </label>
-      <label>
-        Labeled Quantity:
-        <input type="number" [(ngModel)]="newProduct.labeledQuantity" name="labeledQuantity" />
-      </label>
-      <label>
-        Price:
-        <input type="number" [(ngModel)]="newProduct.price" name="price" required />
-      </label>
-      <label>
-        Price Percentage for Employee:
-        <input type="number" [(ngModel)]="newProduct.pricePercentageForEmployee" name="pricePercentageForEmployee"
-          required />
-      </label>
-      <label>
-        Warehouse ID:
-        <input type="number" [(ngModel)]="newProduct.warehouseId" name="warehouseId" required />
-      </label>
-      <button (click)="addProduct()">Add Product</button>
+    <div *ngIf="activeSection === 'productDashboard'">
+      <!-- Product Dashboard Section -->
+      <h3>Product Dashboard</h3>
+      <p>Welcome to the product management dashboard!</p>
     </div>
 
-    <h2>Product List</h2>
-    <ul>
-      <li *ngFor="let product of products">
-        {{ product.name }} - ${{ product.price }} ({{ product.quantity }} in stock)
-        <button (click)="deleteProduct(product.id)">Delete</button>
-      </li>
-    </ul>
+    <div *ngIf="activeSection === 'orders'">
+      <!-- Placeholder for Order Dashboard -->
+      <h3>Order Dashboard</h3>
+      <p>Navigate to the order management section.</p>
+    </div>
 
-    <!-- Logout Button 
-    <div>
-      <button (click)="logout()">Logout</button>
-    </div>-->
+    <div *ngIf="activeSection === 'createProduct'">
+      <div class="add-product-section">
+        <h3>Create Product</h3>
+        <form class="product-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productName">Product Name</label>
+              <input type="text" id="productName" name="productName" [(ngModel)]="newProduct.name" />
+            </div>
+          </div>
+        
+          <div class="form-row">
+            <div class="form-group">
+              <label for="unlabeledQuantity">Unlabeled Quantity</label>
+              <input type="number" id="unlabeledQuantity" name="unlabeledQuantity" [(ngModel)]="newProduct.unlabeledQuantity" />
+            </div>
+            <div class="form-group">
+              <label for="labeledQuantity">Labeled Quantity</label>
+              <input type="number" id="labeledQuantity" name="labeledQuantity" [(ngModel)]="newProduct.labeledQuantity" />
+            </div>
+          </div>
+        
+          <div class="form-row">
+            <div class="form-group">
+              <label for="price">Price</label>
+              <input type="number" id="price" name="price" [(ngModel)]="newProduct.price" />
+            </div>
+            <div class="form-group">
+              <label for="pricePercentageForEmployee">Price Percentage for Employee</label>
+              <input type="number" id="pricePercentageForEmployee" name="pricePercentageForEmployee" [(ngModel)]="newProduct.pricePercentageForEmployee" />
+            </div>
+          </div>
+        
+          <div class="form-row">
+            <div class="form-group">
+              <label for="warehouseId">Warehouse ID</label>
+              <input type="number" id="warehouseId" name="warehouseId" [(ngModel)]="newProduct.warehouseId" />
+            </div>
+          </div>
+        
+          <div class="form-actions">
+            <button type="button" class="submit-btn" (click)="addProduct()">Add Product</button>
+          </div>
+        </form>
+
+      </div>
+      
+    </div>
+
+    <div *ngIf="activeSection === 'listProducts'">
+      <h3>List Products</h3>
+      <ul>
+        <li *ngFor="let product of products" class="product-item">
+          
+          <!-- Wrapper Div -->
+          <div class="product-wrapper">
+            <!-- Product Name Div -->
+            <div class="product-name">
+              <strong>{{ product.name }}</strong>
+            </div>
+    
+            <!-- Product Details Div (Price and Stock) -->
+            <div class="product-details">
+              <div>Price: ${{ product.price }}</div>
+              <div>
+                <ng-container *ngIf="product.unlabeledQuantity > 0; else outOfStock">
+                  Unlabeled Quantity: {{ product.unlabeledQuantity }}
+                </ng-container>
+                <ng-template #outOfStock>Out of Stock</ng-template>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Delete Button -->
+          <button class="delete-btn" (click)="deleteProduct(product.id)">Delete</button>
+        </li>
+      </ul>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   </div>
 </div>
