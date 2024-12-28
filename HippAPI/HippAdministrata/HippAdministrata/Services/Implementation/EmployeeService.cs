@@ -67,7 +67,7 @@ namespace HippAdministrata.Services
             // Check if all quantities are labeled for the order
             if (order.UnlabeledQuantity == 0)
             {
-                order.OrderStatus = OrderStatus.ReadyForShipping; // Advance to the next process
+                order.OrderStatusId = (int?)OrderStatuses.ReadyForShipping; // Advance to the next process
             }
 
             // Save changes
@@ -94,7 +94,7 @@ namespace HippAdministrata.Services
                 LabeledQuantity = order.LabeledQuantity,
                 ProductPrice = order.Product.Price,
                 PricePercentageForEmployee = order.Product.PricePercentageForEmployee,
-                OrderStatus = OrderStatus.InProgress
+                OrderStatusId = (int)OrderStatuses.InProgress
             });
         }
 

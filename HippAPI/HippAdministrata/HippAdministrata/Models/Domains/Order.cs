@@ -25,7 +25,7 @@ namespace HippAdministrata.Models.Domains
         public DateTime? LastUpdated { get; set; }
 
         // Order Workflow Status
-        public OrderStatus OrderStatus { get; set; }
+        public int? OrderStatusId { get; set; }
 
         // Post-assignment nullable properties
         public int? EmployeeId { get; set; } // Assigned Employee
@@ -39,6 +39,8 @@ namespace HippAdministrata.Models.Domains
         public Employee? Employee { get; set; }
         public Driver? Driver { get; set; }
         public Warehouse? Warehouse { get; set; }
+        public OrderStatus? OrderStatus { get; set; }
+
     }
 
 }

@@ -172,7 +172,7 @@ namespace HippAdministrata.Migrations
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatus")
+                    b.Property<int?>("OrderStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -201,6 +201,8 @@ namespace HippAdministrata.Migrations
 
                     b.HasIndex("EmployeeId");
 
+                    b.HasIndex("OrderStatusId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("SalesPersonId");
@@ -208,6 +210,22 @@ namespace HippAdministrata.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("HippAdministrata.Models.Domains.OrderStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatus");
                 });
 
             modelBuilder.Entity("HippAdministrata.Models.Domains.Product", b =>
@@ -369,12 +387,6 @@ namespace HippAdministrata.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("NewStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OldStatus")
-                        .HasColumnType("int");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -467,6 +479,10 @@ namespace HippAdministrata.Migrations
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("HippAdministrata.Models.Domains.OrderStatus", "OrderStatus")
+                        .WithMany()
+                        .HasForeignKey("OrderStatusId");
+
                     b.HasOne("HippAdministrata.Models.Domains.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -489,6 +505,8 @@ namespace HippAdministrata.Migrations
                     b.Navigation("Driver");
 
                     b.Navigation("Employee");
+
+                    b.Navigation("OrderStatus");
 
                     b.Navigation("Product");
 

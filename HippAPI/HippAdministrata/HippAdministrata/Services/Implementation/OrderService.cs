@@ -75,7 +75,7 @@ namespace HippAdministrata.Services
                     UnlabeledQuantity = productDto.Quantity,
                     LabeledQuantity = 0,
                     ProductPrice = product.Price,
-                    OrderStatus = OrderStatus.Created,
+                    OrderStatusId = (int?)OrderStatuses.Created,
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -93,10 +93,10 @@ namespace HippAdministrata.Services
             if (order.DriverId != driverId)
                 throw new Exception("You are not assigned to this order");
 
-            if (order.OrderStatus != OrderStatus.ReadyForShipping)
+            if (order.OrderStatusId != (int?)OrderStatuses.ReadyForShipping)
                 throw new Exception("Order is not ready for shipping");
 
-            order.OrderStatus = OrderStatus.InTransit;
+            order.OrderStatusId = (int?)OrderStatuses.InTransit;
             order.LastUpdated = DateTime.UtcNow;
             await _orderRepository.UpdateOrderAsync(order);
 
@@ -109,11 +109,11 @@ namespace HippAdministrata.Services
                 order.LastUpdated = DateTime.UtcNow;
                 if (i == 5)
                 {
-                    order.OrderStatus = OrderStatus.Shipped;
+                    order.OrderStatusId = (int?)OrderStatuses.Shipped;
                 }
                 else
                 {
-                    order.OrderStatus = OrderStatus.InTransit; 
+                    order.OrderStatusId = (int?)OrderStatuses.InTransit; 
                 }
                 await _orderRepository.UpdateOrderAsync(order);
             }
@@ -152,14 +152,14 @@ namespace HippAdministrata.Services
         public async Task<Order> AssignOrderAsync(int orderId, OrderAssignmentDto assignmentDto)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
-            if (order == null || order.OrderStatus != OrderStatus.Created)
+            if (order == null || order.OrderStatusId != (int?)OrderStatuses.Created)
                 throw new Exception("Order not found or cannot be assigned.");
 
             // Update assignments
             order.EmployeeId = assignmentDto.EmployeeId;
             order.DriverId = assignmentDto.DriverId;
             order.WarehouseId = assignmentDto.WarehouseId;
-            order.OrderStatus = OrderStatus.InProgress;
+            order.OrderStatusId = (int?)OrderStatuses.InProgress;
             order.LastUpdated = DateTime.UtcNow;
 
             await _orderRepository.UpdateAsync(order);

@@ -6,28 +6,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HippAdministrata.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "OrderStatus",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    UnlabeledQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    LabeledQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_OrderStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +43,8 @@ namespace HippAdministrata.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,7 +61,8 @@ namespace HippAdministrata.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,6 +76,32 @@ namespace HippAdministrata.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UnlabeledQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    LabeledQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PricePercentageForEmployee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -87,8 +109,7 @@ namespace HippAdministrata.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -129,9 +150,8 @@ namespace HippAdministrata.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -153,6 +173,7 @@ namespace HippAdministrata.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalPay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SupervisorId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -173,37 +194,12 @@ namespace HippAdministrata.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SalesPersonClients",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SalesPersonId = table.Column<int>(type: "int", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SalesPersonClients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SalesPersonClients_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SalesPersonClients_SalesPersons_SalesPersonId",
-                        column: x => x.SalesPersonId,
-                        principalTable: "SalesPersons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CarDrivers",
                 columns: table => new
                 {
                     DriverId = table.Column<int>(type: "int", nullable: false),
-                    CarId = table.Column<int>(type: "int", nullable: false)
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    DriverId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -241,16 +237,20 @@ namespace HippAdministrata.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    DeliveryDestination = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     SalesPersonId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: false),
-                    WarehouseId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
+                    DeliveryDestination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnlabeledQuantity = table.Column<int>(type: "int", nullable: false),
+                    LabeledQuantity = table.Column<int>(type: "int", nullable: false),
+                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    OrderStatusId = table.Column<int>(type: "int", nullable: true),
+                    EmployeeId = table.Column<int>(type: "int", nullable: true),
+                    DriverId = table.Column<int>(type: "int", nullable: true),
+                    WarehouseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -294,33 +294,36 @@ namespace HippAdministrata.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "orderHistories",
+                name: "OrderHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    OldStatus = table.Column<int>(type: "int", nullable: false),
-                    NewStatus = table.Column<int>(type: "int", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedByEmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orderHistories", x => x.Id);
+                    table.PrimaryKey("PK_OrderHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_orderHistories_Employees_UpdatedByEmployeeId",
+                        name: "FK_OrderHistory_Employees_UpdatedByEmployeeId",
                         column: x => x.UpdatedByEmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_orderHistories_Orders_OrderId",
+                        name: "FK_OrderHistory_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarDrivers_DriverId1",
+                table: "CarDrivers",
+                column: "DriverId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_UserId",
@@ -353,13 +356,13 @@ namespace HippAdministrata.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orderHistories_OrderId",
-                table: "orderHistories",
+                name: "IX_OrderHistory_OrderId",
+                table: "OrderHistory",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orderHistories_UpdatedByEmployeeId",
-                table: "orderHistories",
+                name: "IX_OrderHistory_UpdatedByEmployeeId",
+                table: "OrderHistory",
                 column: "UpdatedByEmployeeId");
 
             migrationBuilder.CreateIndex(
@@ -393,14 +396,9 @@ namespace HippAdministrata.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SalesPersonClients_ClientId",
-                table: "SalesPersonClients",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SalesPersonClients_SalesPersonId",
-                table: "SalesPersonClients",
-                column: "SalesPersonId");
+                name: "IX_Products_WarehouseId",
+                table: "Products",
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SalesPersons_UserId",
@@ -421,6 +419,13 @@ namespace HippAdministrata.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_CarDrivers_Drivers_DriverId1",
+                table: "CarDrivers",
+                column: "DriverId1",
+                principalTable: "Drivers",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Drivers_Orders_OrderId1",
                 table: "Drivers",
                 column: "OrderId1",
@@ -439,10 +444,10 @@ namespace HippAdministrata.Migrations
                 name: "CarDrivers");
 
             migrationBuilder.DropTable(
-                name: "orderHistories");
+                name: "OrderHistory");
 
             migrationBuilder.DropTable(
-                name: "SalesPersonClients");
+                name: "OrderStatus");
 
             migrationBuilder.DropTable(
                 name: "Drivers");
@@ -463,10 +468,10 @@ namespace HippAdministrata.Migrations
                 name: "SalesPersons");
 
             migrationBuilder.DropTable(
-                name: "Warehouses");
+                name: "Managers");
 
             migrationBuilder.DropTable(
-                name: "Managers");
+                name: "Warehouses");
 
             migrationBuilder.DropTable(
                 name: "Users");

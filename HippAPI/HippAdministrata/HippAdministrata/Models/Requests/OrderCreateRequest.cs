@@ -12,6 +12,6 @@ namespace HippAdministrata.Models.Requests
         public int EmployeeId { get; set; }
         public int DriverId { get; set; }
         public int? WarehouseId { get; set; }
-        public OrderStatus OrderStatus { get; set; }
+        public int? OrderStatusId { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HippAdministrata.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241227052706_RemovingDuplicatePasswordColumn")]
-    partial class RemovingDuplicatePasswordColumn
+    [Migration("20241228051204_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,7 +175,7 @@ namespace HippAdministrata.Migrations
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatus")
+                    b.Property<int?>("OrderStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -211,6 +211,22 @@ namespace HippAdministrata.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("HippAdministrata.Models.Domains.OrderStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatus");
                 });
 
             modelBuilder.Entity("HippAdministrata.Models.Domains.Product", b =>
@@ -371,12 +387,6 @@ namespace HippAdministrata.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("NewStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OldStatus")
-                        .HasColumnType("int");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");

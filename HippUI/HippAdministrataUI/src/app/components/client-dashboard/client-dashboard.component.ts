@@ -28,9 +28,9 @@ interface Order {
 export class ClientDashboardComponent implements OnInit {
   products: any[] = []; // List of products
   orders: any[] = []; // List of orders
-  newOrder = { 
+  newOrder = {
     products: [{ productId: null, quantity: 0 }], // Track multiple products
-    deliveryDestination: '' 
+    deliveryDestination: ''
   };
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
   isOrderModalOpen = false;
@@ -39,7 +39,7 @@ export class ClientDashboardComponent implements OnInit {
   groupedOrders: any[] = []; // Grouped orders for display
   recentOrders: Order[] = []; // To store the two most recent orders
 
-  constructor(private router: Router, private clientService: ClientService) {}
+  constructor(private router: Router, private clientService: ClientService) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -77,18 +77,20 @@ export class ClientDashboardComponent implements OnInit {
       alert('Client ID not found. Please log in again.');
       return;
     }
-
+    console.log(clientId);
     this.clientService.getOrdersByClientId(clientId).subscribe(
       (orders) => {
+        console.log(orders);
         // Map the orders to display order details
         const formattedOrders = orders.map(order => ({
           ...order,
-          orderStatusDisplay: this.getOrderStatusDisplay(order.orderStatus),
+          orderStatusDisplay: order.orderStatus.description,
           productName: this.getProductName(order.productId)
         }));
 
         // Group orders for frontend display
         this.groupedOrders = this.groupOrders(formattedOrders);
+        console.log(this.groupedOrders)
         this.loadRecentOrders(); // Refresh recent orders whenever orders are loaded
       },
       (error) => {
@@ -143,12 +145,10 @@ export class ClientDashboardComponent implements OnInit {
     const statusMap: { [key: number]: string } = {
       0: 'Created',
       1: 'InProgress',
-      2: 'Labeled',
-      3: 'Packaged',
+      2: 'Labeling',
       4: 'Ready For Shipping',
       5: 'In Transit',
       6: 'Shipped',
-      7: 'Completed',
     };
     return statusMap[status] || 'Unknown';
   }

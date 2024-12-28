@@ -24,6 +24,8 @@ namespace HippAdministrata.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrderHistory> OrderHistories { get; set; }
+        public DbSet<OrderStatus> OrderStatus { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CarDriversConfiguration());

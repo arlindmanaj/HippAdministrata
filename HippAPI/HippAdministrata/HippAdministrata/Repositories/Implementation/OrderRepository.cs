@@ -37,7 +37,7 @@ namespace HippAdministrata.Repositories.Implementation
 
         public async Task<IEnumerable<Order>> GetByClientIdAsync(int clientId)
         {
-            return await _context.Set<Order>().Where(o => o.ClientId == clientId).ToListAsync();
+            return await _context.Set<Order>().Where(o => o.ClientId == clientId).Include(x => x.OrderStatus).ToListAsync();
         }
 
         public async Task<IEnumerable<Order>> GetBySalesPersonIdAsync(int salesPersonId)
@@ -91,7 +91,7 @@ namespace HippAdministrata.Repositories.Implementation
                     LabeledQuantity = o.LabeledQuantity,
                     ProductPrice = o.ProductPrice,
                     CreatedAt = o.CreatedAt,
-                    OrderStatus = o.OrderStatus
+                    OrderStatusId = o.OrderStatusId
                 })
                 .ToListAsync();
         }
