@@ -6,7 +6,6 @@ import { UserService } from '../../../services/user.service';
 import { SalesPersonService } from '../../../services/salesperson.service';
 import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
-import { getOrderStatusLabel } from '../../../services/order-status.util';
 import { FormsModule } from '@angular/forms';
 
 @Component({
