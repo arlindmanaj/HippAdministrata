@@ -31,7 +31,7 @@
                 <p>Product: {{ product.productName }}</p>
                 <p>Quantity: {{ product.quantity }}</p>
                 <p>Price: ${{ product.productPrice }}</p>
-                <td>Status: {{ getOrderStatusLabel(order.orderStatus) }}</td>
+                <td>Status: {{ order.orderStatusDisplay }}</td>
               </li>
 
 

@@ -5,14 +5,13 @@ import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { getOrderStatusLabel } from '../../../services/order-status.util';
 
 @Component({
   selector: 'app-salesperson-dashboard',
   templateUrl: './salesperson-dashboard.component.html',
   standalone: true,
   styleUrls: ['./salesperson-dashboard.component.css'],
-  
+
   imports: [CommonModule, FormsModule]
 })
 export class SalespersonDashboardComponent implements OnInit {
@@ -22,7 +21,7 @@ export class SalespersonDashboardComponent implements OnInit {
   warehouses: any[] = [];
   assignment = { employeeId: null, driverId: null, warehouseId: null };
   selectedOrder: any = null;
-  isModalOpen = false;  
+  isModalOpen = false;
   activeSection: string = 'orders'; // Default active section
 
   constructor(
@@ -89,22 +88,22 @@ export class SalespersonDashboardComponent implements OnInit {
     );
   }
 
-    // Open the details modal
-    openDetailsModal(order: any): void {
-      this.selectedOrder = order;
-      this.assignment = {
-        employeeId: order.assignment?.employeeId || null,
-        driverId: order.assignment?.driverId || null,
-        warehouseId: order.assignment?.warehouseId || null,
-      };
-      this.isModalOpen = true;  // Open the modal
-    }
-  
-    // Close the modal
-    closeModal(): void {
-      this.isModalOpen = false;  // Close the modal
-      this.selectedOrder = null;
-    }
+  // Open the details modal
+  openDetailsModal(order: any): void {
+    this.selectedOrder = order;
+    this.assignment = {
+      employeeId: order.assignment?.employeeId || null,
+      driverId: order.assignment?.driverId || null,
+      warehouseId: order.assignment?.warehouseId || null,
+    };
+    this.isModalOpen = true;  // Open the modal
+  }
+
+  // Close the modal
+  closeModal(): void {
+    this.isModalOpen = false;  // Close the modal
+    this.selectedOrder = null;
+  }
 
   saveAssignment(): void {
     if (!this.assignment.employeeId || !this.assignment.driverId || !this.assignment.warehouseId) {

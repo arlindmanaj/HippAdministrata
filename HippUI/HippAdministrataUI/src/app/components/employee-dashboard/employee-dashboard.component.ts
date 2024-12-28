@@ -2,15 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../../services/employee.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { OrderStatus } from '../../../models/OrderStatus';
-<<<<<<< HEAD
-import { getOrderStatusLabel } from '../../../services/order-status.util';
 import { Router } from '@angular/router';
-=======
-import { Chart } from 'chart.js';
-import { Router } from '@angular/router';  // Import Router
-
->>>>>>> f8e85cfe04a3401b5b96eff1a87de72801965624
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -26,13 +18,9 @@ export class EmployeeDashboardComponent implements OnInit {
   labelingQuantity: { [key: number]: number } = {}; // Quantity input for each order
   employeeId: number = Number(localStorage.getItem('roleSpecificId')); // Employee ID from storage
 
-<<<<<<< HEAD
 
 
 
-=======
-  // Removed the manual declaration of router, as it's being injected
->>>>>>> f8e85cfe04a3401b5b96eff1a87de72801965624
   constructor(private employeeService: EmployeeService, private router: Router) { }
 
   ngOnInit(): void {
@@ -87,7 +75,7 @@ export class EmployeeDashboardComponent implements OnInit {
         this.employeeTotalPay += labelingQuantity * productPaymentPerLabel;
 
         // Trigger total pay animation
-        this.animateTotalPay(this.employeeTotalPay);
+        // this.animateTotalPay(this.employeeTotalPay);
 
         // Check if order is fully labeled
       },
@@ -106,34 +94,10 @@ export class EmployeeDashboardComponent implements OnInit {
     }, 0);
 
     // Trigger the animation after calculation
-    this.animateTotalPay(this.employeeTotalPay);
+    // this.animateTotalPay(this.employeeTotalPay);
   }
-<<<<<<< HEAD
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
 }
-=======
-
-  animateTotalPay(targetPay: number): void {
-    let currentPay = 0;
-    const interval = setInterval(() => {
-      this.animatedTotalPay = currentPay;
-      currentPay += 50;  // Increase by 50 each time
-      if (currentPay >= targetPay) {
-        this.animatedTotalPay = targetPay;  // Set to target when done
-        clearInterval(interval);
-      }
-    }, 20);  // Speed of the animation (milliseconds)
-  }
-
-  logout(): void {
-    // Clear the session or token
-    localStorage.removeItem('authToken');
-    
-    // Navigate to login page after logging out
-    this.router.navigate(['/login']);
-  }
-}
->>>>>>> f8e85cfe04a3401b5b96eff1a87de72801965624

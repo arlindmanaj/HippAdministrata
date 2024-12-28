@@ -117,7 +117,7 @@ namespace HippAdministrata.Controllers
                 try
                 {
                     await _orderService.SimulateShippingAsync(driverId, orderId); // Invoke the service method
-                    return Ok("Shipping simulation completed successfully.");
+                    return Ok( new { message = "Shipping simulation completed successfully." });
                 }
                 catch (Exception ex)
                 {

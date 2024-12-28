@@ -78,7 +78,7 @@ namespace HippAdministrata.Repositories.Implementation
         public async Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId)
         {
             return await _context.Orders
-                .Where(o => o.SalesPersonId == salesPersonId)
+                .Where(o => o.SalesPersonId == salesPersonId).Include(x => x.OrderStatus)
                 .Select(o => new OrderDto
                 {
                     Id = o.Id,
@@ -91,7 +91,8 @@ namespace HippAdministrata.Repositories.Implementation
                     LabeledQuantity = o.LabeledQuantity,
                     ProductPrice = o.ProductPrice,
                     CreatedAt = o.CreatedAt,
-                    OrderStatusId = o.OrderStatusId
+                    OrderStatusId = o.OrderStatusId,
+                    OrderStatusDescription = o.OrderStatus.Description
                 })
                 .ToListAsync();
         }
@@ -112,7 +113,8 @@ namespace HippAdministrata.Repositories.Implementation
         {
             return await _context.Orders
                 .Where(order => order.EmployeeId == employeeId)
-                .Include(order => order.Product) // Include related product details
+                .Include(order => order.Product)
+                .Include(order => order.OrderStatus)// Include related product details
                 .ToListAsync();
         }
 
@@ -120,7 +122,7 @@ namespace HippAdministrata.Repositories.Implementation
         {
             return await _context.Orders
                 .Where(order => order.DriverId == driverId)
-                .Include(order => order.Product) // Include product details
+                .Include(order => order.Product).Include(x => x.OrderStatus) // Include product details
                 .ToListAsync();
         }
 

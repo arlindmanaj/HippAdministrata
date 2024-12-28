@@ -104,7 +104,7 @@ export class AdminDashboardComponent implements OnInit {
         );
         break;
       case 'Employee':
-        this.authService.registerEmployee(name, password).subscribe(
+        this.authService.registerEmployee(name, password, email).subscribe(
           () => this.handleSuccess('Employee registered successfully.'),
           (error) => this.handleError('Failed to register employee.', error)
         );

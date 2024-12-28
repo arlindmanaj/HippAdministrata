@@ -36,7 +36,6 @@ namespace HippAdministrata.Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
-
         }
 
     }

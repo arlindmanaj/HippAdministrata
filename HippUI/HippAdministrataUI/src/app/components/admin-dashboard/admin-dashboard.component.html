@@ -1,134 +1,130 @@
 <div class="admin-dashboard">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2>Admin Panel</h2>
-      <nav>
-        <ul>
-          <li 
-            (click)="viewSection('registration')" 
-            [class.active]="activeSection === 'registration'">
-            Registration
-          </li>
-          <li 
-            (click)="viewSection('users')" 
-            [class.active]="activeSection === 'users'">
-            Users
-          </li>
-        </ul>
-      </nav>
-    </aside>
-  
-    <!-- Main Content -->
-    <div class="content">
-      <!-- Header -->
-      <header class="header">
-        <h1>Admin Dashboard</h1>
-      </header>
-  
-      <!-- Registration Section -->
-      <section *ngIf="activeSection === 'registration'" class="add-user-section">
-        <h2>Registration</h2>
-        <div class="form-container">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="Enter name" [(ngModel)]="newUser.name" />
-          </div>
-  
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter password" [(ngModel)]="newUser.password" />
-          </div>
-  
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter email" [(ngModel)]="newUser.email" />
-          </div>
-  
-          <div class="form-group">
-            <label for="role">Role</label>
-            <select id="role" [(ngModel)]="newUserRole">
-              <option value="" disabled>Select Role</option>
-              <option value="Driver">Driver</option>
-              <option value="SalesPerson">SalesPerson</option>
-              <option value="Empaloyee">Employee</option>
-              <option value="Manager">Manager</option>
-              <option value="Client">Client</option>
-            </select>
-          </div>
-  
-          <div class="driver-details" *ngIf="newUserRole === 'Driver'">
-            <div class="form-group">
-              <label for="licensePlate">License Plate</label>
-              <input type="text" id="licensePlate" placeholder="License Plate" [(ngModel)]="newDriverDetails.licensePlate" />
-            </div>
-  
-            <div class="form-group">
-              <label for="carModel">Car Model</label>
-              <input type="text" id="carModel" placeholder="Car Model" [(ngModel)]="newDriverDetails.carModel" />
-            </div>
-          </div>
-          <div class="client-details" *ngIf="newUserRole === 'Client'">
-            <div class="form-group">
-              <label for="phone">Phone</label>
-              <input type="text" id="phone" placeholder="Enter phone" [(ngModel)]="newClientDetails.phone" />
-            </div>
-          
-            <div class="form-group">
-              <label for="address">Address</label>
-              <input type="text" id="address" placeholder="Enter address" [(ngModel)]="newClientDetails.address" />
-            </div>
-          </div>
-          
-          <p *ngIf="['SalesPerson', 'Manager'].includes(newUserRole) && !newUser.email" class="validation-message">
-            Email is required for {{ newUserRole }}.
-          </p>
-  
-          <button class="btn btn-add" (click)="addUser()">Add User</button>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <nav>
+      <ul>
+        <li (click)="viewSection('registration')" [class.active]="activeSection === 'registration'">
+          Registration
+        </li>
+        <li (click)="viewSection('users')" [class.active]="activeSection === 'users'">
+          Users
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header -->
+    <header class="header">
+      <h1>Admin Dashboard</h1>
+    </header>
+
+    <!-- Registration Section -->
+    <section *ngIf="activeSection === 'registration'" class="add-user-section">
+      <h2>Registration</h2>
+      <div class="form-container">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Enter name" [(ngModel)]="newUser.name" />
         </div>
-        <button (click)="logout()">Log out</button>
-      </section>
-  
-      <!-- Messages -->
-      <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
-      <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
-  
-     <!-- Users Section -->
-      <section *ngIf="activeSection === 'users'" class="user-table-section">
-        <h2>Existing Users</h2>
 
-        <!-- Role Filter Dropdown -->
-        <div>
-          <label for="roleFilter">Filter by Role:</label>
-          <select id="roleFilter" [(ngModel)]="selectedRole" (change)="filterUsersByRole()">
-            <option value="">All Roles</option>
-            <option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</option>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" [(ngModel)]="newUser.password" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter email" [(ngModel)]="newUser.email" />
+        </div>
+
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" [(ngModel)]="newUserRole">
+            <option value="" disabled>Select Role</option>
+            <option value="Driver">Driver</option>
+            <option value="SalesPerson">SalesPerson</option>
+            <option value="Employee">Employee</option>
+            <option value="Manager">Manager</option>
+            <option value="Client">Client</option>
           </select>
         </div>
 
-        <table class="user-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of filteredUsers">
-              <td>{{ user.userId }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email || 'N/A' }}</td>
-              <td>{{ user.role }}</td>
-              <td>
-                <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
+        <div class="driver-details" *ngIf="newUserRole === 'Driver'">
+          <div class="form-group">
+            <label for="licensePlate">License Plate</label>
+            <input type="text" id="licensePlate" placeholder="License Plate"
+              [(ngModel)]="newDriverDetails.licensePlate" />
+          </div>
+
+          <div class="form-group">
+            <label for="carModel">Car Model</label>
+            <input type="text" id="carModel" placeholder="Car Model" [(ngModel)]="newDriverDetails.carModel" />
+          </div>
+        </div>
+        <div class="client-details" *ngIf="newUserRole === 'Client'">
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" placeholder="Enter phone" [(ngModel)]="newClientDetails.phone" />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" placeholder="Enter address" [(ngModel)]="newClientDetails.address" />
+          </div>
+        </div>
+
+        <p *ngIf="['SalesPerson', 'Manager'].includes(newUserRole) && !newUser.email" class="validation-message">
+          Email is required for {{ newUserRole }}.
+        </p>
+
+        <button class="btn btn-add" (click)="addUser()">Add User</button>
+
+      </div>
+      <button (click)="logout()">Log out</button>
+    </section>
+
+    <!-- Messages -->
+    <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
+
+    <!-- Users Section -->
+    <section *ngIf="activeSection === 'users'" class="user-table-section">
+      <h2>Existing Users</h2>
+
+      <!-- Role Filter Dropdown -->
+      <div>
+        <label for="roleFilter">Filter by Role:</label>
+        <select id="roleFilter" [(ngModel)]="selectedRole" (change)="filterUsersByRole()">
+          <option value="">All Roles</option>
+          <option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers">
+            <td>{{ user.userId }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email || 'N/A' }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
-  
+</div>

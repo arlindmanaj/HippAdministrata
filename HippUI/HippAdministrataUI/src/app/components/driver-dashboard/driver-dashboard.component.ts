@@ -27,17 +27,19 @@ export class DriverDashboardComponent implements OnInit {
     this.loadDriverAssignedOrders(this.driverId);
   }
 
-  
 
 
-  loadDriverAssignedOrders(driverId: number ): void {
+
+  loadDriverAssignedOrders(driverId: number): void {
     this.driverService.getDriverAssignedOrders(driverId).subscribe(
       (orders) => {
         const formattedOrders = orders.map(order => ({
           ...order,
-          orderStatusDisplay: getOrderStatusLabel(order.orderStatus), // Use utility function
+          orderStatusDisplay: order.orderStatusDescription, // Use utility function
           productName: order.productName
-        }));
+        }))
+        this.assignedOrders = formattedOrders;
+      },
       (error) => {
         console.error('Failed to load assigned orders:', error);
         alert('Failed to load assigned orders.');
@@ -49,8 +51,8 @@ export class DriverDashboardComponent implements OnInit {
     const driverId = this.driverId; // Get driverId from the logged-in driver
     this.driverService.simulateShipping(driverId, orderId).subscribe(
       (response) => {
-        alert(response);
-        this.loadDriverAssignedOrders(); // Refresh orders after simulation
+        alert(response.message);
+        this.loadDriverAssignedOrders(driverId); // Refresh orders after simulation
       },
       (error) => {
         console.error('Failed to simulate shipping:', error);

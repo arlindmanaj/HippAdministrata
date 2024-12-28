@@ -57,8 +57,10 @@ namespace HippAdministrata.Services.Implementation
             {
                 Id = order.Id,
                 ProductName = order.Product.Name,
-                OrderStatus = order.OrderStatus.ToString(),
+                OrderStatusDescription = order.OrderStatus.Description,
                 Destination = order.DeliveryDestination, // Example field
+                OrderStatusId = order.OrderStatusId
+                
 
             });
         }

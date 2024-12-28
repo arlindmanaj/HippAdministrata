@@ -21,7 +21,9 @@ namespace HippAdministrata.Models.DTOs
             public decimal ProductPrice { get; set; }
             public DateTime CreatedAt { get; set; }
             public int? OrderStatusId { get; set; }
-        
+            public string OrderStatusDescription { get; set; }
+
+
 
     }
 }

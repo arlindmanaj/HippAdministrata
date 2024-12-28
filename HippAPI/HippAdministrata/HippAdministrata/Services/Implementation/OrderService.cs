@@ -136,6 +136,7 @@ namespace HippAdministrata.Services
                 order.WarehouseId = assignmentDto.WarehouseId.Value;
 
             order.LastUpdated = DateTime.UtcNow;
+            order.OrderStatusId = (int)OrderStatuses.InProgress;
 
             await _orderRepository.UpdateAsync(order);
             return order;

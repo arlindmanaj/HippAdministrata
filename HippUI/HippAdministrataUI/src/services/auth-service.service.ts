@@ -104,8 +104,8 @@ export class AuthService {
   }
 
   // Register Employee
-  registerEmployee(name: string, password: string): Observable<any> {
-    const body = { name, password };
+  registerEmployee(name: string, password: string, email: string): Observable<any> {
+    const body = { name, password, email };
     return this.http.post(`${this.apiUrl}/Auth/register/employee`, body, { headers: this.getHeaders() });
   }
 

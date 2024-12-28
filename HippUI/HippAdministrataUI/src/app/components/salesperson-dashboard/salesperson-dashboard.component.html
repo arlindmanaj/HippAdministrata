@@ -42,7 +42,7 @@
             <td>{{ order.labeledQuantity }}</td>
             <td>{{ order.productPrice }}</td>
             <td>{{ order.createdAt | date: 'yyyy/MM/dd' }}</td>
-            <td>{{ getOrderStatus(order.orderStatus) }}</td>
+            <td>{{ order.orderStatusDescription }}</td>
             <td>
               <button (click)="openDetailsModal(order)">View Details</button>
             </td>

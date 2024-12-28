@@ -15,10 +15,9 @@
       <tr *ngFor="let order of assignedOrders">
         <td>{{ order.id }}</td>
         <td>{{ order.productName }}</td>
-        <td>{{ getOrderStatusLabel(order.orderStatus) }}</td>
+        <td>{{ order.orderStatusDescription }}</td>
         <td>
-          <button  *ngIf="order.orderStatus === 3"
-            (click)="simulateShipping(order.id)">
+          <button *ngIf="order.orderStatusId === 4" (click)="simulateShipping(order.id)">
             Simulate Shipping
           </button>
         </td>
