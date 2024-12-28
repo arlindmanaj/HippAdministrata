@@ -116,5 +116,14 @@ namespace HippAdministrata.Repositories.Implementation
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetOrdersByDriverIdAsync(int driverId)
+        {
+            return await _context.Orders
+                .Where(order => order.DriverId == driverId)
+                .Include(order => order.Product) // Include product details
+                .ToListAsync();
+        }
+
+
     }
 }

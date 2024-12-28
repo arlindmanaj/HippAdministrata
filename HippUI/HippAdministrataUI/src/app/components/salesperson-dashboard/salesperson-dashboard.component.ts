@@ -5,6 +5,7 @@ import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { getOrderStatusLabel } from '../../../services/order-status.util';
 
 @Component({
   selector: 'app-salesperson-dashboard',
@@ -51,6 +52,15 @@ export class SalespersonDashboardComponent implements OnInit {
         alert('Failed to load orders. Please try again.');
       }
     );
+  }
+  getOrderStatusLabel(status: number | string): string {
+    // If the status is already a string, return it
+    if (typeof status === 'string') {
+      return status;
+    }
+
+    // Convert numeric status to the corresponding string value
+    return OrderStatus[status] || 'Unknown';
   }
 
   loadUserData(type: string): void {
@@ -151,17 +161,11 @@ export class SalespersonDashboardComponent implements OnInit {
 
 
 
-  getOrderStatus(status: number): string {
-    const statusMap = {
-      0: 'Created',
-      1: 'In Progress',
-      2: 'Completed',
-      3: 'Ready for shipping'
-    };
-    return OrderStatus[status] || 'Unknown';
-  }
+
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
+
+
 }

@@ -24,6 +24,23 @@
           </thead>
           <tbody>
             <tr *ngFor="let order of orders">
+<<<<<<< HEAD
+                <td>{{ order.id }}</td>
+                <td>{{ order.productName }}</td>
+                <td>{{ order.unlabeledQuantity }}</td>
+                <td>{{ order.labeledQuantity }}</td>
+                <td>{{ getOrderStatusLabel(order.orderStatus)}}</td>
+                <td>
+                    <input type="number" [(ngModel)]="labelingQuantity[order.id]" placeholder="Enter quantity" />
+                    <button (click)="addLabels(order.id, labelingQuantity[order.id])">Add Labels</button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+    <button (click)="logout()">Log out</button>
+</div>
+=======
               <td>{{ order.id }}</td>
               <td>{{ order.productName }}</td>
               <td>{{ order.unlabeledQuantity }}</td>
@@ -42,3 +59,4 @@
     </div>
   </div>
   
+>>>>>>> f8e85cfe04a3401b5b96eff1a87de72801965624

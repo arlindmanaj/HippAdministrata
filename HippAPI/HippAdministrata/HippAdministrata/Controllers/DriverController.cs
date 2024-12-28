@@ -44,9 +44,24 @@ namespace HippAdministrata.Controllers
                 return Ok(drivers);
             }
 
-          
+            [HttpGet("assigned-orders/{driverId}")]
+            public async Task<IActionResult> GetAssignedOrders( int driverId)
+            {
+                try
+                {
+                    var orders = await _driverService.GetAssignedOrdersAsync(driverId);
+                    return Ok(orders);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
-            [HttpPut("{id}")]
+
+
+
+        [HttpPut("{id}")]
             public async Task<IActionResult> Update(int id, [FromBody] DriverUpdateRequest request)
             {
                 if (id != request.Id)
@@ -69,25 +84,25 @@ namespace HippAdministrata.Controllers
                 return Ok("Driver updated successfully.");
             }
 
-        [HttpPost("{productId}/transfer")]
-        public async Task<IActionResult> TransferProductBetweenWarehouses(int productId, [FromBody] TransferProductDto transferDto)
-        {
-            try
+            [HttpPost("{productId}/transfer")]
+            public async Task<IActionResult> TransferProductBetweenWarehouses(int productId, [FromBody] TransferProductDto transferDto)
             {
-                await _driverService.TransferProductBetweenWarehouses(
-                    productId,
-                    transferDto.SourceWarehouseId,
-                    transferDto.DestinationWarehouseId);
+                try
+                {
+                    await _driverService.TransferProductBetweenWarehouses(
+                        productId,
+                        transferDto.SourceWarehouseId,
+                        transferDto.DestinationWarehouseId);
 
-                return Ok($"Product {productId} has been transferred successfully.");
+                    return Ok($"Product {productId} has been transferred successfully.");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
-        [HttpDelete("{id}")]
+            [HttpDelete("{id}")]
             public async Task<IActionResult> Delete(int id)
             {
                 var result = await _driverService.DeleteAsync(id);
@@ -113,11 +128,11 @@ namespace HippAdministrata.Controllers
 
 
         private static string HashPassword(string password)
-            {
+        {
                 using var sha256 = SHA256.Create();
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return Convert.ToBase64String(hashedBytes);
-            }
+        }
 
     }
    

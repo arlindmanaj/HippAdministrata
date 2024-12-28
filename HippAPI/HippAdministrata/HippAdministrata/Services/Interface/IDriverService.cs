@@ -9,7 +9,9 @@ namespace HippAdministrata.Services.Interface
         Task<IEnumerable<Driver>> GetAllAsync();
         Task<bool> UpdateAsync(Driver driver);
         Task<bool> DeleteAsync(int id);
-      
-        
+        Task<IEnumerable<OrderDto>> GetAssignedOrdersAsync(int driverId);
+
+
+
     }
 }

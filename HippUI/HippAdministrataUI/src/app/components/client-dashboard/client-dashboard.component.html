@@ -1,62 +1,70 @@
 <div class="client-dashboard">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-content">
-        <h2>Menu</h2>
-        <ul>
-          <li (click)="viewSection('orders')" [class.active]="activeSection === 'orders'">Your Orders</li>
-          <li (click)="viewSection('create-order')" [class.active]="activeSection === 'create-order'">Create Order</li>
-        </ul>
-      </div>
-      <button class="logout-button" (click)="logout()">Logout</button>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-content">
+      <h2>Menu</h2>
+      <ul>
+        <li (click)="viewSection('orders')" [class.active]="activeSection === 'orders'">Your Orders</li>
+        <li (click)="viewSection('create-order')" [class.active]="activeSection === 'create-order'">Create Order</li>
+      </ul>
     </div>
-  
-    <!-- Main Content -->
-    <div class="content">
-      <!-- Orders Section -->
-      <div *ngIf="activeSection === 'orders'">
-        <h1>Your Orders</h1>
-        <div *ngIf="groupedOrders.length > 0; else noOrders" class="order-list">
-          <div *ngFor="let order of groupedOrders" class="order-card">
-            <button class="order-header" (click)="toggleOrder(order.orderId)">
-              Order ID: {{ order.orderId }}
-              <span>{{ isOrderOpen(order.orderId) ? '︿' : '﹀' }}</span>
-            </button>
-            <div class="order-details" *ngIf="isOrderOpen(order.orderId)">
-              <p><strong>Delivery Destination:</strong> {{ order.deliveryDestination }}</p>
-              <p><strong>Status:</strong> {{ order.orderStatusDisplay }}</p>
-              <p><strong>Products:</strong></p>
-              <ul>
-                <li *ngFor="let product of order.products">
-                  <p>Product: {{ product.productName }}</p>
-                  <p>Quantity: {{ product.quantity }}</p>
-                  <p>Price: ${{ product.productPrice }}</p>
-                </li>
-              </ul>
-            </div>
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Orders Section -->
+    <div *ngIf="activeSection === 'orders'">
+      <h1>Your Orders</h1>
+      <div *ngIf="groupedOrders.length > 0; else noOrders" class="order-list">
+        <div *ngFor="let order of groupedOrders" class="order-card">
+          <button class="order-header" (click)="toggleOrder(order.orderId)">
+            Order ID: {{ order.orderId }}
+            <span>{{ isOrderOpen(order.orderId) ? '︿' : '﹀' }}</span>
+          </button>
+          <div class="order-details" *ngIf="isOrderOpen(order.orderId)">
+            <p><strong>Delivery Destination:</strong> {{ order.deliveryDestination }}</p>
+
+            <p><strong>Products:</strong></p>
+            <ul>
+              <li *ngFor="let product of order.products">
+                <p>Product: {{ product.productName }}</p>
+                <p>Quantity: {{ product.quantity }}</p>
+                <p>Price: ${{ product.productPrice }}</p>
+                <td>Status: {{ getOrderStatusLabel(order.orderStatus) }}</td>
+              </li>
+
+
+
+            </ul>
           </div>
         </div>
-        <ng-template #noOrders>
-          <p>You have no orders yet.</p>
-        </ng-template>
       </div>
-      
-  
-      <div *ngIf="activeSection === 'create-order'">
-        <h1>Create a New Order</h1>
-        <button (click)="openOrderModal()" class="create-order-btn">Create Order</button>
-      
-        <!-- Recent Orders Section -->
-        <div class="recent-orders">
-            <h3>Recent Orders</h3>
-            <div *ngFor="let order of recentOrders" class="order-card">
-              <button class="order-header" (click)="toggleOrder(order.orderId)">
-                Order ID: {{ order.orderId }}
-                <span>{{ isOrderOpen(order.orderId) ? '︿' : '﹀' }}</span>
-              </button>
-              <div class="order-details" *ngIf="isOrderOpen(order.orderId)">
-                <p><strong>Delivery Destination:</strong> {{ order.deliveryDestination }}</p>
-                <p><strong>Status:</strong> {{ order.orderStatusDisplay }}</p>
+      <ng-template #noOrders>
+        <p>You have no orders yet.</p>
+      </ng-template>
+    </div>
+
+
+    <div *ngIf="activeSection === 'create-order'">
+      <h1>Create a New Order</h1>
+      <button (click)="openOrderModal()" class="create-order-btn">Create Order</button>
+
+      <!-- Recent Orders Section -->
+      <div class="recent-orders">
+        <h3>Recent Orders</h3>
+        <div *ngFor="let order of recentOrders" class="order-card">
+          <button class="order-header" (click)="toggleOrder(order.orderId)">
+            Order ID: {{ order.orderId }}
+            <span>{{ isOrderOpen(order.orderId) ? '︿' : '﹀' }}</span>
+          </button>
+          <div class="order-details" *ngIf="isOrderOpen(order.orderId)">
+            <p><strong>Delivery Destination:</strong> {{ order.deliveryDestination }}</p>
+            <tr *ngFor="let order of assignedOrders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productName }}</td>
+              <td>{{ getOrderStatusLabel(order.orderStatus) }}</td>
+              <td>
                 <p><strong>Products:</strong></p>
                 <ul>
                   <li *ngFor="let product of order.products">
@@ -64,53 +72,43 @@
                     <p>Quantity: {{ product.quantity }}</p>
                   </li>
                 </ul>
-              </div>
-            </div>
-          </div>
-          
-      
-        <!-- Existing Order Modal -->
-        <div *ngIf="isOrderModalOpen" class="modal">
-          <div class="modal-content">
-            <h2>Create Multiple Orders</h2>
-            <form>
-              <!-- Dynamic Product Fields -->
-              <div *ngFor="let product of newOrder.products; let i = index" class="form-group">
-                <label for="product{{ i }}">Product</label>
-                <select id="product{{ i }}" [(ngModel)]="product.productId" name="product{{ i }}">
-                  <option *ngFor="let p of products" [value]="p.id">{{ p.name }}</option>
-                </select>
-      
-                <label for="quantity{{ i }}">Quantity</label>
-                <input
-                  type="number"
-                  id="quantity{{ i }}"
-                  [(ngModel)]="product.quantity"
-                  name="quantity{{ i }}"
-                  required
-                />
-              </div>
-      
-              <button type="button" class="add-product-btn" (click)="addProduct()">Add Another Product</button>
-      
-              <!-- Delivery Destination -->
-              <div class="form-group">
-                <label for="deliveryDestination">Delivery Destination</label>
-                <input
-                  type="text"
-                  id="deliveryDestination"
-                  [(ngModel)]="newOrder.deliveryDestination"
-                  name="deliveryDestination"
-                  required
-                />
-              </div>
-      
-              <!-- Action Buttons -->
-              <div class="button-group">
-                <button type="button" class="submit-btn" (click)="createMultipleOrders()">Place Orders</button>
-                <button type="button" class="cancel-btn" (click)="closeOrderModal()">Cancel</button>
-              </div>
-            </form>
           </div>
         </div>
       </div>
+
+
+      <!-- Existing Order Modal -->
+      <div *ngIf="isOrderModalOpen" class="modal">
+        <div class="modal-content">
+          <h2>Create Multiple Orders</h2>
+          <form>
+            <!-- Dynamic Product Fields -->
+            <div *ngFor="let product of newOrder.products; let i = index" class="form-group">
+              <label for="product{{ i }}">Product</label>
+              <select id="product{{ i }}" [(ngModel)]="product.productId" name="product{{ i }}">
+                <option *ngFor="let p of products" [value]="p.id">{{ p.name }}</option>
+              </select>
+
+              <label for="quantity{{ i }}">Quantity</label>
+              <input type="number" id="quantity{{ i }}" [(ngModel)]="product.quantity" name="quantity{{ i }}"
+                required />
+            </div>
+
+            <button type="button" class="add-product-btn" (click)="addProduct()">Add Another Product</button>
+
+            <!-- Delivery Destination -->
+            <div class="form-group">
+              <label for="deliveryDestination">Delivery Destination</label>
+              <input type="text" id="deliveryDestination" [(ngModel)]="newOrder.deliveryDestination"
+                name="deliveryDestination" required />
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-group">
+              <button type="button" class="submit-btn" (click)="createMultipleOrders()">Place Orders</button>
+              <button type="button" class="cancel-btn" (click)="closeOrderModal()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>

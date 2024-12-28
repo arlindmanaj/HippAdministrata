@@ -218,6 +218,22 @@
   },
   {
     "ContainingType": "HippAdministrata.Controllers.DriverController",
+    "Method": "GetAssignedOrders",
+    "RelativePath": "api/Driver/assigned-orders/{driverId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "driverId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HippAdministrata.Controllers.DriverController",
     "Method": "SimulateShipping",
     "RelativePath": "api/Driver/simulate-shipping/{orderId}",
     "HttpMethod": "POST",

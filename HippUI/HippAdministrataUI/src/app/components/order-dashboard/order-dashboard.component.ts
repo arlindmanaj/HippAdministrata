@@ -6,6 +6,7 @@ import { UserService } from '../../../services/user.service';
 import { SalesPersonService } from '../../../services/salesperson.service';
 import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
+import { getOrderStatusLabel } from '../../../services/order-status.util';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -13,8 +14,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './order-dashboard.component.html',
   styleUrls: ['./order-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule,FormsModule]
-  
+  imports: [CommonModule, FormsModule]
+
 })
 export class OrderDashboardComponent implements OnInit {
   orders: any[] = [];
@@ -29,6 +30,7 @@ export class OrderDashboardComponent implements OnInit {
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key)));
   showAllOrders: boolean = false; // New variable to toggle All Orders view
   selectedSalesPersonId: string | null = null;
+  salesPersonId: number = 0;
 
   constructor(
     private salesPersonService: SalesPersonService,
@@ -37,7 +39,7 @@ export class OrderDashboardComponent implements OnInit {
     private orderService: OrderService,
     public router: Router,
     private cdr: ChangeDetectorRef // Add this
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -58,7 +60,7 @@ export class OrderDashboardComponent implements OnInit {
       }
     );
   }
-  
+
 
   deleteOrder(orderId: number): void {
     if (confirm('Are you sure you want to delete this order?')) {
@@ -66,15 +68,15 @@ export class OrderDashboardComponent implements OnInit {
         next: (response) => {
           console.log(response);  // Logs the plain text response (e.g., "Order deleted successfully")
           alert('Order deleted successfully!');
-          
+
           // Update the orders array to remove the deleted order
           this.orders = this.orders.filter(order => order.id !== orderId);
-  
+
           // Optionally reload orders if All Orders is active
           if (this.showAllOrders) {
             this.loadOrders();
           }
-  
+
           // Trigger change detection manually
           this.cdr.detectChanges();
         },
@@ -85,11 +87,11 @@ export class OrderDashboardComponent implements OnInit {
       });
     }
   }
-  
-  
-  
-  
-  
+
+
+
+
+
 
 
   loadClients(): void {
@@ -109,18 +111,18 @@ export class OrderDashboardComponent implements OnInit {
   loadClientOrders(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const selectedClientId = Number(target.value);
-  
+
     if (selectedClientId) {
       this.selectedClientId = selectedClientId;
       this.salesPersonsOrders = []; // Clear SalesPerson orders
       this.showAllOrders = false; // Turn off "All Orders" section
-      
+
       // Set 'orders' as the active section immediately after selecting client
       this.activeSection = 'orders';
-  
+
       // Reset SalesPerson dropdown
       (document.getElementById('salesPersonDropdown') as HTMLSelectElement).value = '';
-  
+
       this.clientService.getOrdersByClientId(selectedClientId).subscribe(
         (data) => (this.clientOrders = data),
         (error) => (this.errorMessage = 'Failed to load client orders')
@@ -132,40 +134,7 @@ export class OrderDashboardComponent implements OnInit {
       this.activeSection = 'orders'; // Keep 'orders' as active section
     }
   }
-  
-  
-  loadSalesPersonTasks(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const selectedSalesPersonId = Number(target.value);
-  
-    if (selectedSalesPersonId) {
-      this.selectedClientId = null; // Clear selected client
-      this.clientOrders = []; // Clear client orders
-      this.showAllOrders = false; // Turn off "All Orders" section
-      
-      // Set 'orders' as the active section immediately after selecting salesperson
-      this.activeSection = 'orders';
-  
-      // Reset the Client dropdown
-      (document.getElementById('clientDropdown') as HTMLSelectElement).value = '';
-  
-      this.salesPersonService.getOrdersBySalesPersonId(selectedSalesPersonId).subscribe(
-        (data) => (this.salesPersonsOrders = data),
-        (error) => (this.errorMessage = 'Failed to load salesperson tasks')
-      );
-    } else {
-      // If no salesperson is selected, keep the "Orders" section active
-      this.salesPersonsOrders = [];
-      this.showAllOrders = false; // Turn off "All Orders" section if no salesperson is selected
-      this.activeSection = 'orders'; // Keep 'orders' as active section
-    }
-  }
-  
-  
 
-  getOrderStatus(status: number): string {
-    return OrderStatus[status];
-  }
 
   // Updated navigateTo method for dynamic routing within Manager Dashboard
   navigateTo(route: string): void {
@@ -186,7 +155,15 @@ export class OrderDashboardComponent implements OnInit {
       (error) => console.error('Failed to load drivers:', error)
     );
   }
+  getOrderStatusLabel(status: number | string): string {
+    // If the status is already a string, return it
+    if (typeof status === 'string') {
+      return status;
+    }
 
+    // Convert numeric status to the corresponding string value
+    return OrderStatus[status] || 'Unknown';
+  }
   loadSalesPersons(): void {
     this.userService.getAllSalesPersons().subscribe(
       (data) => (this.salesPersons = data),
@@ -194,38 +171,39 @@ export class OrderDashboardComponent implements OnInit {
     );
   }
 
-  // loadSalesPersonTasks(salesPersonId: number): void {
-  //   this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
-  //     (data) => (this.salesPersonsOrders = data),
-  //     (error) => console.error('Failed to load salesperson tasks:', error)
-  //   );
-  // }
+  loadSalesPersonTasks(salesPersonId: number): void {
+    this.salesPersonId = salesPersonId
+    this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
+      (data) => (this.salesPersonsOrders = data),
+      (error) => console.error('Failed to load salesperson tasks:', error)
+    );
+  }
 
-    // Add this to your class
+  // Add this to your class
   activeSection: string = 'orders'; // Default section on page load
 
   setActiveSection(section: string): void {
     this.activeSection = section;
   }
 
-    roles: string[] = ['SalesPerson', 'Driver', 'Employee'];
+  roles: string[] = ['SalesPerson', 'Driver', 'Employee'];
   filteredPeople: any[] = [];
 
- 
+
 
 
   // Logout method
   logout() {
     // Perform any logout logic (like clearing session or tokens)
     console.log('Logging out...');
-    
+
     // Redirect to the login page or another route if needed
     this.router.navigate(['/login']);  // Adjust the route as needed
   }
-  
+
   toggleAllOrders(): void {
     this.showAllOrders = !this.showAllOrders;
-  
+
     if (this.showAllOrders) {
       this.activeSection = 'allOrders';
       this.selectedClientId = null;
@@ -236,6 +214,4 @@ export class OrderDashboardComponent implements OnInit {
       this.activeSection = 'orders';
     }
   }
-  
-
 }
