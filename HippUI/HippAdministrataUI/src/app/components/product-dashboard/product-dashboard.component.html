@@ -4,6 +4,13 @@
     <h2>Manager Dashboard</h2>
     <ul>
       <li>
+        <button 
+        [class.active]="activeSection === 'manager'" 
+        (click)="router.navigate(['/manager-dashboard']); setActiveSection('manager')"
+          >Manager Dashboard
+        </button>
+      </li>
+      <li>
         <button
           [class.active]="activeSection === 'orders'"
           (click)="navigateTo('orders'); setActiveSection('orders')"

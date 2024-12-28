@@ -35,7 +35,7 @@ export class OrderDashboardComponent implements OnInit {
     private userService: UserService,
     private clientService: ClientService,
     private orderService: OrderService,
-    private router: Router,
+    public router: Router,
     private cdr: ChangeDetectorRef // Add this
   ) {}
 

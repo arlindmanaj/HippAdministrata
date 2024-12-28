@@ -2,12 +2,44 @@
   <aside class="sidebar">
     <h1>Manager Dashboard</h1>
     <ul class="navigation">
-      <li><button (click)="navigateTo('products')">Product Dashboard</button></li>
-      <li><button (click)="navigateTo('orders')">Order Dashboard</button></li>
+      <li>
+        <button
+          [class.active]="activeSection === 'products'"
+          (click)="navigateTo('products')"
+        >
+          Product Dashboard
+        </button>
+      </li>
+      <li>
+        <button
+          [class.active]="activeSection === 'orders'"
+          (click)="navigateTo('orders')"
+        >
+          Order Dashboard
+        </button>
+      </li>
     </ul>
     <button class="logout-button" (click)="logout()">Logout</button>
   </aside>
   <main class="content">
+    <div class="charts">
+      <div class="chart-container">
+        <h2>Product Quantities</h2>
+        <canvas id="productChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Monthly Revenue</h2>
+        <canvas id="revenueChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Revenue Share by Product</h3>
+        <canvas id="revenueShareChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Top Performing Products</h2>
+        <canvas id="topProductsChart"></canvas>
+      </div>
+    </div>
     <router-outlet></router-outlet>
   </main>
 </div>

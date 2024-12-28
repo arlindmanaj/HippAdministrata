@@ -23,7 +23,7 @@ export class ProductDashboardComponent implements OnInit {
     warehouseId: 0
   };
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(private productService: ProductService, public router: Router) {}
 
   ngOnInit(): void {
     this.loadProducts();

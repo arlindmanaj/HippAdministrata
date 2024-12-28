@@ -1,7 +1,12 @@
-
-/* Sidebar */
-.sidebar {
-    position: relative;
+/* Main Container */
+.manager-dashboard {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
     top: 0;
     left: 0;
     width: 250px;
@@ -12,81 +17,173 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Keeps content from being pushed to bottom */
-}
-
-/* Sidebar Title */
-.sidebar h1 {
+    justify-content: space-between; /* Keeps content from being pushed to the bottom */
+  }
+  
+  /* Sidebar Title */
+  .sidebar h1 {
     font-size: 20px;
     margin-bottom: 20px;
     color: #333;
-}
-
-/* Sidebar List */
-.sidebar ul {
+  }
+  
+  /* Sidebar List */
+  .sidebar ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    flex-grow: 1; /* This ensures the buttons stay near the top */
-}
-
-/* Sidebar List Items */
-.sidebar li {
+    flex-grow: 1; /* Keeps buttons near the top */
+  }
+  
+  /* Sidebar List Items */
+  .sidebar li {
     padding: 10px 15px;
     margin-bottom: 10px;
-    background-color: transparent;
-    color: #333;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-/* Sidebar Button Styling */
-.sidebar li button {
+  }
+  
+  .sidebar li button {
     background-color: #e9ecef;
     color: #333;
-    border: none !important;
+    border: none;
     padding: 10px 15px;
     border-radius: 4px;
     text-align: left;
     font-size: 16px;
     cursor: pointer;
     width: 100%;
-    outline: none !important;
     transition: background-color 0.3s, color 0.3s;
-}
-
-/* Sidebar Button Hover & Active State */
-.sidebar li button:hover,
-.sidebar li button.active {
+  }
+  
+  .sidebar li button:hover,
+  .sidebar li button.active {
     background-color: #007bff;
     color: white;
-    box-shadow: none;
-}
-
-/* Remove outline on focus */
-.sidebar li button:focus {
-    outline: none !important;
-    box-shadow: none;
-}
-
-/* Logout Button */
-.logout-button {
+  }
+  
+  .sidebar li button:focus {
+    outline: none;
+  }
+  
+  /* Logout Button */
+  .logout-button {
     background-color: #ff5c5c;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-bottom: 20px;
     transition: background-color 0.3s;
-}
-
-.logout-button:hover {
+  }
+  
+  .logout-button:hover {
     background-color: #ff3232;
-}
-
+  }
+  
+ /* Main Container */
+.manager-dashboard {
+    display: flex;
+    height: 100vh;
+  }
+  
+  
+  
+ /* Main Container */
+.manager-dashboard {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #f7f7f9;
+    color: #333;
+    padding-left: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .sidebar h1 {
+    font-size: 22px;
+    margin: 20px 0;
+  }
+  
+  .navigation {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .navigation li {
+    margin: 10px 0;
+  }
+  
+  .navigation button {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .navigation button.active {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .logout-button {
+    margin-bottom: 20px;
+    background: #dc3545;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Content Area */
+  .content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+    overflow-y: auto;
+  }
+  
+  /* Charts Section */
+  .charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .chart-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 500px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chart-container h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .chart-container canvas {
+    width: 100%;
+    height: 100%;
+  }
+  
