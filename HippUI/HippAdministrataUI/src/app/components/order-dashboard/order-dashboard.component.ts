@@ -31,6 +31,7 @@ export class OrderDashboardComponent implements OnInit {
   showAllOrders: boolean = false; // New variable to toggle All Orders view
   selectedSalesPersonId: string | null = null;
   salesPersonId: number = 0;
+  sidebarCollapsed: boolean = false;
 
   constructor(
     private salesPersonService: SalesPersonService,
@@ -213,5 +214,8 @@ export class OrderDashboardComponent implements OnInit {
     } else {
       this.activeSection = 'orders';
     }
+  }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

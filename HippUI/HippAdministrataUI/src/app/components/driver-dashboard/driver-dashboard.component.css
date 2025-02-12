@@ -1,0 +1,260 @@
+.driver-dashboard {
+    display: flex;
+    height: 100vh; /* Full height for the layout */
+    margin: 0;
+  }
+  
+  /* Sidebar Styling */
+  .sidebar {
+    width: 250px;
+    background-color: #f7f7f9;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+  }
+  
+  .sidebar h2::after {
+    content: "";
+    display: block;
+    width: 50%;
+    height: 2px;
+    background-color: #007bff;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: #e9ecef;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .sidebar li.active,
+  .sidebar li:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  /* Content Area Styling */
+  .content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    margin: 0;
+  }
+  
+  /* Logout Button Styling */
+  button.logout-btn {
+    background-color: #ff5c5c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  button.logout-btn:hover {
+    background-color: #ff3232;
+  }
+  
+  /* Recent Deliveries Section */
+  .recent-deliveries {
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .delivery-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .delivery-header {
+    width: 100%;
+    background-color: #f7f7f7;
+    border: none;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .delivery-header:hover {
+    background-color: #eaeaea;
+  }
+  
+  .delivery-details {
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+  .delivery-details p {
+    margin: 5px 0;
+  }
+  
+  /* Button Styling */
+  .assign-order-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .assign-order-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* No Deliveries Message */
+  .no-deliveries {
+    text-align: center;
+    color: #555;
+    font-size: 18px;
+  }
+  /* Driver Dashboard Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+td button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+td button:hover {
+  background-color: #0056b3;
+}
+
+td input[type="number"] {
+  padding: 8px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* No Orders Message Styling */
+.no-orders {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin: 20px 0;
+  font-family: 'Arial', sans-serif;
+}
+/* Transfer Product Section Styling */
+.transfer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between form elements */
+  padding: 20px;
+  background-color: #f7f7f9; /* Light background color */
+  border: 1px solid #ddd; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  width: 100%;
+  max-width: 500px; /* Limit width for better readability */
+  margin: 0 auto; /* Center the form */
+}
+
+.transfer-form label {
+  font-size: 14px;
+  font-weight: 600; /* Make the labels slightly bold */
+  color: #333; /* Dark text color */
+  margin-bottom: 5px;
+}
+
+.transfer-form input[type="number"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+  transition: border-color 0.3s;
+}
+
+.transfer-form input[type="number"]:focus {
+  border-color: #007bff; /* Highlight on focus */
+  outline: none;
+}
+
+.transfer-form button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase; /* Capitalize button text */
+  transition: background-color 0.3s, transform 0.2s;
+  align-self: center; /* Center the button horizontally */
+}
+
+.transfer-form button:hover {
+  background-color: #218838;
+  transform: scale(1.05); /* Slight scaling effect */
+}
+
+.transfer-form button:active {
+  background-color: #1e7e34;
+  transform: scale(1); /* Reset scale */
+}

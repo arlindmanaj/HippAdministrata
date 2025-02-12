@@ -1,364 +1,324 @@
-/* Main Dashboard Container */
+/* Import Sidebar Styles */
+@import url(../../../assets/sidebar.css);
+
+/* Adjust Content When Sidebar is Collapsed */
 .dashboard-container {
-    display: flex;
-    height: 100vh;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f5f7;
-  }
-  
-  /* Sidebar */
-  .sidebar {
-    position: relative;
-    width: 250px;
-    background-color: #f7f7f9;
-    color: #333;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Sidebar Title */
-  .sidebar h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Sidebar List */
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  /* Sidebar List Items */
-  .sidebar li {
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    background-color: transparent;
-    color: #333;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  /* Sidebar Button Styling */
-  .sidebar li button {
-    background-color: #e9ecef;
-    color: #333;
-    border: none !important; /* Force remove any border */
-    padding: 10px 15px;
-    border-radius: 4px;
-    text-align: left;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    outline: none !important; /* Ensure no outline on focus or active state */
-    box-shadow: none; /* Ensure no shadow is applied */
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  /* Sidebar Button Hover & Active State */
-  .sidebar li button:hover,
-  .sidebar li button.active {
-    background-color: #007bff;
-    color: white;
-    box-shadow: none; /* Ensure no shadow is applied during hover/active */
-  }
-  
-  /* Remove outline on focus */
-  .sidebar li button:focus {
-    outline: none !important; /* Ensure no outline when focused */
-    box-shadow: none; /* Ensure no box-shadow */
-  }
-  
-
-  
-  .logout-button {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ff5c5c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .logout-button:hover {
-    background-color: #ff3232;
-  }
-  
-  
-  
-  
-  /* Content Area */
-  .content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background-color: white;
-  }
-  
-  /* Content Header */
-  .content header h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
-  }
-  
-  /* Table Styling */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px 0;
-    background-color: white;
-  }
-  
-  table th,
-  table td {
-    text-align: left;
-    padding: 12px;
-    border: 1px solid #ddd;
-  }
-  
-  table th {
-    background-color: #e5e7eb;
-    font-weight: bold;
-  }
-  
-  /* Error Section */
-  .error-section {
-    margin-top: 15px;
-    background-color: #fee2e2;
-    color: #b91c1c;
-    padding: 10px;
-    border: 1px solid #fca5a5;
-    border-radius: 8px;
-  }
-  
-  /* Order Cards */
-  .order-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .order-header {
-    width: 100%;
-    background-color: #f7f7f7;
-    border: none;
-    text-align: left;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .order-header:hover {
-    background-color: #eaeaea;
-  }
-  
-  .order-details {
-    padding: 10px;
-    background-color: #fff;
-  }
-  
-  .order-details p {
-    margin: 5px 0;
-  }
-  
-  /* Create Order Button */
-  .create-order-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-  
-  .create-order-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Recent Orders Section */
-  .recent-orders {
-    margin: 20px 0;
-    font-family: Arial, sans-serif;
-  }
-  
-  .order-group {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .order-group h3 {
-    margin-top: 0;
-  }
-  
-  /* No Orders Message */
-  .no-orders {
-    text-align: center;
-    color: #555;
-    font-size: 18px;
-  }
-  
-  /* Modal Styling */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    background: #ffffff;
-    padding: 25px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 450px;
-    text-align: center;
-    font-family: "Arial", sans-serif;
-  }
-  
-  .modal-content h2 {
-    margin-bottom: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .form-group input,
-  .form-group select {
-    width: calc(100% - 10px);
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-  }
-  
-  .add-product-btn {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    background-color: #28a745;
-    color: white;
-    font-size: 14px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .add-product-btn:hover {
-    background-color: #218838;
-  }
-  
-  .submit-btn {
-    background-color: #007bff;
-    color: white;
-    font-size: 14px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 48%;
-  }
-  
-  .submit-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  .cancel-btn {
-    background-color: #dc3545;
-    color: white;
-    font-size: 14px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 48%;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #c82333;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
-  .selection-section {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px; /* Adds space between dropdowns */
+  display: flex;
+  height: 100vh;
+  margin-left: 250px; /* Adjusted for sidebar */
+  transition: margin-left 0.3s ease;
 }
 
-.dropdown {
-    display: flex;
-    flex-direction: column;
+/* When Sidebar is Collapsed */
+.sidebar.collapsed + .dashboard-container {
+  margin-left: 60px;
 }
 
-.dropdown label {
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
+/* Content Area */
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: white;
+  width: calc(100% - 250px); /* Adjust width dynamically */
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
-.dropdown select {
-    padding: 8px 12px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200px;
+/* Content expands when sidebar collapses */
+.sidebar.collapsed + .dashboard-container .content {
+  width: calc(100% - 60px);
 }
+
+/* Sidebar Navigation */
+.navigation {
+  list-style: none;
+  padding: 0;
+}
+
+
+
+
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background-color: white;
+}
+
+table th, table td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+table th {
+  background-color: #e5e7eb;
+  font-weight: bold;
+}
+
+/* Error Section */
+.error-section {
+  margin-top: 15px;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 10px;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+}
+
+/* Order Cards */
+.order-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  width: 100%;
+  background-color: #f7f7f7;
+  border: none;
+  text-align: left;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-header:hover {
+  background-color: #eaeaea;
+}
+
+.order-details {
+  padding: 10px;
+  background-color: #fff;
+}
+
+.order-details p {
+  margin: 5px 0;
+}
+
+/* Create Order Button */
+.create-order-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.create-order-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Recent Orders Section */
+.recent-orders {
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+}
+
+.order-group {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.order-group h3 {
+  margin-top: 0;
+}
+
+/* No Orders Message */
+.no-orders {
+  text-align: center;
+  color: #555;
+  font-size: 18px;
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 450px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form Inputs */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}
+
+/* Buttons */
+.add-product-btn, .submit-btn, .cancel-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  font-size: 14px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Green Button */
+.add-product-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.add-product-btn:hover {
+  background-color: #218838;
+}
+
+/* Blue Submit Button */
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Red Cancel Button */
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+
+
+/* Selection Section */
+.selection-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown Container */
 .dropdown-container {
-    display: flex;
-    gap: 1rem; /* Optional: adds space between the dropdowns */
-    width: 100%; /* Ensures the container takes up all available space */
-  }
-  
-  .dropdown-container select {
-    flex: 1; /* Each dropdown takes an equal amount of space */
-    padding: 0.5rem; /* Optional: adds padding inside the dropdowns */
-    font-size: 1rem; /* Optional: adjusts font size */
-  }
-  
-  
+  display: flex;
+  width: 100%;
+  gap: 10px; /* Adjust spacing between dropdowns */
+  justify-content: center; /* Center them */
+  align-items: center;
+}
 
-  
+/* Dropdown Labels */
+.dropdown label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+}
+
+/* Dropdown Styling */
+.dropdown-container select {
+  flex: 1; /* Make all dropdowns take equal space */
+  width: 100%; /* Ensure they take full width */
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover & Focus Effects */
+.dropdown-container select:hover,
+.dropdown-container select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Ensure dropdowns are fully stretched */
+.dropdown-container select {
+  flex-grow: 1;
+  max-width: none;
+  min-width: 200px; /* Set a minimum width for small screens */
+}
+/* Responsive Fixes */
+@media screen and (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .selection-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dropdown-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dropdown-container select {
+    width: 100%; /* Full width on smaller screens */
+  }
+}

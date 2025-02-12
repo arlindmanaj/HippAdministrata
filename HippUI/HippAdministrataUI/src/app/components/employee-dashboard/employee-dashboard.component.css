@@ -34,8 +34,7 @@
     color: #333;
     margin-bottom: 10px;
   }
-  
-    .sidebar h2 {
+  .sidebar h2 {
     font-size: 24px; /* Larger font size */
     font-weight: 700; /* Bold the text for better emphasis */
     color: #333; /* Dark color for readability */
@@ -46,6 +45,7 @@
     
     text-align: center; /* Center-align the "Menu" text */
     }
+
 
     /* Optional: Adding a subtle underline effect */
     .sidebar h2::after {

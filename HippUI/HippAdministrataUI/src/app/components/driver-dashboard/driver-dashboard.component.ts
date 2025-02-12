@@ -20,24 +20,26 @@ export class DriverDashboardComponent implements OnInit {
     sourceWarehouseId: 0,
     destinationWarehouseId: 0,
   };
+  activeSection: string = 'assignedOrders'; // Default section
 
-  constructor(private driverService: DriverService, private router: Router) { }
+  constructor(private driverService: DriverService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadDriverAssignedOrders(this.driverId);
   }
 
-
-
+  showSection(section: string): void {
+    this.activeSection = section;
+  }
 
   loadDriverAssignedOrders(driverId: number): void {
     this.driverService.getDriverAssignedOrders(driverId).subscribe(
       (orders) => {
-        const formattedOrders = orders.map(order => ({
+        const formattedOrders = orders.map((order) => ({
           ...order,
           orderStatusDisplay: order.orderStatusDescription, // Use utility function
-          productName: order.productName
-        }))
+          productName: order.productName,
+        }));
         this.assignedOrders = formattedOrders;
       },
       (error) => {
@@ -56,11 +58,10 @@ export class DriverDashboardComponent implements OnInit {
       },
       (error) => {
         console.error('Failed to simulate shipping:', error);
-        alert('Failed to simulate shipping.');
+        
       }
     );
   }
-
 
   transferProduct(): void {
     const { productId, sourceWarehouseId, destinationWarehouseId } = this.transferData;
@@ -88,8 +89,7 @@ export class DriverDashboardComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('authToken');
-
-
     this.router.navigate(['/login']);
   }
 }
+

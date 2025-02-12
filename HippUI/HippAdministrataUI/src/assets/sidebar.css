@@ -1,0 +1,157 @@
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* Expanded width */
+    height: 100vh;
+    background-color: #f7f7f9;
+    color: #333;
+    padding-left: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: width 0.3s ease; /* Smooth transition for width change */
+}
+
+/* Sidebar collapsed state */
+.sidebar.collapsed {
+    width: 60px; /* Collapsed width */
+    padding-left: 10px;
+}
+
+/* Sidebar Title */
+.sidebar h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Hide title when sidebar is collapsed */
+.sidebar.collapsed h1 {
+    display: none;
+}
+
+/* Sidebar Navigation */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+/* Hide navigation items when sidebar is collapsed */
+.sidebar.collapsed ul {
+    display: none;
+}
+
+/* Sidebar List Items */
+.sidebar li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}
+
+/* Sidebar Buttons */
+.sidebar li button {
+    background-color: #e9ecef;
+    color: #333;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Sidebar button hover & active state */
+.sidebar li button:hover,
+.sidebar li button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.sidebar li button:focus {
+    outline: none;
+}
+
+/* Sidebar Section Title */
+.sidebar h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+.sidebar h2::after {
+    content: "";
+    display: block;
+    width: 50%;
+    height: 2px;
+    background-color: #007bff;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hide section title when sidebar is collapsed */
+.sidebar.collapsed h2 {
+    display: none;
+}
+
+/* Adjust Content Area when Sidebar Collapses */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    transition: margin-left 0.3s ease; 
+    margin-left: 250px; /* Default margin */
+}
+
+/* When Sidebar is Collapsed */
+.sidebar.collapsed + .dashboard-container {
+    margin-left: 60px;
+}
+
+/* Content Area */
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    width: calc(100% - 250px); /* Default width */
+    transition: width 0.3s ease, margin-left 0.3s ease;
+}
+/* Content expands when sidebar collapses */
+.sidebar.collapsed + .dashboard-container .content {
+    width: calc(100% - 60px);
+}
+
+/* Logout Button */
+.logout-button {
+    background-color: #e9ecef;
+    color: black;
+    border: solid 0.1mm #fe1818;
+    padding: 10px 15px;
+    align-self: center; 
+    min-width: 80px; 
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+/* Adjust logout button for collapsed state */
+.sidebar.collapsed .logout-button {
+    display: none; /* Adjust width when collapsed */
+    text-align: center;
+}
+
+/* Logout Button hover */
+.logout-button:hover {
+    background-color: #fe1818;
+}

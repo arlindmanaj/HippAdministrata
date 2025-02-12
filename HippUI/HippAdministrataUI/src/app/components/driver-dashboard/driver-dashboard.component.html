@@ -1,43 +1,58 @@
 <div class="driver-dashboard">
-  <h1>Driver Dashboard</h1>
-
-  <h2>Assigned Orders</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Order ID</th>
-        <th>Product</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of assignedOrders">
-        <td>{{ order.id }}</td>
-        <td>{{ order.productName }}</td>
-        <td>{{ order.orderStatusDescription }}</td>
-        <td>
-          <button *ngIf="order.orderStatusId === 4" (click)="simulateShipping(order.id)">
-            Simulate Shipping
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2>Transfer Product Between Warehouses</h2>
-  <div class="transfer-form">
-    <label for="productId">Product ID:</label>
-    <input type="number" [(ngModel)]="transferData.productId" placeholder="Enter Product ID" />
-
-    <label for="sourceWarehouseId">Source Warehouse ID:</label>
-    <input type="number" [(ngModel)]="transferData.sourceWarehouseId" placeholder="Enter Source Warehouse ID" />
-
-    <label for="destinationWarehouseId">Destination Warehouse ID:</label>
-    <input type="number" [(ngModel)]="transferData.destinationWarehouseId"
-      placeholder="Enter Destination Warehouse ID" />
-
-    <button (click)="transferProduct()">Transfer Product</button>
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+      <li (click)="showSection('assignedOrders')" [class.active]="activeSection === 'assignedOrders'">Assigned Orders</li>
+      <li (click)="showSection('transferProduct')" [class.active]="activeSection === 'transferProduct'">Transfer Product</li>
+    </ul>
+    <button class="logout-btn" (click)="logout()">Logout</button>
   </div>
-  <button (click)="logout()">Logout</button>
+
+  <div class="content">
+    <!-- Assigned Orders Section -->
+    <div *ngIf="activeSection === 'assignedOrders'">
+      <h1>Driver Dashboard</h1>
+      <h2>Assigned Orders</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of assignedOrders">
+            <td>{{ order.id }}</td>
+            <td>{{ order.productName }}</td>
+            <td>{{ order.orderStatusDescription }}</td>
+            <td>
+              <button *ngIf="order.orderStatusDescription === 'Ready For Shipping'" (click)="simulateShipping(order.id)">
+                Simulate Shipping
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Transfer Product Section -->
+    <div *ngIf="activeSection === 'transferProduct'">
+      <h2>Transfer Product Between Warehouses</h2>
+      <div class="transfer-form">
+        <label for="productId">Product ID:</label>
+        <input type="number" [(ngModel)]="transferData.productId" placeholder="Enter Product ID" />
+
+        <label for="sourceWarehouseId">Source Warehouse ID:</label>
+        <input type="number" [(ngModel)]="transferData.sourceWarehouseId" placeholder="Enter Source Warehouse ID" />
+
+        <label for="destinationWarehouseId">Destination Warehouse ID:</label>
+        <input type="number" [(ngModel)]="transferData.destinationWarehouseId"
+          placeholder="Enter Destination Warehouse ID" />
+
+        <button (click)="transferProduct()">Transfer Product</button>
+      </div>
+    </div>
+  </div>
 </div>
