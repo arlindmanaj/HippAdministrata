@@ -1,57 +1,77 @@
 <div class="driver-dashboard">
-  <div class="sidebar">
-    <h2>Menu</h2>
-    <ul>
-      <li (click)="showSection('assignedOrders')" [class.active]="activeSection === 'assignedOrders'">Assigned Orders</li>
-      <li (click)="showSection('transferProduct')" [class.active]="activeSection === 'transferProduct'">Transfer Product</li>
-    </ul>
-    <button class="logout-btn" (click)="logout()">Logout</button>
-  </div>
-
-  <div class="content">
-    <!-- Assigned Orders Section -->
-    <div *ngIf="activeSection === 'assignedOrders'">
-      <h1>Driver Dashboard</h1>
-      <h2>Assigned Orders</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Product</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of assignedOrders">
-            <td>{{ order.id }}</td>
-            <td>{{ order.productName }}</td>
-            <td>{{ order.orderStatusDescription }}</td>
-            <td>
-              <button *ngIf="order.orderStatusDescription === 'Ready For Shipping'" (click)="simulateShipping(order.id)">
-                Simulate Shipping
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed" >
+    <div class="sidebar-header">
+      <img class="logo" 
+     [src]="sidebarCollapsed ? 'https://res.cloudinary.com/dhpok6wna/image/upload/c_crop,w_200,h_250/v1739372570/Untitled_design__2_-removebg-preview_qk06l1.png' 
+                             : 'https://res.cloudinary.com/dpha0wzqx/image/upload/v1739367747/full_photo-removebg-preview_dbmpcf.png'" 
+     alt="HIPP Logo">
+      <button id="toggle-sidebar" (click)="toggleSidebar()">
+        <img [src]="sidebarCollapsed ? 'https://res.cloudinary.com/dpha0wzqx/image/upload/c_pad,w_24,h_24/v1739367333/sidebar_znafqx.png' 
+        : 'https://res.cloudinary.com/dpha0wzqx/image/upload/c_pad,w_24,h_24/v1739367333/sidebar_1_brovsh.png'" 
+        alt="Toggle Sidebar">
+      </button>
     </div>
+    <h2>Driver Dashboard</h2>
+    <ul>
+      <li >
+      <button (click)="showSection('assignedOrders')" [class.active]="activeSection === 'assignedOrders'">
+        Assigned Orders
+      </button>
+      </li>
+      <li>
+        <button (click)="showSection('transferProduct')" [class.active]="activeSection === 'transferProduct'">
+          Transfer Product
+        </button>
+      </li>
+    </ul>
+    <button class="logout-button" (click)="logout()"><img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt=""><span class="tooltip">Log out</span></button>
+  </aside>
 
-    <!-- Transfer Product Section -->
-    <div *ngIf="activeSection === 'transferProduct'">
-      <h2>Transfer Product Between Warehouses</h2>
-      <div class="transfer-form">
-        <label for="productId">Product ID:</label>
-        <input type="number" [(ngModel)]="transferData.productId" placeholder="Enter Product ID" />
-
-        <label for="sourceWarehouseId">Source Warehouse ID:</label>
-        <input type="number" [(ngModel)]="transferData.sourceWarehouseId" placeholder="Enter Source Warehouse ID" />
-
-        <label for="destinationWarehouseId">Destination Warehouse ID:</label>
-        <input type="number" [(ngModel)]="transferData.destinationWarehouseId"
-          placeholder="Enter Destination Warehouse ID" />
-
-        <button (click)="transferProduct()">Transfer Product</button>
+  <div class="dashboard-container">
+    <div class="content">
+      <!-- Assigned Orders Section -->
+      <div *ngIf="activeSection === 'assignedOrders'">
+        <h2>Assigned Orders</h2>
+          <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of assignedOrders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productName }}</td>
+              <td>{{ order.orderStatusDescription }}</td>
+              <td>
+                <button *ngIf="order.orderStatusDescription === 'Ready For Shipping'" (click)="simulateShipping(order.id)">
+                  Simulate Shipping
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Transfer Product Section -->
+      <div *ngIf="activeSection === 'transferProduct'">
+        <h2>Transfer Product Between Warehouses</h2>
+        <div class="transfer-form">
+          <label for="productId">Product ID:</label>
+          <input type="number" [(ngModel)]="transferData.productId" placeholder="Enter Product ID" />
+  
+          <label for="sourceWarehouseId">Source Warehouse ID:</label>
+          <input type="number" [(ngModel)]="transferData.sourceWarehouseId" placeholder="Enter Source Warehouse ID" />
+  
+          <label for="destinationWarehouseId">Destination Warehouse ID:</label>
+          <input type="number" [(ngModel)]="transferData.destinationWarehouseId"
+            placeholder="Enter Destination Warehouse ID" />
+  
+          <button (click)="transferProduct()">Transfer Product</button>
+        </div>
       </div>
     </div>
   </div>

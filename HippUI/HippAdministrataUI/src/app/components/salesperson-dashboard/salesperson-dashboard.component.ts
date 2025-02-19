@@ -23,6 +23,8 @@ export class SalespersonDashboardComponent implements OnInit {
   selectedOrder: any = null;
   isModalOpen = false;
   activeSection: string = 'orders'; // Default active section
+  sidebarCollapsed: boolean = false;
+
 
   constructor(
     private userService: UserService,
@@ -166,5 +168,8 @@ export class SalespersonDashboardComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
 
 }

@@ -14,13 +14,17 @@ import { CommonModule } from '@angular/common';
 export class ProductDashboardComponent implements OnInit {
   products: any[] = [];
   activeSection: string = 'createProduct';
+  sidebarCollapsed: boolean = false;
+
   newProduct = {
     name: '',
     unlabeledQuantity: 0,
     labeledQuantity: 0,
     price: 0,
     pricePercentageForEmployee: 0,
-    warehouseId: 0
+    warehouseId: 0.
+    
+    
   };
 
   constructor(private productService: ProductService, public router: Router) {}
@@ -84,5 +88,16 @@ export class ProductDashboardComponent implements OnInit {
       },
       (error) => console.error('Failed to delete product:', error)
     );
+  }
+    // Logout method
+    logout() {
+      // Perform any logout logic (like clearing session or tokens)
+      console.log('Logging out...');
+  
+      // Redirect to the login page or another route if needed
+      this.router.navigate(['/login']);  // Adjust the route as needed
+    }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

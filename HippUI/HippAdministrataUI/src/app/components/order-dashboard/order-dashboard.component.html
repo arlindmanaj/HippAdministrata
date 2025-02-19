@@ -1,7 +1,17 @@
 <div class="dashboard-wrapper">
   <!-- Sidebar -->
   <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
-    <button id="toggle-sidebar" (click)="toggleSidebar()">Toggle Sidebar</button>
+    <div class="sidebar-header">
+      <img class="logo" 
+     [src]="sidebarCollapsed ? 'https://res.cloudinary.com/dhpok6wna/image/upload/c_crop,w_200,h_250/v1739372570/Untitled_design__2_-removebg-preview_qk06l1.png' 
+                             : 'https://res.cloudinary.com/dpha0wzqx/image/upload/v1739367747/full_photo-removebg-preview_dbmpcf.png'" 
+     alt="HIPP Logo">
+      <button id="toggle-sidebar" (click)="toggleSidebar()">
+        <img [src]="sidebarCollapsed ? 'https://res.cloudinary.com/dpha0wzqx/image/upload/c_pad,w_24,h_24/v1739367333/sidebar_znafqx.png' 
+        : 'https://res.cloudinary.com/dpha0wzqx/image/upload/c_pad,w_24,h_24/v1739367333/sidebar_1_brovsh.png'" 
+alt="Toggle Sidebar">
+      </button>
+    </div>
     <h2>Manager Dashboard</h2>
     <ul>
       <li>
@@ -20,84 +30,188 @@
         </button>
       </li>
     </ul>
-    <button class="logout-button" (click)="logout()">Logout</button>
+    <button class="logout-button" (click)="logout()"><img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt=""><span class="tooltip">Log out</span></button>
   </aside>
 
   <!-- Main Content Area -->
   <div class="dashboard-container">
     <div class="content">
-      <header>
+      <header style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Order Dashboard</h1>
+        <button  class="button-6" (click)="clearPage()">Clear Page</button>
+        
       </header>
-
+      
       <main>
         <!-- Selection Dropdowns -->
         <div class="dropdown-container">
-          <!-- Client Dropdown -->
-          <select id="clientDropdown" (change)="loadClientOrders($event)">
-            <option value="" disabled selected>Select a Client</option>
-            <option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</option>
-          </select>
+          <div class="dropdown-row">
+            <!-- Client Dropdown -->
+            <select id="clientDropdown" (change)="loadClientOrders($event)">
+              <option value="" disabled selected>Select a Client</option>
+              <option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</option>
+            </select>
 
-          <!-- SalesPerson Dropdown -->
-          <select id="salesPersonDropdown" (change)="loadSalesPersonTasks(salesPersonId)">
-            <option value="" disabled selected>Select a SalesPerson</option>
-            <option *ngFor="let salesPerson of salesPersons" [value]="salesPerson.id">{{ salesPerson.name }}</option>
-          </select>
+            <!-- SalesPerson Dropdown -->
+            <select id="salesPersonDropdown" (change)="loadSalesPersonTasks($event)">
+              <option value="" disabled selected>Select a SalesPerson</option>
+              <option *ngFor="let salesPerson of salesPersons" [value]="salesPerson.id">{{ salesPerson.name }}</option>
+            </select>
+
+            
+          </div>
+          
+          <div class="search-row">
+            <input type="number" [(ngModel)]="searchOrderId" (input)="handleSearch('order')" placeholder="Search by Order ID">
+            <input type="number" [(ngModel)]="searchProductId" (input)="handleSearch('product')" placeholder="Search by Product ID">
+          </div>
+          <div class="checkbox-wrapper-2"> 
+            <label class="checkbox-label">
+              <input type="checkbox" class="sc-gJwTLC ikxBAC" [(ngModel)]="combineSearch" (change)="resetSearch()"> 
+              Combine Searches
+            </label>
+
+          </div>
+          
         </div>
 
         <!-- Orders for SalesPerson -->
-        <section *ngIf="salesPersonsOrders.length" class="orders-section">
-          <h3>Orders for SalesPerson</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let order of salesPersonsOrders">
-                <td>{{ order.id }}</td>
-                <td>{{ order.productName }}</td>
-                <td>{{ order.quantity }}</td>
-                <td>{{ getOrderStatusLabel(order.orderStatus) }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
+          <section 
+          *ngIf="salesPersonsOrders.length > 0 || isFadingOut"[ngClass]="{
+            'fade-in':salesPersonsOrders.length > 0,
+            'fade-out': isFadingOut
+          }" class="orders-section" >
+            <h3>Orders for SalesPerson</h3>
+            <button (click)="toggleSelectAll()" class="button-6">
+              {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+            </button>
+            
+            <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+            <table>
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Order ID</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Print</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of salesPersonsOrders">
+                  <td>
+                    <input type="checkbox" [checked]="selectedOrders.includes(order.id)" (change)="toggleOrderSelection(order.id)" />
+                  </td>
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.productName }}</td>
+                  <td>{{ order.quantity }}</td>
+                  <td>{{ getOrderStatusLabel(order.orderStatusId) }}</td>
+                  <td>
+                    <button class="printButton" (click)="printOrder(order, 'salesPerson')">🖨️</button>
+
+                  </td>                  
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+
+        <section 
+        *ngIf="filteredOrders.length > 0 || isFadingOut" 
+        [ngClass]="{
+          'fade-in': filteredOrders.length > 0, 
+          'fade-out': isFadingOut
+        }">
+        <h3>Filtered Orders</h3>
+        <button (click)="toggleSelectAll()" class="button-6">
+          {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+        </button>
+        
+        <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+        <table>
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>Order ID</th>
+              <th>Product ID</th>
+              <th>Quantity</th>
+              <th>Status</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of filteredOrders">
+              <td>
+                <input type="checkbox" [checked]="selectedOrders.includes(order.id)" (change)="toggleOrderSelection(order.id)" />
+              </td>
+              <td>{{ order.id }}</td>
+              <td>{{ order.productId }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ getOrderStatusLabel(order.orderStatusId) }}</td>
+              <td>
+                <button class="printButton" (click)="printOrder(order, 'filtered')">🖨️</button>
+
+              </td>              
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      
+
 
         <!-- Orders for Client -->
-        <section *ngIf="selectedClientId && clientOrders.length" class="client-orders-section">
+        <section *ngIf="clientOrders.length > 0 || isFadingOut"[ngClass]="{
+          'fade-in':clientOrders.length > 0,
+          'fade-out': isFadingOut
+        }" class="client-orders-section">
           <h3>Orders for Client ID: {{ selectedClientId }}</h3>
+          <button (click)="toggleSelectAll()" class="button-6">
+            {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+          </button>
+          
+          <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+
           <table>
             <thead>
               <tr>
+                <th>Select</th>
                 <th>Order ID</th>
                 <th>Product</th>
                 <th>Quantity</th>
                 <th>Status</th>
+                <th>Print</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let order of clientOrders">
+                <td>
+                  <input type="checkbox" [checked]="selectedOrders.includes(order.id)" (change)="toggleOrderSelection(order.id)" />
+                </td>
                 <td>{{ order.id }}</td>
                 <td>{{ order.productId }}</td>
                 <td>{{ order.quantity }}</td>
-                <td>{{ getOrderStatusLabel(order.orderStatus) }}</td>
+                <td>{{ getOrderStatusLabel(order.orderStatusId) }}</td>
+                <td>
+                  <button class="printButton" (click)="printOrder(order, 'client')">🖨️</button>
+
+                </td>
+                
+
               </tr>
             </tbody>
           </table>
         </section>
 
-        <!-- All Orders List -->
         <section *ngIf="showAllOrders" class="all-orders-section" [ngClass]="{'active': activeSection === 'allOrders'}">
           <h2>All Orders</h2>
+          <button (click)="selectAllOrders()" class="button-6">Select All</button>
+          <button (click)="confirmDelete()" class="button-6" >Delete Selected</button>
+        
           <table>
             <thead>
               <tr>
+                <th>Select</th>
                 <th>Order ID</th>
                 <th>Product ID</th>
                 <th>Quantity</th>
@@ -107,10 +221,13 @@
             </thead>
             <tbody>
               <tr *ngFor="let order of orders">
+                <td>
+                  <input type="checkbox" [checked]="selectedOrders.includes(order.id)" (change)="toggleOrderSelection(order.id)" />
+                </td>
                 <td>{{ order.id }}</td>
                 <td>{{ order.productId }}</td>
                 <td>{{ order.quantity }}</td>
-                <td>{{ getOrderStatusLabel(order.orderStatus) }}</td>
+                <td>{{ getOrderStatusLabel(order.orderStatusId) }}</td>
                 <td>
                   <button (click)="deleteOrder(order.id)">Delete</button>
                 </td>
@@ -118,6 +235,20 @@
             </tbody>
           </table>
         </section>
+        
+        <!-- Confirmation Modal -->
+        <div *ngIf="showDeleteModal" class="modal">
+          <div class="modal-content">
+            <h3>Confirm Deletion</h3>
+            <p>Enter the manager password to delete selected orders:</p>
+            <input type="password" [(ngModel)]="managerPassword" placeholder="Enter password" />
+            <div class="modal-buttons">
+              <button (click)="deleteSelectedOrders()">Confirm</button>
+              <button (click)="cancelDelete()">Cancel</button>
+            </div>
+          </div>
+        </div>
+        
 
         <!-- Error Message -->
         <section *ngIf="errorMessage" class="error-section">

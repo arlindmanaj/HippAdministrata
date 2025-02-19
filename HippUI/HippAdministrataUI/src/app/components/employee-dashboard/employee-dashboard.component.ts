@@ -17,6 +17,8 @@ export class EmployeeDashboardComponent implements OnInit {
   animatedTotalPay: number = 0; // Animated total pay for smooth transition
   labelingQuantity: { [key: number]: number } = {}; // Quantity input for each order
   employeeId: number = Number(localStorage.getItem('roleSpecificId')); // Employee ID from storage
+  sidebarCollapsed: boolean = false;
+
 
 
 
@@ -99,5 +101,8 @@ export class EmployeeDashboardComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
+  }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

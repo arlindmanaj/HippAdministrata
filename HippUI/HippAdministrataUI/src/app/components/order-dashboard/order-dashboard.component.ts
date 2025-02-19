@@ -8,13 +8,32 @@ import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
 import { getOrderStatusLabel } from '../../../services/order-status.util';
 import { FormsModule } from '@angular/forms';
+import { ProductService } from '../../../services/product.service';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+
+
+
 
 @Component({
   selector: 'app-order-dashboard',
   templateUrl: './order-dashboard.component.html',
   styleUrls: ['./order-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  
+  imports: [CommonModule, FormsModule],
+  animations: [
+    trigger('fadeTable', [
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0, transform: 'scale(0.9)' }))
+      ]),
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.9)' }),
+        animate('500ms ease-in', style({ opacity: 1, transform: 'scale(1)' }))
+      ])
+    ])
+  ]
 
 })
 export class OrderDashboardComponent implements OnInit {
@@ -32,11 +51,30 @@ export class OrderDashboardComponent implements OnInit {
   selectedSalesPersonId: string | null = null;
   salesPersonId: number = 0;
   sidebarCollapsed: boolean = false;
+  filteredOrders: any[] = [];
+  searchQuery: string = '';
+  startDate: string = '';
+  endDate: string = '';
+  sortColumn: string = 'id';
+  sortAscending: boolean = true;
+  currentPage: number = 1;
+  ordersPerPage: number = 10;
+  sortedColumn: string = 'id';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  searchTerm: string = '';
+  selectedOrders: any[] = [];
+  filteredProducts: any[] = [];
+  isFadingOut: boolean = false;
+  loggedInUser: string | undefined;
+  private jwtHelper = new JwtHelperService();
+
+
 
   constructor(
     private salesPersonService: SalesPersonService,
     private userService: UserService,
     private clientService: ClientService,
+    private productService: ProductService,
     private orderService: OrderService,
     public router: Router,
     private cdr: ChangeDetectorRef // Add this
@@ -48,20 +86,55 @@ export class OrderDashboardComponent implements OnInit {
     this.loadEmployees();
     this.loadDrivers();
     this.loadSalesPersons();
+
+      const token = localStorage.getItem('authToken'); // Retrieve the token with the correct key
+    
+      if (token) {
+        try {
+          const decodedToken = this.jwtHelper.decodeToken(token);
+          console.log(decodedToken); // Log the decoded token to the console
+        } catch (error) {
+          console.error('Invalid token', error);
+        }
+      } else {
+        console.log('No token found in localStorage');
+      }
+    
+    
+  
+
   }
 
+  
   loadOrders(): void {
     this.orderService.getOrders().subscribe(
       (orders) => {
-        this.orders = orders; // Update the orders array with the latest data
-        this.cdr.detectChanges(); // Trigger change detection
+        console.log('Fetched Orders:', orders); // Debugging line
+        this.orders = orders;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Failed to load orders:', error);
       }
     );
+    
+    
   }
 
+  getProductName(productId: number): Promise<string> {
+    return new Promise((resolve) => {
+      this.productService.getProductById(productId).subscribe(
+        (product) => resolve(product?.name || "Unknown Product"),
+        (error) => {
+          console.error(`Error fetching product name for ID ${productId}:`, error);
+          resolve("Unknown Product");
+        }
+      );
+    });
+  }
+  
+
+  
 
   deleteOrder(orderId: number): void {
     if (confirm('Are you sure you want to delete this order?')) {
@@ -102,13 +175,6 @@ export class OrderDashboardComponent implements OnInit {
     );
   }
 
-  // loadClientOrders(clientId: number): void {
-  //   this.selectedClientId = clientId;
-  //   this.clientService.getOrdersByClientId(clientId).subscribe(
-  //     (data) => (this.clientOrders = data),
-  //     (error) => (this.errorMessage = 'Failed to load client orders')
-  //   );
-  // }
   loadClientOrders(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const selectedClientId = Number(target.value);
@@ -156,15 +222,18 @@ export class OrderDashboardComponent implements OnInit {
       (error) => console.error('Failed to load drivers:', error)
     );
   }
-  getOrderStatusLabel(status: number | string): string {
-    // If the status is already a string, return it
-    if (typeof status === 'string') {
-      return status;
-    }
 
-    // Convert numeric status to the corresponding string value
-    return OrderStatus[status] || 'Unknown';
+
+  getOrderStatusLabel(status: number | string): string {
+    
+    if (typeof status === "number") {
+      return OrderStatus[status] ?? "Unknown";
+    } else if (typeof status === "string") {
+      return Object.values(OrderStatus).includes(status) ? status : "Unknown";
+    }
+    return "Unknown";
   }
+  
   loadSalesPersons(): void {
     this.userService.getAllSalesPersons().subscribe(
       (data) => (this.salesPersons = data),
@@ -172,13 +241,35 @@ export class OrderDashboardComponent implements OnInit {
     );
   }
 
-  loadSalesPersonTasks(salesPersonId: number): void {
-    this.salesPersonId = salesPersonId
-    this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
-      (data) => (this.salesPersonsOrders = data),
-      (error) => console.error('Failed to load salesperson tasks:', error)
-    );
+  loadSalesPersonTasks(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedSalesPersonId = Number(target.value);
+  
+    if (selectedSalesPersonId) {
+      this.salesPersonId = selectedSalesPersonId;
+      this.clientOrders = []; // Clear Client orders
+      this.showAllOrders = false; // Hide All Orders
+      this.activeSection = 'orders'; // Ensure the correct section is shown
+  
+      // Fetch orders for the selected salesperson
+      this.salesPersonService.getOrdersBySalesPersonId(selectedSalesPersonId).subscribe(
+        (data) => (this.salesPersonsOrders = data),
+        (error) => console.error('Failed to load salesperson tasks:', error)
+      );
+      this.salesPersonService.getOrdersBySalesPersonId(selectedSalesPersonId).subscribe(
+        (data) => {
+          console.log("Sales Person Orders:", data); // Debugging
+          this.salesPersonsOrders = data;
+        },
+        (error) => console.error('Failed to load salesperson tasks:', error)
+      );
+      
+    } else {
+      this.salesPersonsOrders = [];
+    }
   }
+  
+
 
   // Add this to your class
   activeSection: string = 'orders'; // Default section on page load
@@ -190,8 +281,87 @@ export class OrderDashboardComponent implements OnInit {
   roles: string[] = ['SalesPerson', 'Driver', 'Employee'];
   filteredPeople: any[] = [];
 
+  filterOrders(): void {
+    this.filteredOrders = this.orders.filter(order => {
+      const searchLower = this.searchTerm.toLowerCase();
+  
+      return (
+        order.id.toString().includes(searchLower) ||  // ✅ Search by Order ID
+        order.productId?.toString().toLowerCase().includes(searchLower) ||  // ✅ Search by Product Name
+        order.clientName?.toLowerCase().includes(searchLower) ||  // ✅ Search by Client Name
+        this.getOrderStatusLabel(order.orderStatus).toLowerCase().includes(searchLower)  // ✅ Search by Status
+      );
+    });
+    console.log('Filtered Orders:', this.filteredOrders);
 
+    this.currentPage = 1;  // Reset pagination after filtering
+  }
+  
+  
+  sortOrders(column: string): void {
+    if (this.sortedColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortedColumn = column;
+      this.sortDirection = 'asc';
+    }
+  
+    this.filteredOrders.sort((a, b) => {
+      const valA = a[column];
+      const valB = b[column];
+  
+      return this.sortDirection === 'asc' ? valA - valB : valB - valA;
+    });
+  }
 
+    searchByOrderId(event: Event): void {
+      const target = event.target as HTMLInputElement;
+      const searchId = Number(target.value);
+      
+      this.filteredOrders = !isNaN(searchId)
+        ? this.orders.filter(order => order.id === searchId)
+        : [];
+    }
+    
+    searchByProductId(event: Event): void {
+      const target = event.target as HTMLInputElement;
+      const searchId = Number(target.value);
+      
+      this.filteredProducts = !isNaN(searchId)
+        ? this.orders.filter(order => order.productId === searchId)
+        : [];
+    }
+    searchOrderId: number | null = null;
+searchProductId: number | null = null;
+combineSearch: boolean = false;
+
+searchOrders(): void {
+  // Convert input values to numbers
+  const orderId = this.searchOrderId ? Number(this.searchOrderId) : null;
+  const productId = this.searchProductId ? Number(this.searchProductId) : null;
+
+  // If both inputs are empty, reset the filtered list
+  if (!orderId && !productId) {
+    this.filteredOrders = [];
+    return;
+  }
+
+  if (this.combineSearch) {
+    // Show only orders that match BOTH Order ID & Product ID
+    this.filteredOrders = this.orders.filter(order =>
+      (!orderId || order.id === orderId) &&
+      (!productId || order.productId === productId)
+    );
+  } else {
+    // Show orders that match EITHER Order ID OR Product ID
+    this.filteredOrders = this.orders.filter(order =>
+      (orderId && order.id === orderId) ||
+      (productId && order.productId === productId)
+    );
+  }
+}
+
+    
 
   // Logout method
   logout() {
@@ -201,6 +371,247 @@ export class OrderDashboardComponent implements OnInit {
     // Redirect to the login page or another route if needed
     this.router.navigate(['/login']);  // Adjust the route as needed
   }
+  handleSearch(type: 'order' | 'product'): void {
+    if (!this.combineSearch) {
+      if (type === 'order') {
+        this.searchProductId = null; // Clear Product ID search
+      } else if (type === 'product') {
+        this.searchOrderId = null; // Clear Order ID search
+      }
+    }
+  
+    this.searchOrders(); // Run search logic
+  }
+  
+  // Reset search when checkbox is toggled
+  resetSearch(): void {
+    if (!this.combineSearch) {
+      this.searchOrderId = null;
+      this.searchProductId = null;
+      this.filteredOrders = [];
+    }
+  }
+  
+  
+      
+  getProductIdByName(productName: string): Promise<number | null> {
+    return this.productService.getAllProducts().toPromise().then((products) => {
+      // Check if products is defined and contains items
+      if (products && Array.isArray(products)) {
+        // Make sure you are using the correct field for the name
+        const product = products.find(p => p.productName === productName || p.name === productName); // Using "name" or "productName"
+        
+        if (product) {
+          console.log('Product found:', product);  // Debugging: Check if we found the product
+          return product.id;
+        } else {
+          console.log('Product not found for name:', productName);  // Debugging: Product not found
+          return null;
+        }
+      } else {
+        console.error("Products data is missing or invalid.");
+        return null;
+      }
+    }).catch((error) => {
+      console.error("Error fetching products:", error);
+      return null;
+    });
+  }
+  
+  
+  
+  
+  getCommonOrderDetails(order: any, formattedDate: string, formattedTime: string, totalPrice: number, managerName: string): string {
+    return `
+      <hr>
+      <div class="order-info">
+        <p><strong>Order ID:</strong> ${order.id}</p>
+        <p><strong>Date:</strong> ${formattedDate} - ${formattedTime}</p>
+        <p><strong>Managed by:</strong> ${managerName}</p>
+      </div>
+      <hr>
+      <h3>Order Details</h3>
+      <table>
+        <tr>
+          <th>Product Name</th>
+          <th>Product ID</th>
+          <th>Quantity</th>
+          <th>Price per Product</th>
+          <th>Total Price</th>
+        </tr>
+        <tr>
+          <td>${order.productName || "Unknown Product"}</td>
+          <td>${order.productId || "Unknown ID"}</td>
+          <td>${order.quantity}</td>
+          <td>$${(order.productPrice ?? 0).toFixed(2)}</td>
+          <td>$${totalPrice.toFixed(2)}</td>
+        </tr>
+      </table>
+      <p class="total"><strong>Grand Total:</strong> $${totalPrice.toFixed(2)}</p>
+    `;
+  }
+  printOrder(order: any, source: string): void {
+    if (!order) {
+      alert("Order data is missing!");
+      return;
+    }
+  
+    console.log("Printing Order:", order, "Source:", source); // Debugging log
+  
+    let productNamePromise: Promise<string>;
+    let productIdPromise: Promise<number | string>;
+  
+    if (source === "salesPerson") {
+      // Use productName directly
+      productNamePromise = Promise.resolve(order.productName || "Unknown Product");
+      productIdPromise = this.getProductIdByName(order.productName).then(id => id ?? "Unknown ID");
+    } else {
+      // Use getProductName and take productId from the order
+      productNamePromise = this.getProductName(order.productId);
+      productIdPromise = Promise.resolve(order.productId || "Unknown ID");
+    }
+  
+    Promise.all([productNamePromise, productIdPromise]).then(([productName, productId]) => {
+      productName = productName || "Unknown Product";
+  
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString();
+      const formattedTime = currentDate.toLocaleTimeString();
+      const managerName = "John Doe"; // Replace with actual manager name
+      const clientId = order.clientId ? order.clientId : (order.clientName ? order.clientName : "Unknown ID");
+      const totalPrice = order.quantity * order.productPrice;
+  
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert("Pop-up blocked! Allow pop-ups for this site.");
+        return;
+      }
+  
+      printWindow.document.write(`
+       <html>
+  <head>
+    <title>Order Invoice - ${order.id}</title>
+  </head>
+  <body>
+    <!-- Header Section with Company Logo -->
+    <div style="text-align: center; padding: 10px;">
+      <img src="https://res.cloudinary.com/dpha0wzqx/image/upload/v1739367747/full_photo-removebg-preview_dbmpcf.png" alt="Company Logo" width="150" />
+      <h2>Invoice for Order - ${order.id}</h2>
+      <p>Generated on ${formattedDate} at ${formattedTime}</p>
+    </div>
+    
+    <!-- Order Information Section -->
+    <div style="margin: 20px 0;">
+      <h3>Order Information</h3>
+      <p><strong>Order ID:</strong> ${order.id}</p>
+      <p><strong>Client Name:</strong> ${clientId}</p>
+      <p><strong>Managed By:</strong> ${managerName}</p>
+      <p><strong>Delivery Destination:</strong> ${order.deliveryDestination || 'N/A'}</p>
+    </div>
+    
+    <!-- Order Details Table -->
+    <h3>Order Details</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+      <thead>
+        <tr style="background-color: #f9f9f9;">
+          <th style="padding: 10px; border: 1px solid #ddd;">Product Name</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Product ID</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Quantity</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Price per Product</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Total Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">${productName}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">${productId || 'Not Available'}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">${order.quantity}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">$${order.productPrice.toFixed(2)}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">$${totalPrice.toFixed(2)}</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Grand Total -->
+    <p style="font-weight: bold; text-align: right; margin-top: 20px;">Grand Total: $${totalPrice.toFixed(2)}</p>
+    
+    <!-- Signature Section -->
+    <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+      <div style="width: 45%; text-align: center;">
+        <p>Manager Signature</p>
+        <hr style="width: 80%; margin: 0 auto;"/>
+      </div>
+      <div style="width: 45%; text-align: center;">
+        <p>Client Signature</p>
+        <hr style="width: 80%; margin: 0 auto;"/>
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div style="text-align: center; margin-top: 30px;">
+      <p style="font-size: 16px; font-weight: bold;">Thank you for your order!</p>
+    </div>
+
+    <!-- Print Script -->
+    <script>
+      window.onload = function() {
+        window.print();
+        setTimeout(() => window.close(), 500);
+      };
+    </script>
+  </body>
+</html>
+
+      `);
+      printWindow.document.close();
+    });
+  }
+  
+  
+  
+  
+  
+  
+  clearPage(): void {
+    this.isFadingOut = true; 
+    setTimeout(() => {
+      // Reset search inputs
+    this.searchOrderId = null;
+    this.searchProductId = null;
+    this.searchQuery = '';
+    this.searchTerm = '';
+  
+    // Reset filtered results
+    this.filteredOrders = [];
+    this.filteredProducts = [];
+  
+    // Reset dropdown selections (if applicable)
+    this.selectedClientId = null;
+    this.selectedSalesPersonId = null;
+    this.salesPersonId = 0;
+  
+    // Reset combine search checkbox
+    this.combineSearch = false;
+  
+    // Optionally reset any other displayed orders
+    this.showAllOrders = false;
+    this.clientOrders = [];
+    this.salesPersonsOrders = [];
+  
+    // Reset active section to default orders view
+    this.activeSection = 'orders';
+    this.isFadingOut = false; 
+
+    }, 300); 
+  
+    console.log("Page cleared!");
+  }
+  
+
+  
+  
+  
+  
 
   toggleAllOrders(): void {
     this.showAllOrders = !this.showAllOrders;
@@ -218,4 +629,74 @@ export class OrderDashboardComponent implements OnInit {
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
+
+
+selectAllChecked: boolean = false;
+showDeleteModal: boolean = false;
+managerPassword: string = '';
+
+toggleOrderSelection(orderId: number): void {
+  const index = this.selectedOrders.indexOf(orderId);
+  if (index === -1) {
+    this.selectedOrders.push(orderId);
+  } else {
+    this.selectedOrders.splice(index, 1);
+  }
+  this.selectAllChecked = this.selectedOrders.length === this.orders.length;
 }
+
+toggleSelectAll(): void {
+  if (this.selectAllChecked) {
+    this.selectedOrders = [];
+  } else {
+    this.selectedOrders = this.orders.map(order => order.id);
+  }
+  this.selectAllChecked = !this.selectAllChecked;
+}
+
+
+selectAllOrders(): void {
+  this.selectAllChecked = true;
+  this.selectedOrders = this.orders.map(order => order.id);
+}
+
+confirmDelete(): void {
+  if (this.selectedOrders.length === 0) {
+    alert('Please select orders to delete.');
+    return;
+  }
+  else{
+  this.showDeleteModal = true;
+
+  }
+}
+
+
+cancelDelete(): void {
+  this.showDeleteModal = false;
+  this.managerPassword = '';
+}
+
+deleteSelectedOrders(): void {
+  if (this.managerPassword === 'Rodriguez123!') {
+    this.selectedOrders.forEach(orderId => {
+      this.deleteOrder(orderId);
+    });
+    this.selectedOrders = [];
+    this.selectAllChecked = false;
+    this.showDeleteModal = false;
+    this.managerPassword = '';
+  } else {
+    alert('Incorrect password!');
+  }
+}
+
+
+
+
+
+
+}
+
+
+

@@ -1,24 +1,14 @@
+@import url('../../../assets/sidebar.css');
+
 /* Overall Layout */
 .employee-dashboard {
     display: flex;
     height: 100vh;
-    margin: 0;
+    margin-left: 30px;
   }
   
   /* Sidebar (empty for now) */
-.sidebar {
-  width: 250px; /* Sidebar width */
-  background-color: #f7f7f9;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  position: relative; /* Allows positioning of the logout button */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 100vh; /* Full height of the viewport */
-  box-sizing: border-box; /* Include padding and border in element's dimensions */
-  overflow-y: auto; /* Enable scrolling within the sidebar if needed */
-}
+
 
   
   /* Content */
@@ -34,47 +24,7 @@
     color: #333;
     margin-bottom: 10px;
   }
-  .sidebar h2 {
-    font-size: 24px; /* Larger font size */
-    font-weight: 700; /* Bold the text for better emphasis */
-    color: #333; /* Dark color for readability */
-    margin-bottom: 30px; /* Increased margin for spacing */
-    letter-spacing: 1px; /* Slight letter spacing for a cleaner look */
-    text-transform: uppercase; /* Makes the text uppercase for a more prominent look */
-    font-family: 'Arial', sans-serif; /* Consistent, clean font */
-    
-    text-align: center; /* Center-align the "Menu" text */
-    }
 
-
-    /* Optional: Adding a subtle underline effect */
-    .sidebar h2::after {
-    content: "";
-    display: block;
-    width: 50%; /* Underline width */
-    height: 2px; /* Underline thickness */
-    background-color: #007bff; /* Underline color */
-    margin-top: 10px; /* Space between the text and the underline */
-    margin-left: auto;
-    margin-right: auto; /* Center the underline */
-    }
-    button.logout-button {
-        background-color: #ff5c5c;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        position: absolute;
-        bottom: 30px; /* Align it at the bottom */
-        left: 50%; /* Center horizontally */
-        transform: translateX(-50%); /* Perfectly center it */
-        transition: background-color 0.3s;
-      }
-      
-    button.logout-button:hover {
-        background-color: #ff3232;
-      }
       
   
   h3 {
@@ -192,9 +142,7 @@
     cursor: pointer;
   }
   
-  button:hover {
-    background-color: #45a049;
-  }
+
   /* Style for the Progress Bar */
 .progress-container {
     width: 100%;

@@ -1,19 +1,29 @@
 <div class="salesperson-dashboard">
   <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sidebar-content">
-      <h2>Menu</h2>
-      <ul>
-      </ul>
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+    <div class="sidebar-header">
+      <img class="logo" 
+     [src]="sidebarCollapsed ? 'https://res.cloudinary.com/dhpok6wna/image/upload/c_crop,w_200,h_250/v1739372570/Untitled_design__2_-removebg-preview_qk06l1.png' 
+                             : 'https://res.cloudinary.com/dpha0wzqx/image/upload/v1739367747/full_photo-removebg-preview_dbmpcf.png'" 
+     alt="HIPP Logo">
+      <button id="toggle-sidebar" (click)="toggleSidebar()">
+        <img [src]="sidebarCollapsed ? 'https://res.cloudinary.com/dpha0wzqx/image/upload/c_pad,w_24,h_24/v1739367333/sidebar_znafqx.png' 
+        : 'https://res.cloudinary.com/dpha0wzqx/image/upload/c_pad,w_24,h_24/v1739367333/sidebar_1_brovsh.png'" 
+        alt="Toggle Sidebar">
+      </button>
     </div>
-    <button class="logout-button" (click)="logout()">Logout</button>
-  </div>
+    
+    <div>
+      <h2>SalesPerson Dashboard</h2>
+    </div>
+    <button class="logout-button" (click)="logout()"><img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt=""><span class="tooltip">Log out</span></button>
+  </aside>
 
-  <!-- Main Content -->
+  <div class="dashboard-container">
+      <!-- Main Content -->
   <div class="content">
     <!-- Orders Section -->
     <div *ngIf="activeSection === 'orders'">
-      <h1>SalesPerson Dashboard</h1>
       <h2>Orders</h2>
       <table>
         <thead>
@@ -87,5 +97,6 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </div>

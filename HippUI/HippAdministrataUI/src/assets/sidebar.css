@@ -107,6 +107,7 @@
 
 /* Adjust Content Area when Sidebar Collapses */
 .dashboard-container {
+  flex: 1;
     display: flex;
     height: 100vh;
     transition: margin-left 0.3s ease; 
@@ -118,13 +119,14 @@
     margin-left: 60px;
 }
 
+
 /* Content Area */
 .content {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: white;
-    width: calc(100% - 250px); /* Default width */
-    transition: width 0.3s ease, margin-left 0.3s ease;
+  flex-grow: 1;
+  padding: 20px;
+  background-color: white;
+  width: calc(100% - 250px); 
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }
 /* Content expands when sidebar collapses */
 .sidebar.collapsed + .dashboard-container .content {
@@ -133,25 +135,163 @@
 
 /* Logout Button */
 .logout-button {
-    background-color: #e9ecef;
-    color: black;
-    border: solid 0.1mm #fe1818;
-    padding: 10px 15px;
-    align-self: center; 
-    min-width: 80px; 
-    border-radius: 4px;
+    background: none;  /* Removes background */
+    border: none;       /* Removes border */
+    padding: 0;         /* Removes padding */
+    outline: none;      /* Prevents focus outline */
     cursor: pointer;
     margin-bottom: 20px;
+    width: 50px;
+    height: 50px;
     transition: background-color 0.3s;
 }
 
 /* Adjust logout button for collapsed state */
 .sidebar.collapsed .logout-button {
-    display: none; /* Adjust width when collapsed */
     text-align: center;
 }
 
 /* Logout Button hover */
 .logout-button:hover {
-    background-color: #fe1818;
+    content: url('https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739375466/image-removebg-preview_4_zlr054.png');
 }
+
+.printButton {
+    background: none;  /* Removes background */
+    border: none;       /* Removes border */
+    padding: 0;         /* Removes padding */
+    outline: none;      /* Prevents focus outline */
+    cursor: pointer;
+
+    transition: background-color 0.3s;
+}
+
+
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    left: 65px; /* Position text to the right of the image */
+    color: gray;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: opacity 0.6s ease-in-out;
+  }
+  
+  .logout-button:hover .tooltip {
+    visibility: visible;
+    opacity: 100;
+  }
+  
+  .sidebar.collapsed .logout-button:hover .tooltip{
+  visibility: hidden;
+   
+  }
+
+
+
+#toggle-sidebar {
+    background: none;  /* Removes background */
+    border: none;       /* Removes border */
+    padding: 0;         /* Removes padding */
+    outline: none;      /* Prevents focus outline */
+    cursor: pointer;
+  }
+  
+  .sidebar.collapsed .sidebar-header{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  
+  .sidebar-header {
+    display: flex; /* Enable Flexbox */
+    align-items: center; /* Vertically center items */
+    justify-content: space-between; /* Space items evenly */
+    padding: 10px; /* Add padding */
+  }
+  .logo {
+    width: 150px; /* Adjust logo size */
+    height: 150px; /* Adjust logo size */
+  }
+  
+  .sidebar.collapsed .logo {
+    width: 150px; /* Adjust logo size */
+    height: 150px; /* Adjust logo size */
+  }
+  
+  .sidebar-header .logo {
+    transition: opacity 0.3s ease, transform 1.4s ease; /* Add transition */
+  }
+  
+  .sidebar.collapsed .logo {
+    opacity: 100; /* Fade out the logo */
+    transform: scale(0.8); /* Optionally scale down the logo */
+  
+  }
+
+
+  .logout-image {
+    transition: opacity 0.6s ease; /* Smooth transition for opacity */
+  }
+  
+  .logout-button:hover .logout-image {
+    width: 30px;
+    height: 30px;
+    content: url('https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739375466/image-removebg-preview_4_zlr054.png'); /* Change image on hover */
+  }
+  .sidebar.collapsed + .dashboard-container .charts {
+    gap: 100px; /* Increased gap when sidebar is collapsed */
+}
+.sidebar.collapsed + .dashboard-container .charts {
+  gap: 120px; /* Increased gap when sidebar is collapsed */
+  transform: translateX(10px);
+}
+.sidebar.collapsed + .dashboard-container .charts .chart-container {
+ 
+/* Increased gap when sidebar is collapsed */
+ transform: scale(1.10);
+}
+
+
+
+.product-dashboard-container .content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: white;
+  width: calc(100% - 250px); /* Default width */
+}
+
+.product-dashboard-container {
+  flex-grow: 1;
+  width: calc(100% - 250px); /* Adjust based on sidebar width */
+}
+
+
+/* Ensure form elements take full width dynamically */
+.product-form {
+  width: 95%;
+  transition: width 0.3s ease-in-out;
+}
+
+
+.product-dashboard-container {
+  margin-left: 20px ;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0); /* Default position */
+}
+
+.sidebar.collapsed + .product-dashboard-container {
+  transform: translateX(-190px); /* Shift left when sidebar collapses */
+
+}
+
+/* When sidebar is collapsed */
+.sidebar.collapsed + .product-dashboard-container .add-product-section {
+  width: 1350px; /* Adjust based on collapsed sidebar width */
+}
+

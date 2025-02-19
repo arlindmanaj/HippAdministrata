@@ -35,6 +35,8 @@ export class ClientDashboardComponent implements OnInit {
   };
   orderStatuses = Object.keys(OrderStatus).filter((key) => isNaN(Number(key))); // Available statuses
   isOrderModalOpen = false;
+  sidebarCollapsed: boolean = false;
+
 
   assignedOrders: any[] = [];
   activeSection: string = 'orders'; // Default active section
@@ -227,5 +229,8 @@ export class ClientDashboardComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
+  }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

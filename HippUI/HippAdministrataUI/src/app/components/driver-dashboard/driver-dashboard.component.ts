@@ -14,6 +14,7 @@ import { getOrderStatusLabel } from '../../../services/order-status.util';
 })
 export class DriverDashboardComponent implements OnInit {
   assignedOrders: any[] = [];
+  sidebarCollapsed: boolean = false;
   driverId: number = Number(localStorage.getItem('roleSpecificId')); // Get driver ID from localStorage
   transferData: { productId: number; sourceWarehouseId: number; destinationWarehouseId: number } = {
     productId: 0,
@@ -90,6 +91,9 @@ export class DriverDashboardComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
+  }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }
 

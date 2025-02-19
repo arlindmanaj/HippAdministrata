@@ -259,14 +259,31 @@ table th {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Dropdown Container */
+/* Dropdown & Search Container */
 .dropdown-container {
   display: flex;
+  flex-direction: column; /* Stack items in a column */
   width: 100%;
-  gap: 10px; /* Adjust spacing between dropdowns */
-  justify-content: center; /* Center them */
-  align-items: center;
+  align-items: center; /* Center everything */
+  gap: 10px; /* Space between rows */
 }
+
+/* Row for dropdowns */
+.dropdown-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Row for search bars */
+.search-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+
 
 /* Dropdown Labels */
 .dropdown label {
@@ -288,12 +305,147 @@ table th {
   cursor: pointer;
   transition: border-color 0.3s ease;
 }
+.search-row input {
+  flex: 1; /* Make all search bars take equal space */
+  width: 100%; /* Ensure they take full width */
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
 
 /* Hover & Focus Effects */
 .dropdown-container select:hover,
-.dropdown-container select:focus {
+.dropdown-container select:focus,
+.search-row input:hover,
+.search-row input:focus {
   border-color: #007bff;
   outline: none;
+}
+
+
+  .checkbox-wrapper-2 .ikxBAC {
+    appearance: none;
+    background-color: #dfe1e4;
+    border-radius: 72px;
+    border-style: none;
+    flex-shrink: 0;
+    height: 20px;
+    margin: 0;
+    position: relative;
+    width: 30px;
+  }
+
+  .checkbox-label {
+    font-size: 16px; /* Adjust text size */
+    font-weight: 500; /* Make text a little bold */
+    cursor: pointer; /* Make it clickable */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between checkbox and text */
+  }
+
+  .checkbox-wrapper-2 .ikxBAC::before {
+    bottom: -6px;
+    content: "";
+    left: -6px;
+    position: absolute;
+    right: -6px;
+    top: -6px;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC,
+  .checkbox-wrapper-2 .ikxBAC::after {
+    transition: all 100ms ease-out;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC::after {
+    background-color: #fff;
+    border-radius: 50%;
+    content: "";
+    height: 14px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 14px;
+  }
+
+  .checkbox-wrapper-2 input[type=checkbox] {
+    cursor: default;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:hover {
+    background-color: #c9cbcd;
+    transition-duration: 0s;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:checked {
+    background-color: #6e79d6;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:checked::after {
+    background-color: #fff;
+    left: 13px;
+  }
+
+  .checkbox-wrapper-2 :focus:not(.focus-visible) {
+    outline: 0;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:checked:hover {
+    background-color: #535db3;
+  }
+
+
+/* CSS */
+.button-6 {
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 2.3rem;
+  max-height: 10px;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+
+.button-6:hover,
+.button-6:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.button-6:hover {
+  transform: translateY(-1px);
+}
+
+.button-6:active {
+  background-color: #ff6666;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
 }
 
 /* Ensure dropdowns are fully stretched */
@@ -322,3 +474,58 @@ table th {
     width: 100%; /* Full width on smaller screens */
   }
 }
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  left: 65px; /* Position text to the right of the image */
+  color: gray;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.logout-button:hover .tooltip {
+  visibility: visible;
+  opacity: 100;
+}
+
+
+.fade-in {
+  opacity: 0;
+  transform: scale(0.9) translateY(-10px);
+  animation: fadeInAnim 0.3s ease-in forwards;
+}
+
+@keyframes fadeInAnim {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+/* Fade Out animation */
+.fade-out {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  animation: fadeOutAnim 0.3s ease-out forwards;
+}
+
+@keyframes fadeOutAnim {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+}
+

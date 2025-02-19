@@ -14,6 +14,8 @@ import { forkJoin } from 'rxjs';
 })
 export class ManagerDashboardComponent implements OnInit {
   activeSection: string = 'manager'; // Default active section
+  sidebarCollapsed: boolean = false;
+
 
   constructor(
     private router: Router,
@@ -244,6 +246,8 @@ export class ManagerDashboardComponent implements OnInit {
     });
   }
   
-  
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
   
 }
