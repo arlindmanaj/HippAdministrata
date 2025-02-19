@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="dashboard-wrapper">
   <!-- Sidebar -->
   <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
@@ -12,6 +13,10 @@
 alt="Toggle Sidebar">
       </button>
     </div>
+=======
+<div class="dashboard-container">
+  <div class="sidebar">
+>>>>>>> 15119dae447a965dc1bddb2e634e96995d163570
     <h2>Manager Dashboard</h2>
     <ul>
       <li>
@@ -30,8 +35,14 @@ alt="Toggle Sidebar">
         </button>
       </li>
     </ul>
+<<<<<<< HEAD
     <button class="logout-button" (click)="logout()"><img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt=""><span class="tooltip">Log out</span></button>
   </aside>
+=======
+    <button class="logout-button" (click)="logout()">Logout</button>
+
+  </div>
+>>>>>>> 15119dae447a965dc1bddb2e634e96995d163570
 
   <!-- Main Content Area -->
   <div class="dashboard-container">
@@ -117,6 +128,7 @@ alt="Toggle Sidebar">
           </section>
 
 
+<<<<<<< HEAD
         <section 
         *ngIf="filteredOrders.length > 0 || isFadingOut" 
         [ngClass]="{
@@ -129,6 +141,58 @@ alt="Toggle Sidebar">
         </button>
         
         <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+=======
+
+      <!-- Orders for SalesPerson -->
+      <section *ngIf="salesPersonsOrders.length" class="orders-section">
+        <h3>Orders for SalesPerson</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of salesPersonsOrders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productName }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.orderStatus.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Orders for Client -->
+      <section *ngIf="selectedClientId && clientOrders.length" class="client-orders-section">
+        <h3>Orders for Client ID: {{ selectedClientId }}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of clientOrders">
+              <td>{{ order.id }}</td>
+              <td>{{ order.productId }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.orderStatus.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- All Orders List -->
+      <section *ngIf="showAllOrders" class="all-orders-section" [ngClass]="{'active': activeSection === 'allOrders'}">
+        <h2>All Orders</h2>
+>>>>>>> 15119dae447a965dc1bddb2e634e96995d163570
         <table>
           <thead>
             <tr>
@@ -148,7 +212,11 @@ alt="Toggle Sidebar">
               <td>{{ order.id }}</td>
               <td>{{ order.productId }}</td>
               <td>{{ order.quantity }}</td>
+<<<<<<< HEAD
               <td>{{ getOrderStatusLabel(order.orderStatusId) }}</td>
+=======
+              <td>{{ order.orderStatus.description }}</td>
+>>>>>>> 15119dae447a965dc1bddb2e634e96995d163570
               <td>
                 <button class="printButton" (click)="printOrder(order, 'filtered')">🖨️</button>
 

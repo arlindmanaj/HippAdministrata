@@ -32,7 +32,7 @@ namespace HippAdministrata.Repositories.Implementation
 
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
-            return await _context.Set<Order>().ToListAsync();
+            return await _context.Set<Order>().Include(x => x.OrderStatus).ToListAsync();
         }
 
         public async Task<IEnumerable<Order>> GetByClientIdAsync(int clientId)
