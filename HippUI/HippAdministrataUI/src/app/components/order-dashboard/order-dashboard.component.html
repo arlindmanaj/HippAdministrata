@@ -72,7 +72,10 @@ alt="Toggle Sidebar">
             </label>
 
           </div>
+
           
+
+
         </div>
 
         <!-- Orders for SalesPerson -->
@@ -85,8 +88,10 @@ alt="Toggle Sidebar">
             <button (click)="toggleSelectAll()" class="button-6">
               {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
             </button>
+            <button (click)="openExportModal()" class="button-6">Export Selected Orders</button>
             
-            <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+            <button (click)="deleteSelectedOrders()" class="button-6">Delete Selected Orders</button>
+
             <table>
               <thead>
                 <tr>
@@ -127,8 +132,9 @@ alt="Toggle Sidebar">
         <button (click)="toggleSelectAll()" class="button-6">
           {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
         </button>
-        
-        <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+        <button (click)="openExportModal()" class="button-6">Export Selected Orders</button>  
+        <button (click)="deleteSelectedOrders()" class="button-6">Delete Selected Orders</button>
+
         <table>
           <thead>
             <tr>
@@ -169,8 +175,10 @@ alt="Toggle Sidebar">
           <button (click)="toggleSelectAll()" class="button-6">
             {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
           </button>
-          
-          <button class="button-6" (click)="confirmDelete()">Delete Selected</button>
+          <button (click)="openExportModal()" class="button-6">Export Selected Orders</button>
+          <!-- Button to delete selected orders directly -->
+          <button (click)="deleteSelectedOrders()" class="button-6">Delete Selected Orders</button>
+
 
           <table>
             <thead>
@@ -205,8 +213,13 @@ alt="Toggle Sidebar">
 
         <section *ngIf="showAllOrders" class="all-orders-section" [ngClass]="{'active': activeSection === 'allOrders'}">
           <h2>All Orders</h2>
-          <button (click)="selectAllOrders()" class="button-6">Select All</button>
-          <button (click)="confirmDelete()" class="button-6" >Delete Selected</button>
+
+          <button (click)="toggleSelectAll()" class="button-6">
+            {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+          </button>
+          <button (click)="openExportModal()" class="button-6">Export Selected Orders</button>
+          <button (click)="deleteSelectedOrders()" class="button-6">Delete Selected Orders</button>
+
         
           <table>
             <thead>
@@ -235,21 +248,30 @@ alt="Toggle Sidebar">
             </tbody>
           </table>
         </section>
-        
+
         <!-- Confirmation Modal -->
+        <div *ngIf="showExportModal" class="modal">
+          <div class="modal-content">
+            <h3>Select Export Format</h3>
+            <button (click)="exportToCSV()" class="btn btn-success">Export as CSV</button>
+            <button (click)="exportToExcel()" class="btn btn-info">Export as Excel</button>
+            <button (click)="closeExportModal()" class="btn btn-danger">Cancel</button>
+          </div>
+        </div>
+
         <div *ngIf="showDeleteModal" class="modal">
           <div class="modal-content">
             <h3>Confirm Deletion</h3>
             <p>Enter the manager password to delete selected orders:</p>
             <input type="password" [(ngModel)]="managerPassword" placeholder="Enter password" />
             <div class="modal-buttons">
-              <button (click)="deleteSelectedOrders()">Confirm</button>
+              <button class="deleteButton" (click)="deleteSelectedOrders()">Confirm</button>
               <button (click)="cancelDelete()">Cancel</button>
             </div>
           </div>
         </div>
         
-
+        
         <!-- Error Message -->
         <section *ngIf="errorMessage" class="error-section">
           <p>{{ errorMessage }}</p>
