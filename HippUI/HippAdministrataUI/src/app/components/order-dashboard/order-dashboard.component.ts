@@ -66,7 +66,7 @@ export class OrderDashboardComponent implements OnInit {
   isFadingOut: boolean = false;
   loggedInUser: string | undefined;
   private jwtHelper = new JwtHelperService();
- 
+  
 
 
 
@@ -105,6 +105,9 @@ export class OrderDashboardComponent implements OnInit {
   
 
   }
+
+  
+  
 
   
   loadOrders(): void {
@@ -364,37 +367,7 @@ searchOrders(): void {
   }
   
   
-  
-  
-  // getCommonOrderDetails(order: any, formattedDate: string, formattedTime: string, totalPrice: number, managerName: string): string {
-  //   return `
-  //     <hr>
-  //     <div class="order-info">
-  //       <p><strong>Order ID:</strong> ${order.id}</p>
-  //       <p><strong>Date:</strong> ${formattedDate} - ${formattedTime}</p>
-  //       <p><strong>Managed by:</strong> ${managerName}</p>
-  //     </div>
-  //     <hr>
-  //     <h3>Order Details</h3>
-  //     <table>
-  //       <tr>
-  //         <th>Product Name</th>
-  //         <th>Product ID</th>
-  //         <th>Quantity</th>
-  //         <th>Price per Product</th>
-  //         <th>Total Price</th>
-  //       </tr>
-  //       <tr>
-  //         <td>${order.productName || "Unknown Product"}</td>
-  //         <td>${order.productId || "Unknown ID"}</td>
-  //         <td>${order.quantity}</td>
-  //         <td>$${(order.productPrice ?? 0).toFixed(2)}</td>
-  //         <td>$${totalPrice.toFixed(2)}</td>
-  //       </tr>
-  //     </table>
-  //     <p class="total"><strong>Grand Total:</strong> $${totalPrice.toFixed(2)}</p>
-  //   `;
-  // }
+
   printOrder(order: any, source: string): void {
     if (!order) {
       alert("Order data is missing!");

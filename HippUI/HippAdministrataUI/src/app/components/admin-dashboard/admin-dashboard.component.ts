@@ -21,7 +21,7 @@ export class AdminDashboardComponent implements OnInit {
   filteredUsers: any[] = [];
   selectedRole: string = '';
   uniqueRoles: string[] = [];
-
+  sidebarCollapsed: boolean = false;
 
   errorMessage = '';
   successMessage = '';
@@ -155,5 +155,8 @@ export class AdminDashboardComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
+  }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }
