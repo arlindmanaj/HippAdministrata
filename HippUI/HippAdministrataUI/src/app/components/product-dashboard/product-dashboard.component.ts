@@ -92,8 +92,8 @@ export class ProductDashboardComponent implements OnInit {
     // Logout method
     logout() {
       // Perform any logout logic (like clearing session or tokens)
-      console.log('Logging out...');
-  
+      localStorage.removeItem('authToken');
+      localStorage.clear(); 
       // Redirect to the login page or another route if needed
       this.router.navigate(['/login']);  // Adjust the route as needed
     }

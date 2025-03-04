@@ -32,10 +32,20 @@ alt="Toggle Sidebar">
   </aside>
 
   <div class="dashboard-container">
+<<<<<<< HEAD
     <div class="content">
       <!-- Header -->
         <h2>Admin Dashboard</h2>
   
+=======
+<app-notification></app-notification>
+
+    <div class="content">
+      <!-- Header -->
+        <h2>Admin Dashboard</h2>
+        <button (click)="sendTestNotification()">Send Admin Test Notification</button>
+
+>>>>>>> 8f502ac13d16f7bb7b418abf05bf8200a36e9a55
       <!-- Registration Section -->
       <section *ngIf="activeSection === 'registration'" class="add-user-section">
         <h2>Registration</h2>
@@ -109,13 +119,21 @@ alt="Toggle Sidebar">
         <h2>Existing Users</h2>
   
         <!-- Role Filter Dropdown -->
+<<<<<<< HEAD
         <div>
+=======
+        <div class="filterDropdown">
+>>>>>>> 8f502ac13d16f7bb7b418abf05bf8200a36e9a55
           <label for="roleFilter">Filter by Role:</label>
           <select id="roleFilter" [(ngModel)]="selectedRole" (change)="filterUsersByRole()">
             <option value="">All Roles</option>
             <option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</option>
           </select>
+<<<<<<< HEAD
         </div>
+=======
+        </div>  
+>>>>>>> 8f502ac13d16f7bb7b418abf05bf8200a36e9a55
   
         <table class="user-table">
           <thead>

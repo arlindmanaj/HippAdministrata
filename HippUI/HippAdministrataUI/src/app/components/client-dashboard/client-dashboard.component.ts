@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OrderStatus } from '../../../models/OrderStatus';
 import { getOrderStatusLabel } from '../../../services/order-status.util';
+import { NotificationService } from '../../../services/notification.service';
+import { NotificationComponent } from '../notifications/notification.component';
 
 interface Product {
   productName: string;
@@ -24,7 +26,7 @@ interface Order {
   templateUrl: './client-dashboard.component.html',
   standalone: true,
   styleUrls: ['./client-dashboard.component.css'],
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,NotificationComponent],
 })
 export class ClientDashboardComponent implements OnInit {
   products: any[] = []; // List of products
@@ -100,7 +102,7 @@ export class ClientDashboardComponent implements OnInit {
 
         // Group orders for frontend display
         this.groupedOrders = this.groupOrders(formattedOrders);
-        console.log(this.groupedOrders)
+        // console.log(this.groupedOrders)
         this.loadRecentOrders(); // Refresh recent orders whenever orders are loaded
       },
       (error) => {
@@ -229,6 +231,7 @@ export class ClientDashboardComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
+    localStorage.clear();
   }
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;

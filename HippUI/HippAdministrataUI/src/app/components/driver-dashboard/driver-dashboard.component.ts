@@ -90,7 +90,9 @@ export class DriverDashboardComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.clear();
     this.router.navigate(['/login']);
+    
   }
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;

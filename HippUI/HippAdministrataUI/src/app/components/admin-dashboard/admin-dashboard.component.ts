@@ -4,13 +4,15 @@ import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification.service';
+import { NotificationComponent } from '../notifications/notification.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule], // Import FormsModule and CommonModule
+  imports: [FormsModule, CommonModule,NotificationComponent], // Import FormsModule and CommonModule
 })
 export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
@@ -27,7 +29,7 @@ export class AdminDashboardComponent implements OnInit {
   successMessage = '';
   activeSection = 'registration'; // Default section
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -52,7 +54,9 @@ export class AdminDashboardComponent implements OnInit {
       }
     );
   }
-
+  sendTestNotification() {
+    this.notificationService.sendNotification("🚀 Admin Test Notification!");
+  }
   extractUniqueRoles(): void {
     this.uniqueRoles = Array.from(new Set(this.users.map((user) => user.role)));
   }
@@ -153,8 +157,13 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   logout(): void {
+    
     localStorage.removeItem('authToken');
     this.router.navigate(['/login']);
+    localStorage.clear();
+  }
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;

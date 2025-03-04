@@ -4,13 +4,15 @@ import { Chart, registerables } from 'chart.js';
 import { ProductService } from '../../../services/product.service';
 import { OrderService } from '../../../services/order.service';
 import { forkJoin } from 'rxjs';
+import { NotificationService } from '../../../services/notification.service';
+import { NotificationComponent } from '../notifications/notification.component';
 
 @Component({
   selector: 'app-manager-dashboard',
   templateUrl: './manager-dashboard.component.html',
   styleUrls: ['./manager-dashboard.component.css'],
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule,NotificationComponent],
 })
 export class ManagerDashboardComponent implements OnInit {
   activeSection: string = 'manager'; // Default active section
@@ -42,6 +44,8 @@ export class ManagerDashboardComponent implements OnInit {
   // Logout method
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.clear();
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 

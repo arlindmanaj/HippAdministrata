@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment/environment.component.spec';
+import { tap } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +11,7 @@ import { environment } from '../environments/environment/environment.component.s
 export class AuthService {
   private apiUrl = `${environment.apiUrl}`;
   private tokenKey = 'authToken';
-
+  
   constructor(private http: HttpClient) { }
 
   // Helper to get headers with token
@@ -24,7 +26,7 @@ export class AuthService {
       'Content-Type': 'application/json',
     });
   }
-
+  
   // Save token to localStorage
   saveToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
@@ -40,19 +42,40 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
   }
 
-  // Decode token to get payload
+  // // Decode token to get payload
+  // decodeToken(): any {
+  //   const token = this.getToken();
+  //   if (!token) return null;
+
+  //   try {
+  //     const payload = JSON.parse(atob(token.split('.')[1]));
+  //     return payload;
+  //   } catch (error) {
+  //     console.error('Error decoding token', error);
+  //     return null;
+  //   }
+  // }
   decodeToken(): any {
     const token = this.getToken();
     if (!token) return null;
-
+  
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
+  
+      if (payload.UserId) {
+        localStorage.setItem('userId', payload.UserId);
+      }
+      if (payload.RoleId) {
+        localStorage.setItem('roleId', payload.RoleId);
+      }
+  
       return payload;
     } catch (error) {
       console.error('Error decoding token', error);
       return null;
     }
   }
+  
 
   // Check if user is authenticated
   isAuthenticated(): boolean {
@@ -82,12 +105,42 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/Users/${id}`, { headers: this.getHeaders() });
   }
 
-  // Login
+  // // Login
+  // login(name: string, password: string): Observable<{ token: { token: string }; role: string; roleSpecificId: number }> {
+  //   const body = { name, password };
+  //   return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body);
+  // }
+  // login(name: string, password: string): Observable<{ token: { token: string }; role: string; roleSpecificId: number }> {
+  //   const body = { name, password };
+  //   return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body)
+  //     .pipe(
+  //       tap(response => {
+  //         if (response.token && response.token.token) {
+  //           // Decode token and extract UserId
+  //           const payload = JSON.parse(atob(response.token.token.split('.')[1]));
+  //           if (payload.UserId) {
+  //             localStorage.setItem('userId', payload.UserId); // Save UserId separately
+  //           }
+  //         }
+  //       })
+  //     );
+  // }
   login(name: string, password: string): Observable<{ token: { token: string }; role: string; roleSpecificId: number }> {
     const body = { name, password };
-    return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body);
+  
+    return this.http.post<{ token: { token: string }; role: string; roleSpecificId: number }>(`${this.apiUrl}/Auth/login`, body)
+      .pipe(
+        tap(response => {
+          if (response.token && response.token.token) {
+            localStorage.setItem('authToken', response.token.token);  // Save token
+            this.decodeToken(); // Call decodeToken() to extract and save UserId & RoleId
+          }
+        })
+      );
   }
-
+  
+  
+  
 
 
   // General user registration
