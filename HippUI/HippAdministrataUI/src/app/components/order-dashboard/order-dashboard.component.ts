@@ -66,6 +66,8 @@ export class OrderDashboardComponent implements OnInit {
   isFadingOut: boolean = false;
   loggedInUser: string | undefined;
   private jwtHelper = new JwtHelperService();
+  
+
 
 
 
@@ -105,6 +107,9 @@ export class OrderDashboardComponent implements OnInit {
   }
 
   
+  
+
+  
   loadOrders(): void {
     this.orderService.getOrders().subscribe(
       (orders) => {
@@ -135,31 +140,9 @@ export class OrderDashboardComponent implements OnInit {
 
   
 
-  deleteOrder(orderId: number): void {
-    if (confirm('Are you sure you want to delete this order?')) {
-      this.orderService.deleteOrder(orderId).subscribe({
-        next: (response) => {
-          console.log(response);  // Logs the plain text response (e.g., "Order deleted successfully")
-          alert('Order deleted successfully!');
 
-          // Update the orders array to remove the deleted order
-          this.orders = this.orders.filter(order => order.id !== orderId);
-
-          // Optionally reload orders if All Orders is active
-          if (this.showAllOrders) {
-            this.loadOrders();
-          }
-
-          // Trigger change detection manually
-          this.cdr.detectChanges();
-        },
-        error: (error) => {
-          console.error('Failed to delete order:', error);
-          alert('Failed to delete the order. Please try again.');
-        },
-      });
-    }
-  }
+  
+  
 
 
 
@@ -277,41 +260,7 @@ export class OrderDashboardComponent implements OnInit {
     this.activeSection = section;
   }
 
-  roles: string[] = ['SalesPerson', 'Driver', 'Employee'];
-  filteredPeople: any[] = [];
 
-  filterOrders(): void {
-    this.filteredOrders = this.orders.filter(order => {
-      const searchLower = this.searchTerm.toLowerCase();
-  
-      return (
-        order.id.toString().includes(searchLower) ||  // ✅ Search by Order ID
-        order.productId?.toString().toLowerCase().includes(searchLower) ||  // ✅ Search by Product Name
-        order.clientName?.toLowerCase().includes(searchLower) ||  // ✅ Search by Client Name
-        this.getOrderStatusLabel(order.orderStatus).toLowerCase().includes(searchLower)  // ✅ Search by Status
-      );
-    });
-    console.log('Filtered Orders:', this.filteredOrders);
-
-    this.currentPage = 1;  // Reset pagination after filtering
-  }
-  
-  
-  sortOrders(column: string): void {
-    if (this.sortedColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortedColumn = column;
-      this.sortDirection = 'asc';
-    }
-  
-    this.filteredOrders.sort((a, b) => {
-      const valA = a[column];
-      const valB = b[column];
-  
-      return this.sortDirection === 'asc' ? valA - valB : valB - valA;
-    });
-  }
 
     searchByOrderId(event: Event): void {
       const target = event.target as HTMLInputElement;
@@ -418,37 +367,7 @@ searchOrders(): void {
   }
   
   
-  
-  
-  getCommonOrderDetails(order: any, formattedDate: string, formattedTime: string, totalPrice: number, managerName: string): string {
-    return `
-      <hr>
-      <div class="order-info">
-        <p><strong>Order ID:</strong> ${order.id}</p>
-        <p><strong>Date:</strong> ${formattedDate} - ${formattedTime}</p>
-        <p><strong>Managed by:</strong> ${managerName}</p>
-      </div>
-      <hr>
-      <h3>Order Details</h3>
-      <table>
-        <tr>
-          <th>Product Name</th>
-          <th>Product ID</th>
-          <th>Quantity</th>
-          <th>Price per Product</th>
-          <th>Total Price</th>
-        </tr>
-        <tr>
-          <td>${order.productName || "Unknown Product"}</td>
-          <td>${order.productId || "Unknown ID"}</td>
-          <td>${order.quantity}</td>
-          <td>$${(order.productPrice ?? 0).toFixed(2)}</td>
-          <td>$${totalPrice.toFixed(2)}</td>
-        </tr>
-      </table>
-      <p class="total"><strong>Grand Total:</strong> $${totalPrice.toFixed(2)}</p>
-    `;
-  }
+
   printOrder(order: any, source: string): void {
     if (!order) {
       alert("Order data is missing!");
@@ -566,7 +485,85 @@ searchOrders(): void {
     });
   }
   
+
+// Use this flag to control modal visibility
+showExportModal: boolean = false;
+
+// Trigger the modal for selecting export format
+openExportModal() {
+  if (this.selectedOrders.length === 0) {
+    alert('Please select orders to export.');
+    return;
+  }
+  else{
+  this.showExportModal = true;
+  }
+}
+
+// Close the modal
+closeExportModal() {
+  this.showExportModal = false;
+}
+
   
+    // Method to export selected orders to CSV
+exportToCSV(): void {
+  if (this.selectedOrders.length === 0) {
+    alert('No orders selected to export!');
+    return;
+  }
+
+  // Filter the orders to include only the selected ones
+  const selectedData = this.orders.filter(order => this.selectedOrders.includes(order.id));
+
+  // Convert to CSV format
+  const csvData = this.convertToCSV(selectedData);
+  this.downloadCSV(csvData);
+}
+
+// Method to export selected orders to Excel
+exportToExcel(): void {
+  if (this.selectedOrders.length === 0) {
+    alert('No orders selected to export!');
+    return;
+  }
+
+  // Filter the orders to include only the selected ones
+  const selectedData = this.orders.filter(order => this.selectedOrders.includes(order.id));
+
+  // Use a library like 'xlsx' to generate an Excel file
+  this.exportToExcelLibrary(selectedData); // Placeholder for Excel library
+}
+
+// Convert filtered data to CSV format
+convertToCSV(data: any[]): string {
+  const header = Object.keys(data[0]);
+  const rows = data.map(item => header.map(field => item[field]).join(','));
+  return [header.join(','), ...rows].join('\n');
+}
+
+// Trigger CSV download (client-side)
+downloadCSV(csvData: string): void {
+  const blob = new Blob([csvData], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'selected_orders.csv';
+  link.click();
+}
+
+// Placeholder for exporting to Excel using an Excel library like xlsx
+exportToExcelLibrary(data: any[]): void {
+  import('xlsx').then(XLSX => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Orders');
+    XLSX.writeFile(wb, 'selected_orders.xlsx');
+  });
+}
+
+  
+  
+
   
   
   
@@ -664,30 +661,61 @@ confirmDelete(): void {
     alert('Please select orders to delete.');
     return;
   }
-  else{
-  this.showDeleteModal = true;
-
-  }
 }
 
 
 cancelDelete(): void {
-  this.showDeleteModal = false;
   this.managerPassword = '';
 }
 
+// deleteSelectedOrders(): void {
+//   if (this.managerPassword === 'Rodriguez123!') {
+//     this.selectedOrders.forEach(orderId => {
+//       this.deleteOrder(orderId);
+//     });
+//     this.selectedOrders = [];
+//     this.selectAllChecked = false;
+//     this.showDeleteModal = false;
+//     this.managerPassword = '';
+//   } else {
+//     alert('Incorrect password!');
+//   }
+// }
 deleteSelectedOrders(): void {
-  if (this.managerPassword === 'Rodriguez123!') {
-    this.selectedOrders.forEach(orderId => {
-      this.deleteOrder(orderId);
-    });
-    this.selectedOrders = [];
-    this.selectAllChecked = false;
-    this.showDeleteModal = false;
-    this.managerPassword = '';
-  } else {
-    alert('Incorrect password!');
+  if (this.selectedOrders.length === 0) {
+    alert('Please select orders to delete.');
+    return;
   }
+
+  // Loop through the selected orders and delete them
+  this.selectedOrders.forEach(orderId => {
+    this.deleteOrder(orderId); // Call the method to delete each order
+  });
+
+  // After deletion, reset the selected orders
+  this.selectedOrders = [];
+  this.selectAllChecked = false; // Uncheck the "Select All" checkbox
+  // No modal is involved, so no need to hide the delete modal
+}
+
+deleteOrder(orderId: number): void {
+  this.orderService.deleteOrder(orderId).subscribe({
+    next: () => {
+      // Instead of mutating, create a new reference to trigger change detection
+      this.orders = this.orders.filter(order => order.id !== orderId);
+      this.salesPersonsOrders = [...this.salesPersonsOrders.filter(order => order.id !== orderId)];
+      this.clientOrders = [...this.clientOrders.filter(order => order.id !== orderId)];
+      this.filteredOrders = [...this.filteredOrders.filter(order => order.id !== orderId)];
+      
+      // Also update selected orders to reflect that the order is deleted
+      this.selectedOrders = this.selectedOrders.filter(id => id !== orderId);
+
+    },
+    error: (error) => {
+      console.error('Error deleting order:', error);
+      alert('Failed to delete the order. Please try again.');
+    }
+  });
 }
 
 
