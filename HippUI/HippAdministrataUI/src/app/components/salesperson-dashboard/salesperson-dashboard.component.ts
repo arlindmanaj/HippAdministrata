@@ -165,6 +165,7 @@ export class SalespersonDashboardComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.clear(); 
     this.router.navigate(['/login']);
   }
 

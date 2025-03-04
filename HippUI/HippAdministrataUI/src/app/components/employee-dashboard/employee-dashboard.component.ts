@@ -100,6 +100,7 @@ export class EmployeeDashboardComponent implements OnInit {
   }
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
   toggleSidebar(): void {

@@ -1,0 +1,38 @@
+<!-- <div class="notification-container">
+    <button (click)="markAllRead()" *ngIf="notifications.length > 0">
+        Mark all as read
+      </button>
+      
+    <div class="bell-icon" (click)="toggleDropdown()">
+      🔔
+      <span class="notification-dot" *ngIf="hasUnread"></span>
+    </div>
+  
+    <div class="dropdown" *ngIf="isOpen">
+      <div *ngIf="notifications.length === 0">No notifications</div>
+      <ul *ngIf="notifications.length > 0">
+        <li *ngFor="let notification of notifications">
+          {{ notification.message }} - {{ notification.createdAt | date:'short' }}
+        </li>
+      </ul>
+    </div>
+  </div>
+   -->
+   <div class="notification-wrapper">
+    <div class="notification-bell" (click)="notificationBellClicked()">
+      🔔
+      <span *ngIf="unreadCount > 0" class="notification-dot"></span>
+    </div>
+  
+    <div class="notification-dropdown" *ngIf="showNotifications">
+      <div *ngIf="notifications.length === 0">No notifications</div>
+  
+      <div *ngFor="let notification of notifications">
+        <div class="notification-item" [class.unread]="!notification.isRead" (click)="markAsRead(notification)">
+          {{ notification.message }}
+          <span class="time">{{ notification.createdAt | date: 'short' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
