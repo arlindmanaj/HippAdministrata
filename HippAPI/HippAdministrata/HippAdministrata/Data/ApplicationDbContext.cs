@@ -25,6 +25,7 @@ namespace HippAdministrata.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrderHistory> OrderHistories { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
+        public DbSet<Notification> Notifications { get; set; } //Testing Notification
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

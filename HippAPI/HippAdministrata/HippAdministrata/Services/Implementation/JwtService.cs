@@ -36,7 +36,11 @@ namespace HippAdministrata.Services.Implementation
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "Unknown")
+                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "Unknown"),
+                new Claim("UserId", user.UserId.ToString()),
+                //new Claim("RoleId", user.RoleId.ToString())   // Adding RoleId
+                new Claim("RoleId", user.RoleId.ToString())
+
             };
 
             var token = new JwtSecurityToken(

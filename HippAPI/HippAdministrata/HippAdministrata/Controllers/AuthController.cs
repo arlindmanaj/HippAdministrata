@@ -44,9 +44,9 @@ namespace hippserver.Controllers
                     return Unauthorized();
 
 
-               
-
                 int? roleSpecificId = await GetRoleSpecificIdAsync(user.UserId, user.Role.RoleName);
+
+
 
                 return Ok(new
                 {
@@ -62,7 +62,7 @@ namespace hippserver.Controllers
             }
         }
 
-        
+
         private async Task<int?> GetRoleSpecificIdAsync(int userId, string roleName)
         {
             return roleName switch
@@ -75,6 +75,8 @@ namespace hippserver.Controllers
                 _ => null
             };
         }
+
+
 
         [Authorize(Roles = "Admin")]
         [HttpPost("register")]

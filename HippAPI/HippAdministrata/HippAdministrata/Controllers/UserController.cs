@@ -7,6 +7,7 @@ using HippAdministrata.Models.Enums;
 using HippAdministrata.Models.Domains;
 using HippAdministrata.Services.Implementation;
 using HippAdministrata.Services;
+using System.Security.Claims;
 
 namespace hippserver.Controllers
 {
@@ -19,6 +20,12 @@ namespace hippserver.Controllers
         public UsersController(IUserService userService)
         {
             _userService = userService;
+        }
+        [HttpGet("getCurrentUserId")]
+        public IActionResult GetCurrentUserId()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return Ok(userId);
         }
 
         [HttpGet]

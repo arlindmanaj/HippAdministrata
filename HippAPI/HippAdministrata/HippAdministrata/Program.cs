@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Builder;
 using HippAdministrata.Services;
+using HippAdministrata.Hubs;
+using HippAdministrata.Repositories;
+using HippAdministrata.Repositories.Interfaces;
+using HippAdministrata.Services.Interfaces;
 
 
 namespace HippAdministrata
@@ -45,6 +49,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  
             builder.Services.AddScoped<ISalesPersonRepository, SalesPersonRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+
 
             // Register Services
             builder.Services.AddScoped<IJwtService, JwtService>();
@@ -54,6 +60,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddSignalR();
 
 
 
@@ -123,25 +131,34 @@ namespace HippAdministrata
             });
 
             var app = builder.Build();
-           
 
-           
+
+            app.MapHub<NotificationHub>("/notificationHub");
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
-            {
+            {   
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseCors(options =>
+            app.UseCors(builder =>
             {
+                builder.WithOrigins("http://localhost:4200") // Add your Angular frontend URL
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials(); // Required for SignalR
+            });
+
+
+            app.UseCors(options =>
+            {   
                 options.AllowAnyHeader();
                 options.AllowAnyOrigin();
                 options.AllowAnyMethod();
             });
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
 
 

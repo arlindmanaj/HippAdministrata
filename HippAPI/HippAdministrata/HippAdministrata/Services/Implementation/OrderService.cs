@@ -6,6 +6,10 @@ using HippAdministrata.Services.Interface;
 using HippAdministrata.Models.DTOs;
 using HippAdministrata.Models.JunctionTables;
 using HippAdministrata.Data;
+using HippAdministrata.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using HippAdministrata.Services.Implementation;
+using HippAdministrata.Services.Interfaces;
 
 namespace HippAdministrata.Services
 {
@@ -14,12 +18,16 @@ namespace HippAdministrata.Services
         private readonly IOrderRepository _orderRepository;
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IProductRepository _productRepository;
+        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly INotificationService _notificationService;
 
-        public OrderService(IProductRepository productRepository, IOrderRepository orderRepository, ApplicationDbContext applicationDbContext)
+
+        public OrderService(IProductRepository productRepository, IOrderRepository orderRepository, ApplicationDbContext applicationDbContext, INotificationService notificationService)
         {
             _orderRepository = orderRepository;
             _applicationDbContext = applicationDbContext;
             _productRepository = productRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<Order> GetByIdAsync(int id)
@@ -42,6 +50,7 @@ namespace HippAdministrata.Services
             return await _orderRepository.GetBySalesPersonIdAsync(salesPersonId);
         }
 
+
         public async Task<List<Order>> CreateMultipleOrdersAsync(int clientId, CreateOrderDto createOrderDto)
         {
             var salesperson = _applicationDbContext.SalesPersons.FirstOrDefault();
@@ -52,7 +61,6 @@ namespace HippAdministrata.Services
 
             foreach (var productDto in createOrderDto.Products)
             {
-                // Fetch the product
                 var product = await _productRepository.GetByIdAsync(productDto.ProductId);
                 if (product == null)
                     throw new Exception($"Product with ID {productDto.ProductId} not found.");
@@ -60,11 +68,9 @@ namespace HippAdministrata.Services
                 if (productDto.Quantity > product.UnlabeledQuantity)
                     throw new Exception($"Requested quantity for product {product.Name} exceeds available stock.");
 
-                // Deduct stock
                 product.UnlabeledQuantity -= productDto.Quantity;
                 await _productRepository.UpdateProductAsync(product);
 
-                // Create the order
                 var order = new Order
                 {
                     ClientId = clientId,
@@ -82,10 +88,25 @@ namespace HippAdministrata.Services
                 createdOrders.Add(await _orderRepository.AddAsync(order));
             }
 
+            // Send notification to Admins (RoleId = 1) and Managers (RoleId = 3)
+            var rolesToNotify = new List<int> { 1, 3 };
+
+            foreach (var roleId in rolesToNotify)
+            {
+                await _notificationService.AddNotificationForRoleAsync(
+                    roleId,
+                    $"📦 {createdOrders.Count} new order(s) have been placed by client ID {clientId}!",
+                    "New Order"
+                );
+            }
+
             return createdOrders;
         }
+    
 
-        public async Task SimulateShippingAsync(int driverId, int orderId)
+
+
+    public async Task SimulateShippingAsync(int driverId, int orderId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
             if (order == null) throw new Exception("Order not found");
