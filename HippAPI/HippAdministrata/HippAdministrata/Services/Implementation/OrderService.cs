@@ -87,7 +87,6 @@ namespace HippAdministrata.Services
 
                 createdOrders.Add(await _orderRepository.AddAsync(order));
             }
-
             // Send notification to Admins (RoleId = 1) and Managers (RoleId = 3)
             var rolesToNotify = new List<int> { 1, 3 };
 
@@ -95,7 +94,7 @@ namespace HippAdministrata.Services
             {
                 await _notificationService.AddNotificationForRoleAsync(
                     roleId,
-                    $"📦 {createdOrders.Count} new order(s) have been placed by client ID {clientId}!",
+                    $" {createdOrders.Count} new order(s) have been placed by client ID {clientId} !",
                     "New Order"
                 );
             }
