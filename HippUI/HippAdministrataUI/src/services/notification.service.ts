@@ -3,6 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
+import { RealTimeNotificationComponent } from '../app/components/real-time-notification/real-time-notification.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,12 +12,16 @@ export class NotificationService {
   public notificationsSubject = new BehaviorSubject<any[]>([]);
   notifications$ = this.notificationsSubject.asObservable();
   userId!: number;
+  private notificationComponent!: RealTimeNotificationComponent;
 
   private apiUrl = 'https://localhost:7136/api/notifications';
 
   constructor( private http: HttpClient) { 
     this.startConnection();
     this.addNotificationListener();
+  }
+  setNotificationComponent(component: RealTimeNotificationComponent) {
+    this.notificationComponent = component;
   }
 
   // private startConnection() {
@@ -106,22 +111,40 @@ export class NotificationService {
 
 
   
+  // private addNotificationListener() {
+  //   this.hubConnection.on("ReceiveNotification", (message) => {
+  //     console.log("🔔 New Notification:", message);
+  
+  //     // Show alert for real-time notification
+  //     alert(message);
+  
+  //     // Fetch notifications from the backend again to update the wrapper
+  //     const roleId = Number(localStorage.getItem("roleId"));
+  //     this.getRoleNotifications(roleId).subscribe((notifications) => {
+  //       this.notificationsSubject.next(notifications); // Update the UI
+  //     });
+  //   });
+  // }
+  
+    // Add a new subject for real-time notifications (separate from the wrapper)
+  private realTimeNotificationSubject = new BehaviorSubject<any | null>(null);
+  realTimeNotification$ = this.realTimeNotificationSubject.asObservable();
+
   private addNotificationListener() {
     this.hubConnection.on("ReceiveNotification", (message) => {
       console.log("🔔 New Notification:", message);
-  
-      // Show alert for real-time notification
-      alert(message);
-  
-      // Fetch notifications from the backend again to update the wrapper
+
+      // Send only the latest notification to the real-time notification observable
+      this.realTimeNotificationSubject.next({ message, timestamp: new Date() });
+
+      // Wrapper logic stays the same, untouched
       const roleId = Number(localStorage.getItem("roleId"));
       this.getRoleNotifications(roleId).subscribe((notifications) => {
         this.notificationsSubject.next(notifications); // Update the UI
       });
     });
   }
-  
-  
+
 
   
   sendNotification(message: string) {

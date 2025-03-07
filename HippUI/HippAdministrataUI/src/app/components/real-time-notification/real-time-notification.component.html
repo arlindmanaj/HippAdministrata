@@ -1,0 +1,12 @@
+<!-- <div class="notification-container">
+    <div *ngIf="realTimeNotification" class="real-time-notification"class="notification">
+        {{ realTimeNotification.message }}
+    </div>
+  </div> -->
+<div class="real-time-notification-container">
+  <div *ngFor="let notification of realTimeNotifications" class="real-time-notification">
+    {{ notification.message }}
+    <span class="close-btn" (click)="closeNotification(notification)">✖</span>
+    
+  </div>
+</div>

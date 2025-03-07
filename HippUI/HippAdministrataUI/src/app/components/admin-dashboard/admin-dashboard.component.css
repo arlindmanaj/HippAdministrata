@@ -124,34 +124,5 @@ li.active button {
   
   button.logout-btn:hover {
     background-color: #ff3232;
-<<<<<<< HEAD
   } */
-=======
-  } */
-   /* Dropdown Labels */
-.filterDropdown label {
-  margin-bottom: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  display: block;
-}
-
-/* Dropdown Styling */
-.filterDropdown select {
-  width: 50%; /* Ensure full width */
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fff;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
-}
-
-/* Hover & Focus Effects */
-.filterDropdown select:hover,
-.filterDropdown select:focus {
-  border-color: #007bff;
-  outline: none;
-}
->>>>>>> 8f502ac13d16f7bb7b418abf05bf8200a36e9a55
+  

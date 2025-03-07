@@ -6,14 +6,16 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
+import { RealTimeNotificationComponent } from '../real-time-notification/real-time-notification.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule,NotificationComponent], // Import FormsModule and CommonModule
+  imports: [FormsModule, CommonModule,NotificationComponent,RealTimeNotificationComponent], // Import FormsModule and CommonModule
 })
+
 export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
   newUser = { name: '', password: '', email: '' };
@@ -165,7 +167,5 @@ export class AdminDashboardComponent implements OnInit {
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
-  toggleSidebar(): void {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
-  }
+
 }
