@@ -34,7 +34,7 @@ export class RealTimeNotificationComponent implements OnInit {
     this.notificationService.realTimeNotification$.subscribe(notification => {
       if (notification) {
         this.realTimeNotifications.unshift(notification); // Add new notification at the top of the stack
-
+        this.playNotificationSound();
         // Auto-hide after 5 seconds
         setTimeout(() => {
           this.closeNotification(notification);
@@ -42,7 +42,10 @@ export class RealTimeNotificationComponent implements OnInit {
       }
     });
   }
-
+  playNotificationSound() {
+    const audio = new Audio('https://cdn.pixabay.com/audio/2024/11/27/audio_e6b2e5efcc.mp3');
+    audio.play();
+  }
   // Close individual notification
   closeNotification(notification: any) {
     this.realTimeNotifications = this.realTimeNotifications.filter(n => n !== notification);

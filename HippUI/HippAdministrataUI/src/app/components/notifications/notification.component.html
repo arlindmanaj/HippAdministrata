@@ -18,13 +18,31 @@
     </div>
   </div>
    -->
-   <div class="notification-wrapper">
+   <!-- <div class="notification-wrapper">
     <div class="notification-bell" (click)="notificationBellClicked()">
       🔔
       <span *ngIf="unreadCount > 0" class="notification-dot"></span>
     </div>
   
     <div class="notification-dropdown" *ngIf="showNotifications">
+      <div *ngIf="notifications.length === 0">No notifications</div>
+  
+      <div *ngFor="let notification of notifications">
+        <div class="notification-item" [class.unread]="!notification.isRead" (click)="markAsRead(notification)">
+          {{ notification.message }}
+          <span class="time">{{ notification.createdAt | date: 'short' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+   -->
+   <div class="notification-wrapper">
+    <div class="notification-bell" (click)="notificationBellClicked()" >
+      🔔
+      <span *ngIf="hasUnread" class="notification-dot"></span>
+    </div>
+  
+    <div class="notification-dropdown" *ngIf="showNotifications" (click)="$event.stopPropagation()">
       <div *ngIf="notifications.length === 0">No notifications</div>
   
       <div *ngFor="let notification of notifications">

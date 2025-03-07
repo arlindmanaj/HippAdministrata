@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { NotificationService } from '../../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth-service.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
@@ -12,13 +14,13 @@ import { AuthService } from '../../../services/auth-service.service';
 
 export class NotificationComponent implements OnInit {
   notifications: any[] = [];
-  hasUnread = false;
+  hasUnread: boolean = false;
   isOpen = false;
   userId!: number;
   unreadCount: number = 0;
   roleId: number = Number(localStorage.getItem('roleId'));
   showNotifications = false;
-  constructor(private notificationService: NotificationService,private authService: AuthService) {
+  constructor(private notificationService: NotificationService,private authService: AuthService,private cdRef: ChangeDetectorRef) {
     
   }
 
@@ -33,10 +35,20 @@ export class NotificationComponent implements OnInit {
     // this.loadNotifications();
     this.notificationService.getNotificationUpdates().subscribe((newNotifications) => {
       console.log("🔄 Real-Time Notification Update:", newNotifications);
+      
       this.notifications = newNotifications;
+    
       this.hasUnread = newNotifications.some(n => !n.isRead);
+      
     });
     
+  }
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.notification-wrapper')) {
+      this.showNotifications = false;
+    }
   }
 
   getRoleIdFromLocalStorage() {
@@ -50,6 +62,11 @@ export class NotificationComponent implements OnInit {
     this.notificationService.getRoleNotifications(this.roleId).subscribe(
       (data) => {
         this.notifications = data;
+  
+        // Check if there are unread notifications
+        this.hasUnread = this.notifications.some(n => !n.isRead);  // Check if any notification is unread
+        this.unreadCount = this.notifications.filter(n => !n.isRead).length;  // Count unread notifications
+        
       },
       (error) => {
         console.error('Error fetching notifications:', error);
@@ -81,21 +98,32 @@ export class NotificationComponent implements OnInit {
       this.hasUnread = true; // ✅ Mark as unread
     });
   }
+
+  
   
   notificationBellClicked() {
-    const roleId = Number(localStorage.getItem("roleId"));
-  
-    this.notificationService.markAllAsRead(roleId).subscribe(() => {
-      // Update notifications locally to reflect the change
-      this.notifications.forEach(n => n.isRead = true);
-  
-      // Clear the unread count
-      this.unreadCount = 0;
-    });
-  
-    // Toggle the dropdown
     this.showNotifications = !this.showNotifications;
+    console.log("🔔 Bell Clicked! Show Notifications:", this.showNotifications);
+
+    if (this.showNotifications) {
+      console.log("📤 Sending request to mark all as read...");
+
+      this.notificationService.markAllAsRead(this.roleId).subscribe({
+        next: (response) => {
+          console.log("✅ API Response:", response);
+          if (response.success) {
+            this.unreadCount = 0;
+            this.hasUnread = false;  // ✅ Remove blue dot when notifications are read
+            this.notifications.forEach(n => n.isRead = true);
+          }
+        },
+        error: (error) => {
+          console.error("❌ Error marking as read:", error);
+        }
+      });
+    }
   }
-  
-  
+
 }
+  
+
