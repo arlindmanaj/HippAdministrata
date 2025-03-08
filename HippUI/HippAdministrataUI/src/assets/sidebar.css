@@ -234,16 +234,17 @@
   
   }
 
-
-  .logout-image {
-    transition: opacity 0.6s ease; /* Smooth transition for opacity */
-  }
-  
   .logout-button:hover .logout-image {
     width: 30px;
     height: 30px;
     content: url('https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739375466/image-removebg-preview_4_zlr054.png'); /* Change image on hover */
   }
+  .logout-image {
+    transition: opacity 0.6s ease; /* Smooth transition for opacity */
+  }
+  
+
+  
   .sidebar.collapsed + .dashboard-container .charts {
     gap: 100px; /* Increased gap when sidebar is collapsed */
 }
@@ -294,4 +295,72 @@
 .sidebar.collapsed + .product-dashboard-container .add-product-section {
   width: 1350px; /* Adjust based on collapsed sidebar width */
 }
+
+.settings-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 50px;
+  height: 50px;
+}
+.settings-button:hover  .settings-icon{
+
+  content: url('https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1741449455/settings-removebg-preview_ga7d7u.png');
+
+  transition: opacity 1s ease; /* Smooth transition for opacity */
+
+}
+.settings-icon {
+  width: 24px;
+  height: 24px;
+  
+}
+
+.settings-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+/* When sidebar is collapsed, stack buttons vertically */
+.sidebar.collapsed .sidebar-footer {
+  flex-direction: column-reverse;
+  align-items: center; /* Center them */
+  gap: 5px; /* Reduce spacing */
+}l
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.close-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.sidebar-footer {
+  display: flex;
+  justify-content: space-between; /* Ensures buttons stay side by side */
+  align-items: center;
+  padding: 10px;
+  gap: 10px; /* Adjust the spacing between buttons */
+}
+
+.logout-button, .settings-button {
+  cursor: pointer;
+  align-items: center;
+}
+
 

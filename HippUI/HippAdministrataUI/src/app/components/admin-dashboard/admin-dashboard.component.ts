@@ -8,6 +8,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
 import { RealTimeNotificationComponent } from '../real-time-notification/real-time-notification.component';
 
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -30,11 +31,15 @@ export class AdminDashboardComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   activeSection = 'registration'; // Default section
+  isSettingsModalOpen = false;
+  muteNotifications = false;
 
   constructor(private authService: AuthService, private router: Router,private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    const savedMuteSetting = localStorage.getItem('muteNotifications');
+    this.muteNotifications = savedMuteSetting === 'true';
   }
 
   // Switch sections
@@ -166,6 +171,18 @@ export class AdminDashboardComponent implements OnInit {
   }
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+  openSettingsModal() {
+    this.isSettingsModalOpen = true;
+  }
+  
+  closeSettingsModal() {
+    this.isSettingsModalOpen = false;
+  }
+  
+  // Toggle mute notifications
+  toggleMuteNotifications() {
+    localStorage.setItem('muteNotifications', String(this.muteNotifications));
   }
 
 }

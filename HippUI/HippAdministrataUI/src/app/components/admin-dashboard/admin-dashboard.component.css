@@ -1,4 +1,5 @@
 @import url(../../../assets/sidebar.css);
+@import url(../../../styles.css);
 
 .admin-dashboard {
   display: flex;
@@ -109,20 +110,15 @@ li.active button {
     background-color: #ff6b6b;
     color: white;
   }
-  /* button.logout-btn {
-    background-color: #ff5c5c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    transition: background-color 0.3s;
+  
+
+  #close-button {
+    margin-top: 10px;
+    text-align: center;
   }
-  
-  button.logout-btn:hover {
-    background-color: #ff3232;
-  } */
-  
+  .modal-footer {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically (if needed) */
+    padding: 10px;
+  }

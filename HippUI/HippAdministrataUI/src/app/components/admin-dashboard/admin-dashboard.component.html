@@ -25,8 +25,19 @@ alt="Toggle Sidebar">
           </button>
         </li>
       </ul>
-      <button class="logout-button" (click)="logout()"><img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt=""><span class="tooltip">Log out</span></button>
-    
+      <div class="sidebar-footer">
+        <button class="logout-button" (click)="logout()">
+          <img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt="">
+          <span class="tooltip">Log out</span>
+        </button>
+        
+        <button class="settings-button" (click)="openSettingsModal()">
+          <img class="settings-icon" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_fill,w_24,h_24/v1741448752/settings_bzrhzt.png" alt="Settings">
+          <span class="tooltip">Settings</span>
+        </button>
+      </div>
+      
+      
     
   </aside>
 
@@ -148,5 +159,22 @@ alt="Toggle Sidebar">
     </div>
   </div>
   <!-- Main Content -->
+  <div *ngIf="isSettingsModalOpen" class="settings-modal">
+    <div class="settings-content">
+      <h2>Settings</h2>
+      
 
+      <div class="checkbox-wrapper-2"> 
+        <label class="checkbox-label">
+          <input type="checkbox" class="sc-gJwTLC ikxBAC" [(ngModel)]="muteNotifications" (change)="toggleMuteNotifications()">
+          Mute Notifications
+        </label>
+        
+      </div>
+      <div class="modal-footer">
+        <button id="close-button" class="button-6" (click)="closeSettingsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  
 </div>

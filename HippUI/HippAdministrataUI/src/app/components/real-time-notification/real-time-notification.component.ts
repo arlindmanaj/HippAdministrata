@@ -42,10 +42,16 @@ export class RealTimeNotificationComponent implements OnInit {
       }
     });
   }
+
   playNotificationSound() {
+    const isMuted = localStorage.getItem('muteNotifications') === 'true';
+    if (isMuted) return;
+  
     const audio = new Audio('https://cdn.pixabay.com/audio/2024/11/27/audio_e6b2e5efcc.mp3');
-    audio.play();
+
+    audio.play().catch(error => console.error('Error playing sound:', error));
   }
+  
   // Close individual notification
   closeNotification(notification: any) {
     this.realTimeNotifications = this.realTimeNotifications.filter(n => n !== notification);
