@@ -2,5 +2,7 @@
 {
     public interface IClientService
     {
+        Task<int?> GetClientIdByUserIdAsync(int userId);
     }
+
 }

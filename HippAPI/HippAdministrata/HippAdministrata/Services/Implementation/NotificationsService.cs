@@ -36,19 +36,7 @@ namespace HippAdministrata.Services.Implementation
 
             await _notificationRepository.AddNotificationAsync(notification);
         }
-        //public async Task AddNotificationForRoleAsync(int roleId, string message, string type)
-        //{
-        //    var notification = new Notification
-        //    {
-        //        RoleId = roleId, // Store the Role ID in the notification
-        //        Message = message,
-        //        Type = type,
-        //        CreatedAt = DateTime.UtcNow,
-        //        IsRead = false
-        //    };
 
-        //    await _notificationRepository.AddNotificationAsync(notification);
-        //}
         public async Task AddNotificationForRoleAsync(int roleId, string message, string type)
         {
             var notification = new Notification
@@ -75,11 +63,6 @@ namespace HippAdministrata.Services.Implementation
             }
         }
 
-
-        //public async Task<List<Notification>> GetUserNotificationsAsync(int userId)
-        //{
-        //    return await _notificationRepository.GetUserNotificationsAsync(userId);
-        //}
         public async Task<List<Notification>> GetRoleNotificationsAsync(int roleId)
         {
             return await _notificationRepository.GetRoleNotificationsAsync(roleId);

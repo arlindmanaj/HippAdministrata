@@ -18,6 +18,8 @@ namespace HippAdministrata.Services.Interface
 
 
         Task<bool> DeleteAsync(int id);
-        
+        Task<List<OrderRequest>> GetPendingRequestsAsync();  // Get pending order requests
+        //Task<bool> ApproveRequestAsync(int requestId); // Approve an order request
+        Task<bool> RejectRequestAsync(int requestId);  // Reject an order request
     }
 }

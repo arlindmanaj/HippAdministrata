@@ -10,6 +10,8 @@ using HippAdministrata.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using HippAdministrata.Services.Implementation;
 using HippAdministrata.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+    
 
 namespace HippAdministrata.Services
 {
@@ -101,11 +103,79 @@ namespace HippAdministrata.Services
 
             return createdOrders;
         }
-    
+        //public async Task<List<Order>> CreateMultipleOrdersAsync(int clientId, CreateOrderDto createOrderDto)
+        //{
+        //    var salesperson = _applicationDbContext.SalesPersons.FirstOrDefault();
+        //    if (salesperson == null)
+        //        throw new Exception("No default salesperson available for the client.");
+
+        //    var createdOrders = new List<Order>();
+
+        //    foreach (var productDto in createOrderDto.Products)
+        //    {
+        //        var product = await _productRepository.GetByIdAsync(productDto.ProductId);
+        //        if (product == null)
+        //            throw new Exception($"Product with ID {productDto.ProductId} not found.");
+
+        //        if (productDto.Quantity > product.UnlabeledQuantity)
+        //            throw new Exception($"Requested quantity for product {product.Name} exceeds available stock.");
+
+        //        product.UnlabeledQuantity -= productDto.Quantity;
+        //        await _productRepository.UpdateProductAsync(product);
+
+        //        var order = new Order
+        //        {
+        //            ClientId = clientId,
+        //            ProductId = productDto.ProductId,
+        //            SalesPersonId = salesperson.Id,
+        //            DeliveryDestination = createOrderDto.DeliveryDestination,
+        //            Quantity = productDto.Quantity,
+        //            UnlabeledQuantity = productDto.Quantity,
+        //            LabeledQuantity = 0,
+        //            ProductPrice = product.Price,
+        //            OrderStatusId = (int?)OrderStatuses.Created, // Mark it as created
+        //            CreatedAt = DateTime.UtcNow
+        //        };
+
+        //        var createdOrder = await _orderRepository.AddAsync(order);
+        //        createdOrders.Add(createdOrder);
+
+        //        // Create an entry in OrderRequests with CreatedAt instead of RequestedAt
+        //        var orderRequest = new OrderRequest
+        //        {
+        //            OrderId = createdOrder.Id,
+        //            ClientId = clientId,
+        //            RequestType = "Create", // For example, "Create" could be a valid request type
+        //            Status = "Pending", // You can adjust the status here as needed
+        //            CreatedAt = DateTime.UtcNow // Use CreatedAt instead of RequestedAt
+        //        };
+
+        //        _applicationDbContext.OrderRequests.Add(orderRequest);
+        //    }
+
+        //    // Save changes to the database
+        //    await _applicationDbContext.SaveChangesAsync();
+
+        //    // Send notification to Admins (RoleId = 1) and Managers (RoleId = 3)
+        //    var rolesToNotify = new List<int> { 1, 3 };
+
+        //    foreach (var roleId in rolesToNotify)
+        //    {
+        //        await _notificationService.AddNotificationForRoleAsync(
+        //            roleId,
+        //            $"{createdOrders.Count} new order(s) have been placed by client ID {clientId}!",
+        //            "New Order"
+        //        );
+        //    }
+
+        //    return createdOrders;
+        //}
 
 
 
-    public async Task SimulateShippingAsync(int driverId, int orderId)
+
+
+        public async Task SimulateShippingAsync(int driverId, int orderId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
             if (order == null) throw new Exception("Order not found");
@@ -187,13 +257,88 @@ namespace HippAdministrata.Services
             return order;
         }
 
-       
 
+
+        //public async Task<bool> DeleteAsync(int id)
+        //{
+        //    return await _orderRepository.DeleteAsync(id);
+        //}
         public async Task<bool> DeleteAsync(int id)
         {
-            return await _orderRepository.DeleteAsync(id);
+            // Fetch related order requests first
+            var orderRequests = await _applicationDbContext.OrderRequests
+                .Where(or => or.OrderId == id)
+                .ToListAsync(); // Force query execution
+
+            if (orderRequests.Any())
+            {
+                _applicationDbContext.OrderRequests.RemoveRange(orderRequests);
+                await _applicationDbContext.SaveChangesAsync(); // Commit order request deletion first
+            }
+
+            // Now delete the order itself
+            var order = await _orderRepository.GetByIdAsync(id);
+            if (order == null)
+                throw new Exception("Order not found");
+
+            return await _orderRepository.DeleteAsync(id); // Pass order ID instead of object
         }
 
-     
+
+
+        // Notification Request for Order
+        // Get pending requests (update/delete)
+        public async Task<List<OrderRequest>> GetPendingRequestsAsync()
+        {
+            return await _applicationDbContext.OrderRequests
+                .Where(o => o.Status == "Pending")  // Filter to get only pending requests
+                .ToListAsync();
+        }
+
+
+        // Approve an order request (update/delete)
+        //public async Task<bool> ApproveRequestAsync(int requestId)
+        //{
+        //    var request = await _applicationDbContext.OrderRequests.FindAsync(requestId);
+        //    if (request == null || request.Status != "Pending")
+        //        return false;
+
+        //    // Mark the request as approved
+        //    request.Status = "Approved";
+        //    request.ReviewedAt = DateTime.UtcNow;
+
+        //    // Approve the action (update or delete order)
+        //    var order = await _applicationDbContext.Orders.FindAsync(request.OrderId);
+        //    if (order == null)
+        //        return false;
+
+        //    if (request.RequestType == "Delete")
+        //    {
+        //        _applicationDbContext.Orders.Remove(order);
+        //    }
+        //    else if (request.RequestType == "Update")
+        //    {
+        //        // Handle update logic here if needed (e.g., update some order properties)
+        //        // Example: order.Status = "Updated"; 
+        //    }
+
+        //    await _applicationDbContext.SaveChangesAsync();
+        //    return true;
+        //}
+
+        // Reject an order request
+        public async Task<bool> RejectRequestAsync(int requestId)
+        {
+            var request = await _applicationDbContext.OrderRequests.FindAsync(requestId);
+            if (request == null || request.Status != "Pending")
+                return false;
+
+            // Mark the request as rejected
+            request.Status = "Rejected";
+            request.ReviewedAt = DateTime.UtcNow;
+
+            await _applicationDbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

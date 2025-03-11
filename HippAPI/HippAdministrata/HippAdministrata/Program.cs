@@ -50,6 +50,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<ISalesPersonRepository, SalesPersonRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 
             // Register Services
@@ -61,6 +63,8 @@ namespace HippAdministrata
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IWarehouseService, WarehouseService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IOrderRequestService, OrderRequestService>();
+            builder.Services.AddScoped<IClientService, ClientService>();
             builder.Services.AddSignalR();
 
 

@@ -20,19 +20,7 @@ public class NotificationsController : ControllerBase
         _context = context;
     }
 
-    //[HttpPost("send")]
-    //public async Task<IActionResult> SendNotification([FromBody] NotificationDto notification)
-    //{
-    //    if (notification == null || string.IsNullOrEmpty(notification.Message))
-    //    {
-    //        return BadRequest("Message is required.");
-    //    }
 
-    //    // Send notification to all connected clients
-    //    await _hubContext.Clients.All.SendAsync("ReceiveNotification", notification.Message);
-
-    //    return Ok(new { Message = "Notification sent successfully!" });
-    //}
     [HttpPost("send")]
     public async Task<IActionResult> SendNotification(NotificationDto notificationDto)
     {
@@ -55,12 +43,7 @@ public class NotificationsController : ControllerBase
     }
 
 
-    //[HttpGet("get-user-notifications/{userId}")]
-    //public async Task<IActionResult> GetUserNotifications(int userId)
-    //{
-    //    var notifications = await _notificationRepository.GetUserNotificationsAsync(userId);
-    //    return Ok(notifications);
-    //}
+
     [HttpGet("get-role-notifications/{roleId}")]
     public async Task<IActionResult> GetRoleNotifications(int roleId)
     {
@@ -76,7 +59,7 @@ public class NotificationsController : ControllerBase
             .ToList();
 
         if (!notifications.Any())
-            return Ok("No unread notifications.");
+            return Ok(new { success = true, message = "No unread notifications." });
 
         foreach (var notification in notifications)
         {
@@ -84,8 +67,10 @@ public class NotificationsController : ControllerBase
         }
 
         await _context.SaveChangesAsync();
-        return Ok("Notifications marked as read.");
+
+        return Ok(new { success = true, message = "Notifications marked as read.", count = notifications.Count });
     }
+
 
 
 

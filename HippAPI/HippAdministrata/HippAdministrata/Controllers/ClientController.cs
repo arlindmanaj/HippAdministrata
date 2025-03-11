@@ -11,12 +11,15 @@ namespace HippAdministrata.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
+        private readonly IClientService _clientService;
 
-        public ClientController(IOrderService orderService, IUserService userService)
+        public ClientController(IOrderService orderService, IUserService userService, IClientService clientService)
         {
             _orderService = orderService;
             _userService = userService;
+            _clientService = clientService;
         }
+
 
         [HttpPost("{clientId}/orders")]
         public async Task<IActionResult> CreateMultipleOrders(int clientId, [FromBody] CreateOrderDto createOrderDto)
@@ -31,7 +34,15 @@ namespace HippAdministrata.Controllers
                 return BadRequest(ex.Message);
             }
         }
-       
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetClientIdByUserId(int userId)
+        {
+            var clientId = await _clientService.GetClientIdByUserIdAsync(userId);
+            if (clientId == null) return NotFound("Client not found");
+
+            return Ok(clientId);
+        }
+
     }
 
 }
