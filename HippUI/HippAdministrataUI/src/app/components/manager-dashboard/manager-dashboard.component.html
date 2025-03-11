@@ -29,6 +29,14 @@
           Order Dashboard
         </button>
       </li>
+      <li>
+        <button
+          [class.active]="activeSection === 'orderRequests'"
+          (click)="openOrderRequestsModal()"
+        >
+          Order Requests
+        </button>
+      </li>      
     </ul>
     <button class="logout-button" (click)="logout()"><img class="logout-image" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1739374830/logout_rjfkqz.png" alt=""><span class="tooltip">Log out</span></button>
 
@@ -37,6 +45,7 @@
     <app-notification></app-notification>
 
     <main class="content">
+      
       <div class="charts">
         <div class="chart-container">
           <h2>Product Quantities</h2>
@@ -59,3 +68,27 @@
     </main>
   </div>
 </div>
+<button (click)="openOrderRequestsModal()">View Order Requests</button>
+
+<!-- Modal -->
+<div *ngIf="isOrderRequestsModalOpen" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Pending Order Requests</h2>
+    <button (click)="closeOrderRequestsModal()">✖</button>
+    
+    <div *ngIf="orderRequests.length > 0; else noRequests">
+      <ul>
+        <li *ngFor="let request of orderRequests">
+          Order ID: {{ request.orderId }} - {{ request.status }}
+          <button (click)="approveRequest(request.id)">Approve</button>
+          <button (click)="rejectRequest(request.id)">Reject</button>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #noRequests>
+      <p>No pending requests.</p>
+    </ng-template>
+  </div>
+</div>
+

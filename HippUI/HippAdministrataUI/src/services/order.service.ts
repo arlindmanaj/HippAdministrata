@@ -21,4 +21,14 @@ export class OrderService {
     // Add responseType: 'text' to handle the plain text response from the backend
     return this.http.delete(`${this.apiUrl}/Order/${orderId}`, { headers, responseType: 'text' });
   }
+  requestOrder(orderId: number, clientId: number, requestType: string, reason: string): Observable<any> {
+    const requestData = {
+      orderId: orderId,
+      clientId: clientId,
+      requestType: requestType,
+      reason: reason
+    };
+
+    return this.http.post('https://localhost:7136/api/Order/request', requestData);
+  }
 }

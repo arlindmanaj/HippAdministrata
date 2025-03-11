@@ -59,6 +59,11 @@ alt="Toggle Sidebar">
 
 
             </ul>
+            <div class="order-actions">
+              <button class="update-btn" (click)="requestOrderAction(order.orderId, 'Update')">Request Update</button>
+              <button class="delete-btn" (click)="requestOrderAction(order.orderId, 'Delete')">Request Delete</button>
+              
+            </div>
           </div>
         </div>
       </div>

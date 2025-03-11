@@ -36,5 +36,15 @@ export class ClientService {
   }
   
 
+  getClientIdByUserId(userId: number): Observable<number> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.get<number>(`${this.apiUrl}/clients/user/${userId}`, { headers });
+  }
+  createOrderRequest(request: { orderId: number; clientId: number; requestType: string; reason: string }): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.post(`${this.apiUrl}/order/request`, request, { headers });
+  }
+    // This method will make an API call to get the clientId based on the userId
+
 
 }

@@ -1,0 +1,15 @@
+<div *ngIf="orderRequests.length > 0; else noRequests">
+    <div *ngFor="let request of orderRequests" class="order-request-card">
+      <p><strong>Order ID:</strong> {{ request.orderId }}</p>
+      <p><strong>Requested Action:</strong> {{ request.action }}</p>
+      <p><strong>Requested By:</strong> {{ request.requestedBy }}</p>
+      <p><strong>Status:</strong> {{ request.status }}</p>
+      <button (click)="approveRequest(request.id)">Approve</button>
+      <button (click)="rejectRequest(request.id)">Reject</button>
+    </div>
+  </div>
+  
+  <ng-template #noRequests>
+    <p>No pending requests.</p>
+  </ng-template>
+  

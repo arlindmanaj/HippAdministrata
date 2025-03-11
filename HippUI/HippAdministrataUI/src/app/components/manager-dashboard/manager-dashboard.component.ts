@@ -6,23 +6,27 @@ import { OrderService } from '../../../services/order.service';
 import { forkJoin } from 'rxjs';
 import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
+import { ManagerService } from '../../../services/manager.service';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-manager-dashboard',
   templateUrl: './manager-dashboard.component.html',
   styleUrls: ['./manager-dashboard.component.css'],
   standalone: true,
-  imports: [RouterModule,NotificationComponent],
+  imports: [RouterModule,NotificationComponent,CommonModule],
 })
 export class ManagerDashboardComponent implements OnInit {
   activeSection: string = 'manager'; // Default active section
   sidebarCollapsed: boolean = false;
-
-
+  orderRequests: any[] = [];
+  isOrderRequestsModalOpen = false;
   constructor(
     private router: Router,
     private productService: ProductService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private managerService: ManagerService
   ) {
     Chart.register(...registerables);
   }
@@ -252,6 +256,32 @@ export class ManagerDashboardComponent implements OnInit {
   
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+  openOrderRequestsModal() {
+    this.isOrderRequestsModalOpen = true;
+    this.getOrderRequests();
+  }
+
+  closeOrderRequestsModal() {
+    this.isOrderRequestsModalOpen = false;
+  }
+
+  getOrderRequests() {
+    this.managerService.getOrderRequests().subscribe((data) => {
+      this.orderRequests = data;
+    });
+  }
+
+  approveRequest(requestId: number) {
+    this.managerService.approveRequest(requestId).subscribe(() => {
+      this.getOrderRequests(); // Refresh the list
+    });
+  }
+
+  rejectRequest(requestId: number) {
+    this.managerService.rejectRequest(requestId).subscribe(() => {
+      this.getOrderRequests(); // Refresh the list
+    });
   }
   
 }
