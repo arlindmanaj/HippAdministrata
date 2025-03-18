@@ -15,7 +15,7 @@ namespace HippAdministrata.Services.Interface
         Task<List<Order>> CreateMultipleOrdersAsync(int clientId, CreateOrderDto createOrderDto);
         Task<Order> UpdateOrderAssignmentAsync(int orderId, OrderAssignmentDto assignmentDto);
         Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId);
-
+        Task<Order> UpdateOrderAsync(int orderId, UpdateOrderDto updateOrderDto);
 
         Task<bool> DeleteAsync(int id);
         Task<List<OrderRequest>> GetPendingRequestsAsync();  // Get pending order requests

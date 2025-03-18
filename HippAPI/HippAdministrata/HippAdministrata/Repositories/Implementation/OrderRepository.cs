@@ -52,11 +52,19 @@ namespace HippAdministrata.Repositories.Implementation
             return order;
         }
 
+        //public async Task<bool> UpdateAsync(Order order)
+        //{
+        //    _context.Set<Order>().Update(order);
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
+        // OrderRepository.cs
+
         public async Task<bool> UpdateAsync(Order order)
         {
             _context.Set<Order>().Update(order);
-            return await _context.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync() > 0; // Return true if any rows were affected, else false
         }
+
 
         public async Task UpdateOrderAsync(Order order)
         {

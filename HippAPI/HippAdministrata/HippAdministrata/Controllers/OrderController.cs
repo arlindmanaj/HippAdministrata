@@ -49,7 +49,7 @@ namespace HippAdministrata.Controllers
             return Ok(orders);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -92,14 +92,54 @@ namespace HippAdministrata.Controllers
         //}
 
 
-            [HttpPost("request")]
-            public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestDto requestDto)
-            {
-                var request = await _orderRequestService.CreateOrderRequestAsync(requestDto.OrderId, requestDto.ClientId, requestDto.RequestType, requestDto.Reason);
-                return Ok(request);
-            }
+        //[HttpPost("request")]
+        //public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestDto requestDto)
+        //{
+        //    var request = await _orderRequestService.CreateOrderRequestAsync(requestDto.OrderId, requestDto.ClientId, requestDto.RequestType, requestDto.Reason);
+        //    return Ok(request);
+        //}
+        [HttpPost("request")]
+        public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestDto requestDto)
+        {
+            // Validate request type
+            if (requestDto.RequestType != "Update" && requestDto.RequestType != "Delete")
+                return BadRequest("Request type must be either 'Update' or 'Delete'.");
 
-            [HttpGet("pending-requests")]
+            // Call the service method, passing all necessary properties
+            var request = await _orderRequestService.CreateOrderRequestAsync(
+                requestDto.OrderId,
+                requestDto.ClientId,
+                requestDto.RequestType,
+                requestDto.Reason,
+                requestDto.NewDeliveryDestination,
+                requestDto.NewQuantity,
+                requestDto.NewProductId);
+
+            return Ok(request);
+        }
+
+        // OrderController.cs
+
+        [HttpPut("update/{orderId}")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] UpdateOrderDto updateOrderDto)
+        {
+            try
+            {
+                var updatedOrder = await _orderService.UpdateOrderAsync(orderId, updateOrderDto);
+                return Ok(updatedOrder); // Return the updated order
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message); // Handle case where order is not found
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message); // Generic error handling
+            }
+        }
+
+
+        [HttpGet("pending-requests")]
             public async Task<IActionResult> GetPendingRequests()
             {
                 var requests = await _orderRequestService.GetPendingRequestsAsync();
@@ -123,6 +163,7 @@ namespace HippAdministrata.Controllers
 
         }
     }
+
 
     }
     

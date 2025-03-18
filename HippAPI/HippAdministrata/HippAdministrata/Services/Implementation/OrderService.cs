@@ -22,14 +22,16 @@ namespace HippAdministrata.Services
         private readonly IProductRepository _productRepository;
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly INotificationService _notificationService;
+        private readonly IClientRepository _clientRepository;
 
 
-        public OrderService(IProductRepository productRepository, IOrderRepository orderRepository, ApplicationDbContext applicationDbContext, INotificationService notificationService)
+        public OrderService(IProductRepository productRepository, IOrderRepository orderRepository, ApplicationDbContext applicationDbContext, INotificationService notificationService, IClientRepository clientRepository)
         {
             _orderRepository = orderRepository;
             _applicationDbContext = applicationDbContext;
             _productRepository = productRepository;
             _notificationService = notificationService;
+            _clientRepository = clientRepository;
         }
 
         public async Task<Order> GetByIdAsync(int id)
@@ -265,24 +267,44 @@ namespace HippAdministrata.Services
         //}
         public async Task<bool> DeleteAsync(int id)
         {
-            // Fetch related order requests first
-            var orderRequests = await _applicationDbContext.OrderRequests
-                .Where(or => or.OrderId == id)
-                .ToListAsync(); // Force query execution
+           // // Fetch related order requests first
+           // var orderRequests = await _applicationDbContext.OrderRequests
+           //     .Where(or => or.OrderId == id)
+           //     .ToListAsync(); // Force query execution
 
-            if (orderRequests.Any())
-            {
-                _applicationDbContext.OrderRequests.RemoveRange(orderRequests);
-                await _applicationDbContext.SaveChangesAsync(); // Commit order request deletion first
-            }
+           // //if (orderRequests.Any())
+           // //{
+           // //    _applicationDbContext.OrderRequests.RemoveRange(orderRequests);
+           // //    await _applicationDbContext.SaveChangesAsync(); // Commit order request deletion first
+           // //}
 
-            // Now delete the order itself
-            var order = await _orderRepository.GetByIdAsync(id);
-            if (order == null)
-                throw new Exception("Order not found");
+           // //Now delete the order itself
+           //var order = await _orderRepository.GetByIdAsync(id);
+           // if (order == null)
+           //     throw new Exception("Order not found");
 
             return await _orderRepository.DeleteAsync(id); // Pass order ID instead of object
         }
+        //public async Task<bool> DeleteAsync(int id)
+        //{
+        //    var order = await _applicationDbContext.Orders
+        //        .AsNoTracking() // Prevents tracking issues
+        //        .FirstOrDefaultAsync(o => o.Id == id);
+
+        //    if (order == null)
+        //    {
+        //        throw new Exception($"Order {id} not found in the database before deletion.");
+        //    }
+
+        //    Console.WriteLine($"Deleting Order {id}: ProductId = {order.ProductId}, WarehouseId = {order.WarehouseId}");
+
+        //    _applicationDbContext.Orders.Remove(order);
+        //    await _applicationDbContext.SaveChangesAsync();
+
+        //    return true;
+        //}
+
+
 
 
 
@@ -340,5 +362,39 @@ namespace HippAdministrata.Services
             await _applicationDbContext.SaveChangesAsync();
             return true;
         }
+        // OrderService.cs
+
+        // OrderService.cs
+
+        public async Task<Order> UpdateOrderAsync(int orderId, UpdateOrderDto updateOrderDto)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+
+            if (order == null)
+            {
+                throw new ArgumentException("Order not found");
+            }
+
+            // Update the order properties based on the DTO
+            order.DeliveryDestination = updateOrderDto.DeliveryDestination;
+            order.Quantity = updateOrderDto.Quantity; // This will overwrite with the new quantity
+            order.ProductId = updateOrderDto.ProductId; // This will change the product ID
+            order.LastUpdated = DateTime.UtcNow; // Set LastUpdated timestamp
+            order.UnlabeledQuantity = updateOrderDto.Quantity; // Update the unlabeled quantity    
+            // Call the repository's UpdateAsync method to persist the changes
+            bool updateSuccess = await _orderRepository.UpdateAsync(order);
+
+            if (updateSuccess)
+            {
+                return order; // Return the updated order if the update was successful
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to update order");
+            }
+        }
+
+
+
     }
 }

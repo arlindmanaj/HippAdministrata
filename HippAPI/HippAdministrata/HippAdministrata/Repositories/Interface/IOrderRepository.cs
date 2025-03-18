@@ -12,6 +12,7 @@ namespace HippAdministrata.Repositories.Interface
         Task<IEnumerable<Order>> GetBySalesPersonIdAsync(int salesPersonId);
         Task<Order?> GetByIdWithProductAsync(int orderId);
         Task<bool> UpdateAsync(Order order);
+        //Task UpdateAsync(Order order);
         Task<List<OrderDto>> GetOrdersBySalesPersonIdAsync(int salesPersonId);
         Task<IEnumerable<Order>> GetOrdersByEmployeeIdAsync(int employeeId);
         Task UpdateOrderAsync(Order order);
