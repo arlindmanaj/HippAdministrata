@@ -53,7 +53,9 @@ namespace HippAdministrata.Services.Implementation
             var groups = new Dictionary<int, string>
             {
                 { 1, "Admins" },
-                { 3, "Managers" }
+                { 3, "Managers" },
+                { 6, "Clients" }
+
             };
 
             if (groups.ContainsKey(roleId))
