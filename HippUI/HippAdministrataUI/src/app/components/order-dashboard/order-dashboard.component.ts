@@ -10,6 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../services/product.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { NgZone } from '@angular/core';
+
+
+
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -67,7 +72,7 @@ export class OrderDashboardComponent implements OnInit {
   loggedInUser: string | undefined;
   private jwtHelper = new JwtHelperService();
   
-
+  orderId: number | null = null;
 
 
 
@@ -78,7 +83,9 @@ export class OrderDashboardComponent implements OnInit {
     private productService: ProductService,
     private orderService: OrderService,
     public router: Router,
-    private cdr: ChangeDetectorRef // Add this
+    private cdr: ChangeDetectorRef ,
+    private route: ActivatedRoute,
+    private ngZone: NgZone// Add this
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +93,28 @@ export class OrderDashboardComponent implements OnInit {
     this.loadClients();
     this.loadEmployees();
     this.loadDrivers();
+    this.route.queryParams.subscribe(params => {
+      const orderId = params['orderId'];
+    
+      if (orderId) {
+        this.searchOrderId = Number(orderId);
+    
+        // Trigger input event to force the search
+        setTimeout(() => {
+          const inputElement = document.getElementById('orderSearchInput') as HTMLInputElement;
+          if (inputElement) {
+            inputElement.dispatchEvent(new Event('input')); // Trigger input event
+          }
+        }, 0);
+      }
+    });
+    
+    
+  
+    // Watch for changes in searchOrderId and trigger search
+    this.watchSearchChanges();
+    
+    
     this.loadSalesPersons();
 
       const token = localStorage.getItem('authToken'); // Retrieve the token with the correct key
@@ -105,8 +134,22 @@ export class OrderDashboardComponent implements OnInit {
   
 
   }
+  searchByOrderId(searchId: number): void {
+    this.filteredOrders = this.orders.filter(order => order.id === searchId);
+  }
 
+
+  watchSearchChanges(): void {
+    this.ngZone.runOutsideAngular(() => {
+      const inputElement = document.querySelector('input[placeholder="Search by Order ID"]') as HTMLInputElement;
   
+      inputElement.addEventListener('input', () => {
+        this.ngZone.run(() => {
+          this.searchOrders(); // Trigger search when user types
+        });
+      });
+    });
+  }
   
 
   
@@ -116,15 +159,16 @@ export class OrderDashboardComponent implements OnInit {
         console.log('Fetched Orders:', orders); // Debugging line
         this.orders = orders;
         this.cdr.detectChanges();
+        
+        // Trigger the search after the orders are successfully loaded
+        // Pass 'order' as the type, because you're searching by orderId
+        this.handleSearch('order');
       },
       (error) => {
         console.error('Failed to load orders:', error);
       }
     );
-    
-    
   }
-
   getProductName(productId: number): Promise<string> {
     return new Promise((resolve) => {
       this.productService.getProductById(productId).subscribe(
@@ -262,14 +306,14 @@ export class OrderDashboardComponent implements OnInit {
 
 
 
-    searchByOrderId(event: Event): void {
-      const target = event.target as HTMLInputElement;
-      const searchId = Number(target.value);
+    // searchByOrderId(event: Event): void {
+    //   const target = event.target as HTMLInputElement;
+    //   const searchId = Number(target.value);
       
-      this.filteredOrders = !isNaN(searchId)
-        ? this.orders.filter(order => order.id === searchId)
-        : [];
-    }
+    //   this.filteredOrders = !isNaN(searchId)
+    //     ? this.orders.filter(order => order.id === searchId)
+    //     : [];
+    // }
     
     searchByProductId(event: Event): void {
       const target = event.target as HTMLInputElement;

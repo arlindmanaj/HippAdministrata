@@ -68,10 +68,8 @@
     </main>
   </div>
 </div>
-<button (click)="openOrderRequestsModal()">View Order Requests</button>
-
 <!-- Modal -->
-<div *ngIf="isOrderRequestsModalOpen" class="modal-overlay">
+<!-- <div *ngIf="isOrderRequestsModalOpen" class="modal-overlay">
   <div class="modal-content">
     <h2>Pending Order Requests</h2>
     <button (click)="closeOrderRequestsModal()">✖</button>
@@ -89,6 +87,132 @@
     <ng-template #noRequests>
       <p>No pending requests.</p>
     </ng-template>
+  </div>
+</div> -->
+
+<!-- <div *ngIf="isOrderRequestsModalOpen" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Pending Order Requests</h2>
+      <button class="button-6" (click)="closeOrderRequestsModal()">✖</button>
+    </div>
+
+    <div *ngIf="orderRequests.length > 0; else noRequests">
+      <ul class="order-list">
+
+        <ul class="order-list">
+          <li *ngFor="let request of orderRequests" class="order-item">
+            
+            
+            <span *ngIf="request.requestType === 'Update'">
+              <strong>Order ID:</strong> {{ request.orderId }} - {{ request.status }} - {{ request.requestType }} <br>
+              <span>New Destination: {{ request.newDeliveryDestination }}</span><br>
+              <span>New Quantity: {{ request.newQuantity }}</span>
+              
+            </span>
+        
+            <span *ngIf="request.requestType === 'Delete'">
+              <strong>Order ID:</strong> {{ request.orderId }} - {{ request.status }} - {{ request.requestType }}
+            </span>
+        
+            <span *ngIf="request.requestType !== 'Update' && request.requestType !== 'Delete'">
+              <strong>Order ID:</strong> {{ request.orderId }} - {{ request.status }}
+            </span>
+        
+            
+            <div class="btn-group">
+              <button class="approve-btn" (click)="approveRequest(request.id)">Approve</button>
+              <button class="reject-btn" (click)="rejectRequest(request.id)">Reject</button>
+            </div>
+            
+          </li>
+        </ul>
+      </ul>
+    </div>
+
+    <ng-template #noRequests>
+      <p class="no-requests">No pending requests.</p>
+    </ng-template>
+  </div>
+</div> -->
+<div *ngIf="isOrderRequestsModalOpen" class="modal-overlay">
+  <div class="modal-content">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>Pending Order Requests</h2>
+      <button class="button-6" (click)="closeOrderRequestsModal()">✖</button>
+    </div>
+
+    <!-- Order List -->
+    <div *ngIf="orderRequests.length > 0; else noRequests">
+      <ul class="order-list">
+        <li *ngFor="let request of orderRequests" class="order-item">
+
+          <div *ngIf="request.requestType === 'Update'" >
+
+            <!-- Left side (Order ID, Status, Request Type) -->
+            <div class="order-item-header">
+              <div class="left">
+                <h4><strong>Order ID:</strong> <span class="normal-text"> {{ request.orderId }}</span></h4>
+                <h4><strong>Status:</strong> <span class="normal-text"> {{ request.status }}</span></h4>
+                <h4><strong>Request Type:</strong> <span class="normal-text"> Update</span></h4>
+              </div>
+              <div class="right">
+                <div class="view-order-btn">
+                  <button (click)="viewOrder(request.orderId)" class="details-button" id="view-order-btn" >
+                    <img class="view-order-icon" src="https://res.cloudinary.com/dhpok6wna/image/upload/c_pad,w_24,h_24/v1742178885/new-tab_weawh1.png" alt="View Order" class="view-order-icon" />
+                    <span class="tooltip">Go to Order</span>
+                  </button>
+                  <button (click)="toggleDetails(request.id)" class="details-button">
+                    Show Details
+                    <span>{{ isDetailsOpen(request.id) ? '︿' : '﹀' }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>            
+          <!-- Order Details (only show when Show Details is clicked) -->
+          <div *ngIf="isDetailsOpen(request.id)" class="order-details">
+            <div class="old-details">
+              <strong>Old Order:</strong>
+              <h4><strong>Product ID:</strong> {{ findOrderById(request.orderId)?.productId }}</h4>
+              <h4><strong>Destination:</strong> {{ findOrderById(request.orderId)?.deliveryDestination }}</h4>
+              <h4><strong>Quantity:</strong> {{ findOrderById(request.orderId)?.quantity }}</h4>
+            </div>
+            <div class="new-details">
+              <strong>New Request:</strong>
+              <h4><strong>Product ID:</strong> {{ request.newProductId }}</h4>
+              <h4><strong>Destination:</strong> {{ request.newDeliveryDestination }}</h4>
+              <h4><strong>Quantity:</strong> {{ request.newQuantity }}</h4>
+            </div>
+          </div>
+          <div *ngIf="request.requestType === 'Delete'" class="left">
+            <h4><strong>Order ID:</strong> <span class="normal-text"> {{ request.orderId }}</span></h4>
+            <h4><strong>Status:</strong> <span class="normal-text"> {{ request.status }}</span></h4>
+            <h4><strong>Request Type:</strong> <span class="normal-text"> Delete</span></h4>
+          </div>
+    
+          <div *ngIf="request.requestType !== 'Update' && request.requestType !== 'Delete'">
+            <strong>Order ID:</strong> {{ request.orderId }} <br>
+            <strong>Status:</strong> {{ request.status }}
+          </div>
+    
+          <!-- Delete and Approve Buttons -->
+          <div class="btn-group">
+            <button class="button-6" id="reject-btn" (click)="rejectRequest(request.id)">Reject</button>
+            <button class="button-6" id="approve-btn" (click)="approveRequest(request.id)">Approve</button>
+          </div>
+
+        </li>
+      </ul>
+    </div>
+
+    <!-- No Requests Message -->
+    <ng-template #noRequests>
+      <p class="no-requests">No pending requests.</p>
+    </ng-template>
+
   </div>
 </div>
 

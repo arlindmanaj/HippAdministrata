@@ -47,6 +47,25 @@ export class ClientDashboardComponent implements OnInit {
   recentOrders: Order[] = []; // To store the two most recent orders
   expandedOrders: Set<number> = new Set(); // Track expanded orders
 
+  isUpdateModalOpen = false;
+  orderId!: number;
+  reason!: string;
+  newDeliveryDestination?: string;
+  newQuantity?: number;
+  newProductId?: number;
+updateRequest = {
+  orderId: 0,
+  clientId: 0,
+  requestType: "Update",
+  reason: "",
+  newDeliveryDestination: "",
+  newQuantity: 0,
+  newProductId: 0
+};
+
+
+
+
   constructor(private router: Router, private clientService: ClientService, private orderService: OrderService) { }
 
   ngOnInit(): void {
@@ -237,47 +256,125 @@ export class ClientDashboardComponent implements OnInit {
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
-// client.component.ts
 
-// client.component.ts
+  requestOrderAction(orderId: number, requestType: string): void {
 
-requestOrderAction(orderId: number, requestType: string): void {
-  const userId = localStorage.getItem('userId'); // Assuming userId is stored in local storage
-
-  if (!userId) {
-    console.error('User ID not found. Please log in again.');
-    return;
+  
+    const userId = localStorage.getItem('userId'); 
+  
+    if (!userId) {
+      console.error('User ID not found. Please log in again.');
+      return;
+    }
+  
+    this.clientService.getClientIdByUserId(Number(userId)).subscribe({
+      next: (clientId) => {
+        if (!clientId) {
+          console.error('Client ID not found');
+          return;
+        }
+  
+        this.orderService.requestOrder(orderId, clientId, requestType, 'Reason for request')
+          .subscribe({
+            next: (response) => {
+              console.log('Order request successfully created:', response);
+            },
+            error: (err) => {
+              console.error('Error creating order request:', err);
+            }
+          });
+      },
+      error: (err) => {
+        console.error('Error fetching client ID:', err);
+      }
+    });
   }
 
-  this.clientService.getClientIdByUserId(Number(userId)).subscribe({
-    next: (clientId) => {
-      if (!clientId) {
-        console.error('Client ID not found');
-        return;
-      }
-
-      // Call the OrderService method
-      this.orderService.requestOrder(orderId, clientId, requestType, 'Reason for request')
-        .subscribe({
+  submitUpdateRequest() {
+    const userId = localStorage.getItem('userId');
+  
+    if (!userId) {
+      console.error('User ID not found. Please log in again.');
+      return;
+    }
+  
+    this.clientService.getClientIdByUserId(Number(userId)).subscribe({
+      next: (clientId) => {
+        if (!clientId) {
+          console.error('Client ID not found.');
+          return;
+        }
+  
+        this.updateRequest.clientId = clientId;
+  
+        this.orderService.requestUpdateOrder(this.updateRequest).subscribe({
           next: (response) => {
-            console.log('Order request successfully created:', response);
+            console.log('Update request submitted successfully:', response);
+            this.closeUpdateModal();
           },
           error: (err) => {
-            console.error('Error creating order request:', err);
+            console.error('Error submitting update request:', err);
           }
         });
-    },
-    error: (err) => {
-      console.error('Error fetching client ID:', err);
-    }
-  });
+      },
+      error: (err) => {
+        console.error('Error fetching client ID:', err);
+      }
+    });
+  }
+  
+  openUpdateModal(orderId: number) {
+    this.updateRequest.orderId = orderId;
+    this.isUpdateModalOpen = true;
+  }
+  
+  // Close the update modal
+  closeUpdateModal() {
+    this.isUpdateModalOpen = false;
+  }
+  
 }
 
+// client.component.ts
+
+// client.component.ts
+
+// requestOrderAction(orderId: number, requestType: string): void {
+//   const userId = localStorage.getItem('userId'); // Assuming userId is stored in local storage
+
+//   if (!userId) {
+//     console.error('User ID not found. Please log in again.');
+//     return;
+//   }
+
+//   this.clientService.getClientIdByUserId(Number(userId)).subscribe({
+//     next: (clientId) => {
+//       if (!clientId) {
+//         console.error('Client ID not found');
+//         return;
+//       }
+
+//       // Call the OrderService method
+//       this.orderService.requestOrder(orderId, clientId, requestType, 'Reason for request')
+//         .subscribe({
+//           next: (response) => {
+//             console.log('Order request successfully created:', response);
+//           },
+//           error: (err) => {
+//             console.error('Error creating order request:', err);
+//           }
+//         });
+//     },
+//     error: (err) => {
+//       console.error('Error fetching client ID:', err);
+//     }
+//   });
+// }
+
+
 
 
   
   
   
-  
-  
-}
+

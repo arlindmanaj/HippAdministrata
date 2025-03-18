@@ -9,7 +9,6 @@ import { NotificationComponent } from '../notifications/notification.component';
 import { ManagerService } from '../../../services/manager.service';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-manager-dashboard',
   templateUrl: './manager-dashboard.component.html',
@@ -22,6 +21,8 @@ export class ManagerDashboardComponent implements OnInit {
   sidebarCollapsed: boolean = false;
   orderRequests: any[] = [];
   isOrderRequestsModalOpen = false;
+  orders: any[] = [];
+  highlightedOrderId: number | null = null;
   constructor(
     private router: Router,
     private productService: ProductService,
@@ -36,9 +37,44 @@ export class ManagerDashboardComponent implements OnInit {
     this.loadRevenueChart();
     this.loadRevenueShareChart();
     this.loadTopProductsChart();
+    this.loadOrders();
+    
     
   }
+  viewOrder(orderId: number): void {
+    console.log('Button clicked. Order ID:', orderId);  // Log a message to confirm if it's being triggered
+    if (orderId) {
+      this.router.navigate(['/manager/orders'], { queryParams: { orderId } });
+    }
+    
+  }
+  
+  // Store visibility for each request
+orderDetailsVisibility: { [requestId: number]: boolean } = {};
 
+toggleDetails(requestId: number): void {
+  this.orderDetailsVisibility[requestId] = !this.orderDetailsVisibility[requestId];
+}
+
+isDetailsOpen(requestId: number): boolean {
+  return this.orderDetailsVisibility[requestId] || false;
+}
+
+  
+  loadOrders(): void {
+    this.orderService.getOrders().subscribe(
+      (orders) => {
+        console.log('Fetched Orders:', orders);  // Debugging line
+        this.orders = orders;  // Assign the orders to the component's orders array
+      },
+      (error) => {
+        console.error('Failed to load orders:', error);  // Handle errors
+      }
+    );
+  }
+  findOrderById(orderId: number) {
+    return this.orders.find(order => order.id === orderId);
+  }
   // Navigation logic
   navigateTo(path: string): void {
     this.activeSection = path; // Update active section

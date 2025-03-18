@@ -1,4 +1,4 @@
-<div *ngIf="orderRequests.length > 0; else noRequests">
+<!-- <div *ngIf="orderRequests.length > 0; else noRequests">
     <div *ngFor="let request of orderRequests" class="order-request-card">
       <p><strong>Order ID:</strong> {{ request.orderId }}</p>
       <p><strong>Requested Action:</strong> {{ request.action }}</p>
@@ -12,4 +12,24 @@
   <ng-template #noRequests>
     <p>No pending requests.</p>
   </ng-template>
+   -->
+   <div *ngIf="isOrderRequestsModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Pending Order Requests</h2>
+      <button (click)="closeOrderRequestsModal()">✖</button>
+      
+      <div *ngIf="orderRequests.length > 0; else noRequests">
+        <ul>
+          <li *ngFor="let request of orderRequests">
+            Order ID: {{ request.orderId }} - {{ request.status }}
+            <button (click)="approveRequest(request.id)">Approve</button>
+            <button (click)="rejectRequest(request.id)">Reject</button>
+          </li>
+        </ul>
+      </div>
   
+      <ng-template #noRequests>
+        <p>No pending requests.</p>
+      </ng-template>
+    </div>
+  </div>

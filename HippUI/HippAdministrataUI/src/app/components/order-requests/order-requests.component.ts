@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class OrderRequestsComponent implements OnInit {
   orderRequests: any[] = [];
+  isOrderRequestsModalOpen = false;
 
   constructor(private http: HttpClient) {}
 
@@ -33,5 +34,13 @@ export class OrderRequestsComponent implements OnInit {
   rejectRequest(requestId: number) {
     this.http.post(`https://localhost:7136/api/Order/reject/${requestId}`, {})
       .subscribe(() => this.getOrderRequests());
+  }
+  openOrderRequestsModal() {
+    this.isOrderRequestsModalOpen = true;
+    this.getOrderRequests();
+  }
+
+  closeOrderRequestsModal() {
+    this.isOrderRequestsModalOpen = false;
   }
 }
