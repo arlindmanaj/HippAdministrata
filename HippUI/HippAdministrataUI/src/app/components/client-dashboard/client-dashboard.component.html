@@ -52,7 +52,7 @@ alt="Toggle Sidebar">
               <li *ngFor="let product of order.products">
                 <p>Product: {{ product.productName }}</p>
                 <p>Quantity: {{ product.quantity }}</p>
-                <p>Price: ${{ product.productPrice }}</p>
+                <p>Price: ${{ product.productPrice*product.quantity }}</p>
                 <td>Status: {{ order.orderStatusDisplay }}</td>
               </li>
 
@@ -60,7 +60,11 @@ alt="Toggle Sidebar">
 
             </ul>
             <div class="order-actions">
-              <button class="update-btn" (click)="requestOrderAction(order.orderId, 'Update')">Request Update</button>
+              <!-- <button class="update-btn" (click)="requestOrderAction(order.orderId, 'Update')">Request Update</button> -->
+              <button class="update-btn" (click)="openUpdateModal(order.orderId)">Request Update</button>
+
+
+
               <button class="delete-btn" (click)="requestOrderAction(order.orderId, 'Delete')">Request Delete</button>
               
             </div>
@@ -140,3 +144,72 @@ alt="Toggle Sidebar">
       </div>
     </div>
     </div>
+<!-- Update Order Modal -->
+<div *ngIf="isUpdateModalOpen" class="modal">
+  <div class="modal-content">
+    <h2>Request Order Update</h2>
+    <form>
+      <!-- New Delivery Destination -->
+      <div class="form-group">
+        <label for="newDeliveryDestination">New Delivery Destination</label>
+        <input type="text" id="newDeliveryDestination" [(ngModel)]="updateRequest.newDeliveryDestination" name="newDeliveryDestination" required />
+      </div>
+
+      <!-- New Product and Quantity -->
+      <div class="form-group">
+        <label for="newProduct">New Product</label>
+        <select id="newProduct" [(ngModel)]="updateRequest.newProductId" name="newProduct">
+          <option *ngFor="let p of products" [value]="p.id">{{ p.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="newQuantity">New Quantity</label>
+        <input type="number" id="newQuantity" [(ngModel)]="updateRequest.newQuantity" name="newQuantity" required />
+      </div>
+
+      <!-- Reason for Update -->
+      <div class="form-group">
+        <label for="reason">Reason</label>
+        <textarea id="reason" [(ngModel)]="updateRequest.reason" name="reason" required></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button type="button" class="submit-btn" (click)="submitUpdateRequest()">Submit Request</button>
+        <button type="button" class="cancel-btn" (click)="closeUpdateModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+    <!-- Update Order Modal -->
+<!-- Update Order Modal -->
+<!-- <div *ngIf="isUpdateModalOpen" class="modal">
+  <div class="modal-content">
+    <h2>Request Order Update</h2>
+    <form>
+      <div class="form-group">
+        <label for="updateDestination">New Delivery Destination</label>
+        <input type="text" id="updateDestination" [(ngModel)]="updateRequest.deliveryDestination" name="updateDestination" required />
+      </div>
+
+      <div class="form-group">
+        <label for="updateProduct">New Product</label>
+        <select id="updateProduct" [(ngModel)]="updateRequest.productId" name="updateProduct">
+          <option *ngFor="let p of products" [value]="p.id">{{ p.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="updateQuantity">New Quantity</label>
+        <input type="number" id="updateQuantity" [(ngModel)]="updateRequest.quantity" name="updateQuantity" required />
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="submit-btn" (click)="submitUpdateRequest()">Submit Request</button>
+        <button type="button" class="cancel-btn" (click)="closeUpdateModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div> -->
+

@@ -62,7 +62,14 @@ alt="Toggle Sidebar">
           </div>
           
           <div class="search-row">
-            <input type="number" [(ngModel)]="searchOrderId" (input)="handleSearch('order')" placeholder="Search by Order ID">
+            <input 
+  id="orderSearchInput" 
+  type="number" 
+  [(ngModel)]="searchOrderId" 
+  (input)="handleSearch('order')" 
+  placeholder="Search by Order ID">
+
+            
             <input type="number" [(ngModel)]="searchProductId" (input)="handleSearch('product')" placeholder="Search by Product ID">
           </div>
           <div class="checkbox-wrapper-2"> 

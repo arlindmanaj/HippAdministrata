@@ -88,7 +88,7 @@
     width: 100%;
     height: 100%;
   }
-  .modal-overlay {
+  /* .modal-overlay {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
@@ -108,4 +108,314 @@
   button {
     margin: 5px;
   }
-  
+   */
+
+   /* Modal Overlay */
+/* .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 500px;
+  max-width: 90%;
+  text-align: center;
+}
+
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+.order-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.approve-btn {
+  background: #28a745;
+  color: white;
+}
+
+.approve-btn:hover {
+  background: #218838;
+}
+
+.reject-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.reject-btn:hover {
+  background: #c82333;
+}
+
+
+.no-requests {
+  font-style: italic;
+  color: gray;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+} */
+ /* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 450px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+/* Close Button */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Order List */
+.order-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.order-item {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Order Details */
+.order-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.old-details,
+.new-details {
+  width: 48%;
+  font-size: 14px;
+}
+
+.old-details h4,
+.new-details h4 {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+
+  justify-content: space-between;
+}
+
+#approve-btn {
+  margin-left: 0;
+}
+
+#approve-btn:hover {
+  background-color: rgba(0, 8, 255, 0.156) !important;
+}
+#reject-btn:hover {
+  background-color: rgba(255, 0, 0, 0.156) !important;
+}
+
+
+
+/* No Requests Text */
+.no-requests {
+  font-style: italic;
+  color: gray;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.request-container {
+  display: flex;  
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* Small gap between them */
+  align-items: start; /* Align to the left */
+}
+.normal-text {
+  font-weight: normal;
+}
+
+.order-item-header {
+  display: flex;
+  justify-content: space-between;  /* Space out the left and right sections */
+  align-items: center;  /* Vertically center the content */
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;  /* Align the button group to the right */
+}
+
+.view-order-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;  /* Optional: Space between the buttons */
+  align-items: center;  /* Align the buttons vertically if needed */
+  margin-bottom: 15px;
+}
+
+.details-button {
+  margin-left: 10px;  /* Space between the buttons */
+}
+
+
+.details-button {
+  background-color: transparent;
+  border: none;
+  color: #007BFF;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#view-order-btn{
+  margin-left: 50px;
+}
+
+
+.view-order-icon:hover{
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}
+
+.view-order-btn {
+  position: relative; /* Needed to position the tooltip */
+}
+
+
+
+.tooltip {
+  visibility: hidden; /* Initially hide the tooltip */
+  position: absolute;
+  bottom: 111px; /* Position the tooltip above the icon */
+  left: 95%;
+  transform: translateX(-50%);
+  background-color: rgba(163, 163, 163, 0.723);
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 12px;
+  opacity: 0; /* Initially hide the tooltip */
+  transition: opacity 0.8s; /* Fade in the tooltip */
+}
+
+#view-order-btn:hover .tooltip {
+  visibility: visible;
+  opacity: 1; /* Show the tooltip when hovering */
+}
