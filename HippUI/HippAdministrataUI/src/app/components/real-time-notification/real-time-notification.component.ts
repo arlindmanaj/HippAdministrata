@@ -7,24 +7,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./real-time-notification.component.css'],
   imports: [CommonModule]
 })
-// export class RealTimeNotificationComponent implements OnInit {
-//   realTimeNotification: any = null;
 
-//   constructor(private notificationService: NotificationService) {}
-
-//   ngOnInit(): void {
-//     this.notificationService.realTimeNotification$.subscribe(notification => {
-//       if (notification) {
-//         this.realTimeNotification = notification;
-
-//         // Auto-hide after 5 seconds
-//         setTimeout(() => {
-//           this.realTimeNotification = null;
-//         }, 5000);
-//       }
-//     });
-//   }
-// }
 export class RealTimeNotificationComponent implements OnInit {
   realTimeNotifications: any[] = []; // Store multiple notifications
 

@@ -8,6 +8,7 @@ import { getOrderStatusLabel } from '../../../services/order-status.util';
 import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
 import { OrderService } from '../../../services/order.service';
+import { RealTimeNotificationComponent } from "../real-time-notification/real-time-notification.component";
 
 interface Product {
   productName: string;
@@ -27,7 +28,7 @@ interface Order {
   templateUrl: './client-dashboard.component.html',
   standalone: true,
   styleUrls: ['./client-dashboard.component.css'],
-  imports: [FormsModule, CommonModule,NotificationComponent],
+  imports: [FormsModule, CommonModule,NotificationComponent, RealTimeNotificationComponent],
 })
 export class ClientDashboardComponent implements OnInit {
   products: any[] = []; // List of products
@@ -335,41 +336,7 @@ updateRequest = {
   
 }
 
-// client.component.ts
 
-// client.component.ts
-
-// requestOrderAction(orderId: number, requestType: string): void {
-//   const userId = localStorage.getItem('userId'); // Assuming userId is stored in local storage
-
-//   if (!userId) {
-//     console.error('User ID not found. Please log in again.');
-//     return;
-//   }
-
-//   this.clientService.getClientIdByUserId(Number(userId)).subscribe({
-//     next: (clientId) => {
-//       if (!clientId) {
-//         console.error('Client ID not found');
-//         return;
-//       }
-
-//       // Call the OrderService method
-//       this.orderService.requestOrder(orderId, clientId, requestType, 'Reason for request')
-//         .subscribe({
-//           next: (response) => {
-//             console.log('Order request successfully created:', response);
-//           },
-//           error: (err) => {
-//             console.error('Error creating order request:', err);
-//           }
-//         });
-//     },
-//     error: (err) => {
-//       console.error('Error fetching client ID:', err);
-//     }
-//   });
-// }
 
 
 
