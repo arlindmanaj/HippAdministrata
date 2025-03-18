@@ -8,13 +8,14 @@ import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
 import { ManagerService } from '../../../services/manager.service';
 import { CommonModule } from '@angular/common';
+import { RealTimeNotificationComponent } from "../real-time-notification/real-time-notification.component";
 
 @Component({
   selector: 'app-manager-dashboard',
   templateUrl: './manager-dashboard.component.html',
   styleUrls: ['./manager-dashboard.component.css'],
   standalone: true,
-  imports: [RouterModule,NotificationComponent,CommonModule],
+  imports: [RouterModule, NotificationComponent, CommonModule, RealTimeNotificationComponent],
 })
 export class ManagerDashboardComponent implements OnInit {
   activeSection: string = 'manager'; // Default active section

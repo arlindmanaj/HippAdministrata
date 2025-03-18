@@ -24,24 +24,6 @@ export class NotificationService {
     this.notificationComponent = component;
   }
 
-  // private startConnection() {
-  //   this.hubConnection = new signalR.HubConnectionBuilder()
-  //   .withUrl("https://localhost:7136/notificationHub", {
-  //     skipNegotiation: true, // Required if using WebSockets only
-  //     transport: signalR.HttpTransportType.WebSockets
-  //   })
-  //   .withAutomaticReconnect()
-  //   .build();
-  
-  //   this.hubConnection
-  // .start()
-  // .then(() => console.log("✅ SignalR Connected"))
-  // .catch(err => console.error("❌ SignalR Connection Failed", err));
-
-  // this.hubConnection.on("ReceiveNotification", (message) => {
-  //   console.log("🔔 New Notification: ", message);
-  // });
-  // }
   private startConnection() {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl("https://localhost:7136/notificationHub", {
@@ -66,6 +48,11 @@ export class NotificationService {
           this.hubConnection.invoke("AddToGroup", "Admins")
             .then(() => console.log("✅ Joined Admins Group"))
             .catch(err => console.error("❌ Failed to join Admins Group", err));
+        }
+        else if (roleId === 6) {
+          this.hubConnection.invoke("AddToGroup", "Clients")
+            .then(() => console.log("✅ Joined Clients Group"))
+            .catch(err => console.error("❌ Failed to join Clients Group", err));
         }
       })
       .catch(err => console.error("❌ SignalR Connection Failed", err));
@@ -93,39 +80,6 @@ export class NotificationService {
   }
   
 
-  // private addNotificationListener() {
-  //   this.hubConnection.on("ReceiveNotification", (message) => {
-  //     console.log("New Notification:", message);
-  //     alert(message); // Example: Show alert, but replace with proper UI updates
-  //   });
-  // }
-  // private addNotificationListener() {
-  //   this.hubConnection.on("ReceiveNotification", (message) => {
-  //     console.log("🔔 New Notification:", message);
-  //     const newNotification = { message, isRead: false, createdAt: new Date() };
-  //     const currentNotifications = this.notificationsSubject.value;
-  //     this.notificationsSubject.next([newNotification, ...currentNotifications]);
-  //   });
-  // }
-
-
-
-  
-  // private addNotificationListener() {
-  //   this.hubConnection.on("ReceiveNotification", (message) => {
-  //     console.log("🔔 New Notification:", message);
-  
-  //     // Show alert for real-time notification
-  //     alert(message);
-  
-  //     // Fetch notifications from the backend again to update the wrapper
-  //     const roleId = Number(localStorage.getItem("roleId"));
-  //     this.getRoleNotifications(roleId).subscribe((notifications) => {
-  //       this.notificationsSubject.next(notifications); // Update the UI
-  //     });
-  //   });
-  // }
-  
     // Add a new subject for real-time notifications (separate from the wrapper)
   private realTimeNotificationSubject = new BehaviorSubject<any | null>(null);
   realTimeNotification$ = this.realTimeNotificationSubject.asObservable();
