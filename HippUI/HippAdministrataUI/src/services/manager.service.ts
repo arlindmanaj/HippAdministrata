@@ -20,7 +20,10 @@ export class ManagerService {
     return this.http.post<void>(`${this.apiUrl}/approve-request/${requestId}`, {});
   }
 
-  rejectRequest(requestId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/reject-request/${requestId}`, {});
+  // rejectRequest(requestId: number): Observable<void> {
+  //   return this.http.post<void>(`${this.apiUrl}/reject-request/${requestId}`, {});
+  // }
+  rejectRequest(requestId: number, reason: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reject-request/${requestId}`, { reason });
   }
 }

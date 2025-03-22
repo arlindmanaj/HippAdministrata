@@ -1,28 +1,34 @@
 /* General Layout */
 @import url('../../../assets/sidebar.css');
+@import url(../../../styles.css);
 .salesperson-dashboard {
   display: flex;
   height: 100vh;
   margin: 0;
 }
 
-
-
-.content {
-  flex: 1;
+.dashboard-container .content {
+  display: flex;
+  height: 100vh;
+  transition: margin-left 0.3s ease;
   padding-left: 40px;
-  overflow-y: auto; /* Allow scrolling if content is too tall */
-  margin: 0;
   box-sizing: border-box;
-  height: 100vh; /* Ensure the content section takes up full height of the viewport */
-  overflow: hidden; /* Prevent content overflow */
 }
 
+/* .content {
+  flex: 1;
+  padding-left: 40px;
+  overflow-y: auto; 
+  margin: 0;
+  box-sizing: border-box;
+  height: 100vh; 
+  overflow: hidden; 
+} */
 
 
 
 
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
@@ -36,7 +42,60 @@ th, td {
 
 th {
   background-color: #f2f2f2;
+} */
+/* table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background-color: white;
+  
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
+
+table th, table td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+
+}
+
+table th {
+  background-color: #e5e7eb;
+  font-weight: bold;
+} */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background-color: white;
+  border-radius: 8px; 
+  overflow: hidden;
+  font-family: poppins;
+
+}
+
+table th, table td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+table td {
+  font-size: 14px;
+
+}
+
+table th {
+  background-color: #e5e7eb;
+  font-weight: bold;
+  
+}
+
+
 
 /* Modal Styles */
 .modal {

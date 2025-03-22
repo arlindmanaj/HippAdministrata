@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientService } from '../../../services/client.service';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
 import { OrderService } from '../../../services/order.service';
 import { RealTimeNotificationComponent } from "../real-time-notification/real-time-notification.component";
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 
 interface Product {
   productName: string;
@@ -28,7 +29,7 @@ interface Order {
   templateUrl: './client-dashboard.component.html',
   standalone: true,
   styleUrls: ['./client-dashboard.component.css'],
-  imports: [FormsModule, CommonModule,NotificationComponent, RealTimeNotificationComponent],
+  imports: [FormsModule, CommonModule,NotificationComponent, RealTimeNotificationComponent,SettingsModalComponent],
 })
 export class ClientDashboardComponent implements OnInit {
   products: any[] = []; // List of products
@@ -333,7 +334,11 @@ updateRequest = {
   closeUpdateModal() {
     this.isUpdateModalOpen = false;
   }
-  
+  @ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
+
+  openSettingsModal() {
+    this.settingsModal.toggleModal();
+  }
 }
 
 

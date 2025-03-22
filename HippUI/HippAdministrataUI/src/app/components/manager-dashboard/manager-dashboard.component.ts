@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { ProductService } from '../../../services/product.service';
@@ -9,13 +9,14 @@ import { NotificationComponent } from '../notifications/notification.component';
 import { ManagerService } from '../../../services/manager.service';
 import { CommonModule } from '@angular/common';
 import { RealTimeNotificationComponent } from "../real-time-notification/real-time-notification.component";
-
+import { FormsModule } from '@angular/forms';
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 @Component({
   selector: 'app-manager-dashboard',
   templateUrl: './manager-dashboard.component.html',
   styleUrls: ['./manager-dashboard.component.css'],
   standalone: true,
-  imports: [RouterModule, NotificationComponent, CommonModule, RealTimeNotificationComponent],
+  imports: [RouterModule, NotificationComponent, CommonModule, RealTimeNotificationComponent,FormsModule,SettingsModalComponent],
 })
 export class ManagerDashboardComponent implements OnInit {
   activeSection: string = 'manager'; // Default active section
@@ -24,6 +25,31 @@ export class ManagerDashboardComponent implements OnInit {
   isOrderRequestsModalOpen = false;
   orders: any[] = [];
   highlightedOrderId: number | null = null;
+  isRejectModalOpen: boolean = false;
+  rejectionReason: string = "";
+  currentRequestId: number | null = null;
+
+  openRejectModal(requestId: number) {
+    this.currentRequestId = requestId;
+    this.isRejectModalOpen = true;
+  }
+
+  closeRejectModal() {
+    this.isRejectModalOpen = false;
+    this.rejectionReason = ""; // Clear input
+  }
+
+  confirmRejection() {
+    if (this.currentRequestId && this.rejectionReason.trim()) {
+      this.managerService.rejectRequest(this.currentRequestId, this.rejectionReason).subscribe(() => {
+        this.closeRejectModal();
+        this.getOrderRequests();
+      });
+    } else {
+      alert("Please enter a reason for rejection.");
+    }
+  }
+
   constructor(
     private router: Router,
     private productService: ProductService,
@@ -315,10 +341,14 @@ isDetailsOpen(requestId: number): boolean {
     });
   }
 
-  rejectRequest(requestId: number) {
-    this.managerService.rejectRequest(requestId).subscribe(() => {
-      this.getOrderRequests(); // Refresh the list
-    });
-  }
+  // rejectRequest(requestId: number) {
+  //   this.managerService.rejectRequest(requestId).subscribe(() => {
+  //     this.getOrderRequests(); // Refresh the list
+  //   });
+  // }
+  @ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
   
+  openSettingsModal() {
+    this.settingsModal.toggleModal();
+  }
 }

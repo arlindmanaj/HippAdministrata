@@ -419,3 +419,31 @@
   visibility: visible;
   opacity: 1; /* Show the tooltip when hovering */
 }
+/* Styles for the rejection modal backdrop */
+.rejection-modal {
+  position: fixed; /* Make sure it stays on top of the page */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Make sure the rejection modal is on top of other elements */
+}
+
+/* Styles for the rejection modal content */
+.rejection-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px; /* Adjust width as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for better visibility */
+  z-index: 10000; /* Ensure the modal content is on top of the backdrop */
+}
+
+/* Optional: Style the rejection modal buttons */
+.rejection-modal button {
+  margin-top: 10px;
+}

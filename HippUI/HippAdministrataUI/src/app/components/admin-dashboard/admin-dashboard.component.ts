@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../../services/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,14 +7,14 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../../../services/notification.service';
 import { NotificationComponent } from '../notifications/notification.component';
 import { RealTimeNotificationComponent } from '../real-time-notification/real-time-notification.component';
-
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule,NotificationComponent,RealTimeNotificationComponent], // Import FormsModule and CommonModule
+  imports: [FormsModule, CommonModule,NotificationComponent,RealTimeNotificationComponent,SettingsModalComponent], // Import FormsModule and CommonModule
 })
 
 export class AdminDashboardComponent implements OnInit {
@@ -172,17 +172,14 @@ export class AdminDashboardComponent implements OnInit {
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
-  openSettingsModal() {
-    this.isSettingsModalOpen = true;
-  }
-  
-  closeSettingsModal() {
-    this.isSettingsModalOpen = false;
-  }
   
   // Toggle mute notifications
   toggleMuteNotifications() {
     localStorage.setItem('muteNotifications', String(this.muteNotifications));
   }
+  @ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
 
+  openSettingsModal() {
+    this.settingsModal.toggleModal();
+  }
 }

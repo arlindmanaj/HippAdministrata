@@ -11,7 +11,11 @@ export class OrderService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
-
+  getOrderById(orderId: number): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+    return this.http.get<any>(`${this.apiUrl}/Order/${orderId}`, { headers });
+  }
+  
   getOrders(): Observable<any[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
     return this.http.get<any[]>(`${this.apiUrl}/Order`, { headers });

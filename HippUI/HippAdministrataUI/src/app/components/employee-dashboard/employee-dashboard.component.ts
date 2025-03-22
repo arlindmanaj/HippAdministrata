@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeeService } from '../../../services/employee.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { ChangeDetectorRef } from '@angular/core'; // Import ChangeDetectorRef
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 @Component({
   selector: 'app-employee-dashboard',
   templateUrl: './employee-dashboard.component.html',
   standalone: true,
   styleUrls: ['./employee-dashboard.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,SettingsModalComponent],
 })
 export class EmployeeDashboardComponent implements OnInit {
   orders: any[] = []; // Orders assigned to the employee
@@ -23,26 +24,32 @@ export class EmployeeDashboardComponent implements OnInit {
 
 
 
-  constructor(private employeeService: EmployeeService, private router: Router) { }
+  constructor(private employeeService: EmployeeService, private router: Router,private cdr: ChangeDetectorRef ) { }
 
   ngOnInit(): void {
     this.loadEmployeeTasks();
   }
+
 
   loadEmployeeTasks(): void {
     if (!this.employeeId) {
       alert('Employee ID not found. Please log in again.');
       return;
     }
-
+  
     this.employeeService.getAssignedOrders(this.employeeId).subscribe(
       (data) => {
+        // Calculate total pay before filtering orders
         this.orders = data;
         this.calculateTotalPay(); // Update the total pay based on fetched orders
+  
+        // Now filter out orders where statusId is 5
+        this.orders = this.orders.filter(order => order.orderStatusId !== 5);
       },
       (error) => console.error('Failed to load employee tasks:', error)
     );
   }
+  
 
   addLabels(orderId: number, labelingQuantity: number): void {
     if (labelingQuantity <= 0) {
@@ -71,15 +78,15 @@ export class EmployeeDashboardComponent implements OnInit {
         // Update order quantities in the UI
         order.labeledQuantity += labelingQuantity;
         order.unlabeledQuantity -= labelingQuantity;
-
+        1
         // Update total pay
         const productPaymentPerLabel = (order.productPrice * order.pricePercentageForEmployee) / 100;
         this.employeeTotalPay += labelingQuantity * productPaymentPerLabel;
+        if(order.unlabeledQuantity === 0){
+          order.orderStatusDescription = "Ready For Shipping"; 
+          this.cdr.detectChanges();
+        }
 
-        // Trigger total pay animation
-        // this.animateTotalPay(this.employeeTotalPay);
-
-        // Check if order is fully labeled
       },
       (error) => {
         console.error('Failed to label product:', error);
@@ -105,5 +112,10 @@ export class EmployeeDashboardComponent implements OnInit {
   }
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+  @ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
+
+  openSettingsModal() {
+    this.settingsModal.toggleModal();
   }
 }

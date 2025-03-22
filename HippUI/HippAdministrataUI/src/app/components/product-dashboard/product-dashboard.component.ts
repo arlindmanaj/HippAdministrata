@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 
 @Component({
   selector: 'app-product-dashboard',
   templateUrl: './product-dashboard.component.html',
   standalone: true,
   styleUrls: ['./product-dashboard.component.css'],
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule,SettingsModalComponent],
 })
 export class ProductDashboardComponent implements OnInit {
   products: any[] = [];
@@ -99,5 +100,10 @@ export class ProductDashboardComponent implements OnInit {
     }
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+  @ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
+
+  openSettingsModal() {
+    this.settingsModal.toggleModal();
   }
 }

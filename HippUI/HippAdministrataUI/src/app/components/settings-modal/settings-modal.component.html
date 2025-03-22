@@ -1,0 +1,54 @@
+<!-- <div *ngIf="isSettingsModalOpen" class="settings-modal">
+    <div class="settings-content">
+      <h2>Settings</h2>
+      
+
+      <div class="checkbox-wrapper-2"> 
+        <label class="checkbox-label">
+          <input type="checkbox" class="sc-gJwTLC ikxBAC" [(ngModel)]="muteNotifications" (change)="toggleMuteNotifications()">
+          Mute Notifications
+        </label>
+        
+      </div>
+      <div class="modal-footer">
+        <button id="close-button" class="button-6" (click)="closeSettingsModal()">Close</button>
+      </div>
+    </div>
+  </div> -->
+<!-- Open Settings Button -->
+<!-- <button (click)="open()">Open Settings</button> -->
+
+<!-- Modal -->
+<!-- Modal Button (inside sidebar, already placed) triggers the modal opening -->
+<!-- <div *ngIf="isSettingsModalOpen" class="settings-modal">
+    <div class="settings-content">
+      <h2>Settings</h2>
+      <div class="checkbox-wrapper-2">
+        <label class="checkbox-label">
+          <input type="checkbox" class="sc-gJwTLC ikxBAC" [checked]="muteNotifications" (change)="toggleMuteNotifications()"> 
+          Mute Notifications
+        </label>
+      </div>
+  
+      <div class="modal-footer">
+        <button id="close-button" class="button-6" (click)="toggleModal()">Close</button>
+      </div>
+    </div>
+  </div> -->
+  <div *ngIf="isSettingsModalOpen" 
+     [ngClass]="{'settings-modal': true, 'collapsed': isSidebarCollapsed}">
+  <div class="settings-content">
+    <h2>Settings</h2>
+
+    <div class="checkbox-wrapper-2">
+      <label class="checkbox-label">
+        <input type="checkbox"class="sc-gJwTLC ikxBAC" [checked]="muteNotifications" (change)="toggleMuteNotifications()"> 
+        Mute Notifications
+      </label>
+    </div>
+
+    <div class="modal-footer">
+      <button id="close-button" class="button-6" (click)="toggleModal()">Close</button>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '../../../services/order.service';
 import { ClientService } from '../../../services/client.service';
@@ -11,11 +11,10 @@ import { ProductService } from '../../../services/product.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { NgZone } from '@angular/core';
-
-
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 
 import { ActivatedRoute } from '@angular/router';
-
+import { NotificationComponent } from "../notifications/notification.component";
 
 
 
@@ -26,7 +25,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./order-dashboard.component.css'],
   standalone: true,
   
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NotificationComponent,SettingsModalComponent],
   animations: [
     trigger('fadeTable', [
       transition(':leave', [
@@ -761,6 +760,11 @@ deleteOrder(orderId: number): void {
 }
 
 
+@ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
+
+openSettingsModal() {
+  this.settingsModal.toggleModal();
+}
 
 
 

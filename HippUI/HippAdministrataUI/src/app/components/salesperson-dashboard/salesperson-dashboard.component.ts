@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SalesPersonService } from '../../../services/salesperson.service';
 import { UserService } from '../../../services/user.service';
 import { OrderStatus } from '../../../models/OrderStatus';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 
 @Component({
   selector: 'app-salesperson-dashboard',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
   standalone: true,
   styleUrls: ['./salesperson-dashboard.component.css'],
 
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, SettingsModalComponent]
 })
 export class SalespersonDashboardComponent implements OnInit {
   orders: any[] = [];
@@ -39,21 +40,65 @@ export class SalespersonDashboardComponent implements OnInit {
     this.loadUserData('warehouses');
   }
 
+  // loadSalesPersonOrders(): void {
+  //   const salesPersonId = Number(localStorage.getItem('roleSpecificId'));
+  //   if (!salesPersonId) {
+  //     alert('SalesPerson ID not found. Please log in again.');
+  //     return;
+  //   }
+
+  //   this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
+  //     (orders) => (this.orders = orders),
+  //     (error) => {
+  //       console.error('Failed to load sales person orders:', error);
+  //       alert('Failed to load orders. Please try again.');
+  //     }
+  //   );
+  // }
+
+  // // This functions wont show orders with order id 5
+  // loadSalesPersonOrders(): void {
+  //   const salesPersonId = Number(localStorage.getItem('roleSpecificId'));
+  //   if (!salesPersonId) {
+  //     alert('SalesPerson ID not found. Please log in again.');
+  //     return;
+  //   }
+
+  //   this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
+  //     (orders) => {
+  //       this.orders = orders;
+  
+  //       this.orders = this.orders.filter(order => order.orderStatusId !== 5);},
+  //     (error) => {
+  //       console.error('Failed to load sales person orders:', error);
+  //       alert('Failed to load orders. Please try again.');
+  //     }
+  //   );
+  // }
   loadSalesPersonOrders(): void {
     const salesPersonId = Number(localStorage.getItem('roleSpecificId'));
     if (!salesPersonId) {
       alert('SalesPerson ID not found. Please log in again.');
       return;
     }
-
+  
     this.salesPersonService.getOrdersBySalesPersonId(salesPersonId).subscribe(
-      (orders) => (this.orders = orders),
+      (orders) => {
+        // Separate orders with orderStatusId === 5
+        const ordersWithStatus5 = orders.filter(order => order.orderStatusId === 5);
+        // Filter out orders with orderStatusId === 5 from the original list
+        const ordersWithoutStatus5 = orders.filter(order => order.orderStatusId !== 5);
+  
+        // Combine the orders with orderStatusId !== 5 and orders with orderStatusId === 5 at the bottom
+        this.orders = [...ordersWithoutStatus5, ...ordersWithStatus5];
+      },
       (error) => {
         console.error('Failed to load sales person orders:', error);
         alert('Failed to load orders. Please try again.');
       }
     );
   }
+  
   getOrderStatusLabel(status: number | string): string {
     // If the status is already a string, return it
     if (typeof status === 'string') {
@@ -172,5 +217,9 @@ export class SalespersonDashboardComponent implements OnInit {
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
+  @ViewChild('settingsModal') settingsModal!: SettingsModalComponent;
 
+  openSettingsModal() {
+    this.settingsModal.toggleModal();
+  }
 }

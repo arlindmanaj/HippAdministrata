@@ -112,13 +112,3 @@ li.active button {
   }
   
 
-  #close-button {
-    margin-top: 10px;
-    text-align: center;
-  }
-  .modal-footer {
-    display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically (if needed) */
-    padding: 10px;
-  }
