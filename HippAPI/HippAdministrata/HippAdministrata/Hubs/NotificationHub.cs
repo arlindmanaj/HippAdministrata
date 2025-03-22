@@ -35,6 +35,16 @@ namespace HippAdministrata.Hubs
                 await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
                 Console.WriteLine($"✅ Admin {userId} added to 'Admins' group.");
             }
+            else if (role == "Manager")
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, "Managers");
+                Console.WriteLine($"✅ Manager {userId} added to 'Managers' group.");
+            }
+            else if (role == "Client")
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, "Clients");
+                Console.WriteLine($"✅ Client {userId} added to 'Clients' group.");
+            }
             else
             {
                 Console.WriteLine($"🚫 User {userId} is NOT an Admin.");

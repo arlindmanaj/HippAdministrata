@@ -28,36 +28,7 @@ namespace HippAdministrata.Repositories.Implementation
                 .Where(n => n.RoleId == roleId)
                 .OrderByDescending(n => n.CreatedAt)
                 .ToListAsync();
-        }
-
-
-
-
-
-
-        //public async Task<List<Notification>> GetUserNotificationsAsync(int userId)
-        //{
-        //    return await _context.Notifications
-        //        .Where(n => n.UserId == userId)
-        //        .OrderByDescending(n => n.CreatedAt)
-        //        .ToListAsync();
-        //}
-        //public async Task MarkNotificationsAsReadAsync(int userId)
-        //{
-        //    var notifications = await _context.Notifications
-        //                                      .Where(n => n.UserId == userId && !n.IsRead)
-        //                                      .ToListAsync();
-
-        //    if (notifications.Any())
-        //    {
-        //        foreach (var notification in notifications)
-        //        {
-        //            notification.IsRead = true;
-        //        }
-
-        //        await _context.SaveChangesAsync();
-        //    }
-        //}
+        }   
 
     }
 

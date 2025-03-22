@@ -92,7 +92,7 @@ namespace HippAdministrata.Services
                 createdOrders.Add(await _orderRepository.AddAsync(order));
             }
             // Send notification to Admins (RoleId = 1) and Managers (RoleId = 3)
-            var rolesToNotify = new List<int> { 1, 3 };
+            var rolesToNotify = new List<int> { 1, 3};
 
             foreach (var roleId in rolesToNotify)
             {
